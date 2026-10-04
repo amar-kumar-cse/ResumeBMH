@@ -275,7 +275,7 @@ export async function parseResumeDocument(
 async function extractTextWithGemini(fileBuffer: Buffer, mimeType: string): Promise<string> {
   const base64Data = fileBuffer.toString("base64");
   const prompt = `You are a high-precision ATS document transcription engine.
-Transcribe and extract ALL text from this resume document with 100% exact fidelity.
+Transcribe and extract ALL text from this resume document with exact fidelity.
 Guidelines:
 1. Preserve all section headers (e.g. SUMMARY, WORK EXPERIENCE, EDUCATION, SKILLS, PROJECTS, CERTIFICATIONS).
 2. Retain all bullet points, numbers, percentages, company names, job titles, dates, technologies, metrics, links, email, phone number, and location.

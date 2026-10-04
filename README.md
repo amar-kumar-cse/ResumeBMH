@@ -1,6 +1,6 @@
 # Karyvo AI Builder
 
-> **India-First AI Career Platform** — Build ATS-proof resumes, optimize bullets using Google's XYZ formula, craft tailored role cover letters, and master technical and behavioral interview preparation with an interactive mock AI coach.
+> **India-First AI Career Platform** — Build ATS-proof resumes, optimize bullets using the XYZ method (popularised by Laszlo Bock, former Google HR head), craft tailored role cover letters, and master technical and behavioral interview preparation with an interactive mock AI coach.
 
 ---
 

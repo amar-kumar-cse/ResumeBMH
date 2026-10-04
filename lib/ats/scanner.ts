@@ -305,7 +305,7 @@ export class ATSScannerService {
         severity: "critical",
         title: "Severe Lack of Quantifiable Results",
         description: "ATS and senior hiring managers look for measurable proof of impact (e.g., 'reduced latency by 35%', 'processed 2M daily requests').",
-        recommendation: "Apply Google's XYZ formula: 'Accomplished [X], measured by [Y], by doing [Z]'.",
+        recommendation: "Apply the XYZ method: 'Accomplished [X], measured by [Y], by doing [Z]' (popularised by Laszlo Bock, former Google HR head).",
       });
       actionableFixes.push("Add at least 3-4 specific numbers, percentage gains, or scale metrics to your achievements.");
     }
@@ -319,18 +319,16 @@ export class ATSScannerService {
     // Overall composite score
     const overall = Math.round(fScore * 0.25 + cScore * 0.25 + kScore * 0.25 + qScore * 0.25);
 
-    // Verdict determination: Honest heuristic Resume Health Check
-    let verdict = "Needs Attention - Key Gaps Detected";
-    if (overall >= 88) {
-      verdict = "Excellent Health - High ATS Compatibility";
-    } else if (overall >= 75) {
-      verdict = "Good Health - Ready for Review";
-    } else if (overall >= 60) {
-      verdict = "Borderline - Moderate Metric Gaps";
+    // Verdict determination: Honest heuristic Resume health check
+    let verdict = "Needs work";
+    if (overall >= 80) {
+      verdict = "Strong";
+    } else if (overall >= 65) {
+      verdict = "Good";
     }
 
     if (actionableFixes.length === 0) {
-      actionableFixes.push("Your resume meets top-tier ATS criteria! Run the AI Resume Improver to polish wording further.");
+      actionableFixes.push("Your resume meets standard ATS criteria! Polish wording further with the XYZ method.");
     }
 
     return {

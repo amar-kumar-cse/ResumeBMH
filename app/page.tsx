@@ -50,7 +50,7 @@ export default function HomePage() {
             </h1>
 
             <p className="text-sm sm:text-base text-slate-600 max-w-xl mx-auto lg:mx-0 leading-relaxed font-sans">
-              One central <strong className="text-slate-900">Master Career Profile</strong> powers your entire journey. Build ATS-proof resumes, optimize bullets with Google’s XYZ formula, craft role cover letters, and master real interview questions.
+              One central <strong className="text-slate-900">Master Career Profile</strong> powers your entire journey. Build ATS-proof resumes, optimize bullets with the XYZ method, craft role cover letters, and master real interview questions.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
@@ -72,16 +72,16 @@ export default function HomePage() {
             {/* Quick Metrics */}
             <div className="mt-8 pt-8 border-t border-slate-200/80 grid grid-cols-3 gap-4 text-center lg:text-left">
               <div>
-                <span className="block text-2xl sm:text-3xl font-extrabold text-slate-900 font-heading">98%</span>
-                <span className="text-xs text-slate-500 font-medium">ATS Pass Rate</span>
+                <span className="block text-sm sm:text-base font-bold text-slate-900 font-heading">Free ATS scan</span>
+                <span className="text-xs text-slate-500 font-medium">No card needed</span>
               </div>
               <div>
-                <span className="block text-2xl sm:text-3xl font-extrabold text-slate-900 font-heading">XYZ</span>
-                <span className="text-xs text-slate-500 font-medium">AI Bullet Formula</span>
+                <span className="block text-sm sm:text-base font-bold text-slate-900 font-heading">PDF, DOCX, text</span>
+                <span className="text-xs text-slate-500 font-medium">Works on all formats</span>
               </div>
               <div>
-                <span className="block text-2xl sm:text-3xl font-extrabold text-slate-900 font-heading">100%</span>
-                <span className="text-xs text-slate-500 font-medium">Zero Hallucinations</span>
+                <span className="block text-sm sm:text-base font-bold text-slate-900 font-heading">Your data</span>
+                <span className="text-xs text-slate-500 font-medium">Stays yours</span>
               </div>
             </div>
           </div>
@@ -93,7 +93,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* LIVE INTERACTIVE GOOGLE XYZ FORMULA DEMO */}
+      {/* LIVE INTERACTIVE THE XYZ METHOD DEMO */}
       <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto z-20 relative">
         <InteractiveBulletDemo />
       </section>
@@ -135,7 +135,7 @@ export default function HomePage() {
             </div>
             <h3 className="text-base font-bold text-slate-900 font-heading">2. Resume Builder</h3>
             <p className="text-xs text-slate-600 leading-relaxed">
-              7-step wizard with split physically-lit live preview, Google XYZ formula bullet improvers, and named version snapshots.
+              7-step wizard with split live preview, XYZ method bullet improvers, and named version snapshots.
             </p>
             <Link href="/resume" className="group text-xs text-indigo-600 font-semibold flex items-center gap-2 pt-1 hover:text-indigo-700 transition-colors">
               <span>Build Resume</span>
@@ -148,12 +148,12 @@ export default function HomePage() {
             <div className="h-10 w-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-200">
               <ShieldCheck className="h-5 w-5" />
             </div>
-            <h3 className="text-base font-bold text-slate-900 font-heading">3. Standalone ATS Scanner</h3>
+            <h3 className="text-base font-bold text-slate-900 font-heading">3. Resume Health Check</h3>
             <p className="text-xs text-slate-600 leading-relaxed">
-              Grades Formatting, Section Completeness, Keyword Strength, and Measurable Quantification without needing a job description.
+              Analyzes Formatting, Section Completeness, Keyword Strength, and Measurable Quantification without needing a job description.
             </p>
             <Link href="/ats" className="group text-xs text-indigo-600 font-semibold flex items-center gap-2 pt-1 hover:text-indigo-700 transition-colors">
-              <span>Scan Resume</span>
+              <span>Check Resume</span>
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
             </Link>
           </GlassCard>
@@ -180,10 +180,10 @@ export default function HomePage() {
         <GlassCard className="p-8 sm:p-12 text-center space-y-6">
           <div className="space-y-2">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 font-heading">
-              Engineered to Match Real Industry ATS Scanners
+              Clean Single-Column Formats
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 max-w-lg mx-auto">
-              Our templates pass strict corporate parsing algorithms at Google, Amazon, Swiggy, and Razorpay without distortion.
+              Our templates use clean single-column structure designed for readability and ATS parsing fidelity without layout distortion.
             </p>
           </div>
 
@@ -192,14 +192,14 @@ export default function HomePage() {
               <span className="text-xs font-bold text-indigo-600 font-heading">TEMPLATE 01</span>
               <h3 className="text-base font-bold text-slate-900 font-heading">Modern Tech Clean</h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Balanced two-column contact header with prominent project architectures and verified skills.
+                Balanced layout with clear contact header, project architectures, and skills inventory.
               </p>
             </div>
             <div className="p-5 rounded-2xl bg-white/80 border border-slate-200 shadow-sm space-y-2">
               <span className="text-xs font-bold text-emerald-600 font-heading">TEMPLATE 02</span>
-              <h3 className="text-base font-bold text-slate-900 font-heading">Minimal ATS Single-Column</h3>
+              <h3 className="text-base font-bold text-slate-900 font-heading">Standard ATS Single-Column</h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                100% text-parseable layout optimized for Workday, Taleo, and Greenhouse parsers.
+                Single-column, text-parseable layout optimized for standard corporate job applicant parsers.
               </p>
             </div>
             <div className="p-5 rounded-2xl bg-white/80 border border-slate-200 shadow-sm space-y-2">

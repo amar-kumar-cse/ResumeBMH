@@ -73,7 +73,7 @@ export class KaryvoAIService {
   }
 
   /**
-   * Improves a single bullet point using Google's XYZ formula:
+   * Improves a single bullet point using the XYZ method:
    * "Accomplished [X], as measured by [Y], by doing [Z]"
    * Strict Factual Grounding: Never hallucinates fake metrics or fabricated percentages.
    */
@@ -106,7 +106,7 @@ export class KaryvoAIService {
     const selectedVerb = powerVerbs[Math.floor(Math.random() * powerVerbs.length)];
 
     // 1. Try Real Gemini AI Call with Factual Grounding Constraints
-    const prompt = `You are a Principal Technical Resume Coach. Transform this resume bullet point using Google's XYZ formula (Accomplished [X], measured by [Y], by doing [Z]).
+    const prompt = `You are a Principal Technical Resume Coach. Transform this resume bullet point using the XYZ method (Accomplished [X], measured by [Y], by doing [Z]).
 CRITICAL FACTUAL GROUNDING RULES:
 1. Do NOT invent fake metrics, percentages, dollar amounts, company names, or statistics that were not present in the original bullet.
 2. If a metric was present, sharpen it. If no metric was present, articulate the concrete qualitative engineering result directly, or include a clear placeholder like "[X%]" if relevant.

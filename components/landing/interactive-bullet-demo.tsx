@@ -1,30 +1,66 @@
 "use client";
 
 import { useState } from "react";
-import { Sparkles, Zap, Check, Copy } from "lucide-react";
+import Link from "next/link";
+import { Sparkles, Zap, Check, Copy, AlertCircle } from "lucide-react";
 import { GlassCard, GlassButton } from "@/components/ui/glass";
 
 interface PresetExample {
   role: string;
   before: string;
   context: string;
+  precomputed: {
+    rewritten: string;
+    result: string;
+    metric: string | null;
+    method: string;
+    needsMetric: boolean;
+    question: string | null;
+  };
 }
 
 const PRESETS: PresetExample[] = [
   {
     role: "Backend SDE",
-    before: "Built payment API and handled database queries for users",
+    before: "Built payment API and handled database queries",
     context: "SDE-1 at FinTech startup using Go, Kafka, PostgreSQL",
+    precomputed: {
+      rewritten:
+        "Architected payment processing API and optimized database queries, achieving [add your number] latency reduction by introducing connection pooling.",
+      result: "Architected payment processing API and optimized queries",
+      metric: null,
+      method: "Introducing connection pooling",
+      needsMetric: true,
+      question: "By how much did it improve? Add your real number.",
+    },
   },
   {
     role: "Frontend Dev",
     before: "Made dashboard UI screens in React and fixed bugs",
     context: "Frontend engineer building SaaS analytics in Next.js & Tailwind",
+    precomputed: {
+      rewritten:
+        "Engineered responsive dashboard interfaces in React and resolved critical rendering defects, improving load times by [add your number] through component code-splitting.",
+      result: "Engineered responsive dashboard interfaces in React",
+      metric: null,
+      method: "Component code-splitting",
+      needsMetric: true,
+      question: "By how much did it improve? Add your real number.",
+    },
   },
   {
     role: "Campus Fresher",
     before: "Completed final year college project using machine learning",
     context: "B.Tech CSE final year, Python, TensorFlow, Flask API",
+    precomputed: {
+      rewritten:
+        "Delivered machine learning classification pipeline for academic capstone, reaching [add your number] validation accuracy by tuning hyperparameters in PyTorch.",
+      result: "Delivered machine learning classification pipeline for academic capstone",
+      metric: null,
+      method: "Tuning hyperparameters in PyTorch",
+      needsMetric: true,
+      question: "By how much did it improve? Add your real number.",
+    },
   },
 ];
 
@@ -32,43 +68,66 @@ export function InteractiveBulletDemo() {
   const [selectedPreset, setSelectedPreset] = useState<number>(0);
   const [inputBullet, setInputBullet] = useState<string>(PRESETS[0].before);
   const [contextText, setContextText] = useState<string>(PRESETS[0].context);
-  const [improvedBullet, setImprovedBullet] = useState<string>(
-    "Architected distributed payment routing microservice in Go & Kafka processing 4.2M daily transactions, reducing p99 checkout latency by 35% with 99.99% availability."
-  );
+  
+  const [outputData, setOutputData] = useState(PRESETS[0].precomputed);
+  const [userCustomNumber, setUserCustomNumber] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [copied, setCopied] = useState<boolean>(false);
 
   const handleSelectPreset = (idx: number) => {
     setSelectedPreset(idx);
     setInputBullet(PRESETS[idx].before);
     setContextText(PRESETS[idx].context);
+    setOutputData(PRESETS[idx].precomputed);
+    setUserCustomNumber("");
+    setErrorMsg(null);
   };
 
   const handleTransform = async () => {
-    if (!inputBullet.trim()) return;
+    const trimmed = inputBullet.trim();
+    if (!trimmed) return;
+
     setIsLoading(true);
+    setErrorMsg(null);
+
     try {
-      const res = await fetch("/api/ai/improve-bullet", {
+      const res = await fetch("/api/demo/improve-bullet", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          bullet: inputBullet.trim(),
-          context: contextText.trim(),
-        }),
+        body: JSON.stringify({ bullet: trimmed }),
       });
+
       const data = await res.json();
-      if (data.success && data.data?.improved) {
-        setImprovedBullet(data.data.improved);
+
+      if (!res.ok || !data.success) {
+        if (res.status === 429) {
+          setErrorMsg(data.error || "Rate limit reached. Please wait a moment or sign up free.");
+        } else {
+          setErrorMsg(data.error || "Failed to transform bullet. Please check your text.");
+        }
+        return;
       }
-    } catch (err) {
-      console.error("Failed to transform bullet:", err);
+
+      if (data.data) {
+        setOutputData(data.data);
+        setUserCustomNumber("");
+      }
+    } catch {
+      setErrorMsg("Network connection error. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Replace placeholder with user-provided metric if typed
+  const displayRewritten =
+    outputData.needsMetric && userCustomNumber.trim()
+      ? outputData.rewritten.replace("[add your number]", userCustomNumber.trim())
+      : outputData.rewritten;
+
   const handleCopy = () => {
-    navigator.clipboard.writeText(improvedBullet);
+    navigator.clipboard.writeText(displayRewritten);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -86,10 +145,10 @@ export function InteractiveBulletDemo() {
               </span>
             </div>
             <h3 className="text-xl sm:text-2xl font-black text-slate-900 font-heading mt-1">
-              Google XYZ Formula Bullet Improver
+              The XYZ Method Bullet Improver
             </h3>
             <p className="text-xs text-slate-600 mt-0.5">
-              Accomplished [X], as measured by [Y], by doing [Z]. Test it live below:
+              Accomplished [X], as measured by [Y], by doing [Z]. Popularised by Laszlo Bock, former Google HR head.
             </p>
           </div>
 
@@ -111,21 +170,30 @@ export function InteractiveBulletDemo() {
           </div>
         </div>
 
+        {/* Error notification if any */}
+        {errorMsg && (
+          <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 flex items-center gap-2.5 text-xs text-rose-700">
+            <AlertCircle className="h-4 w-4 shrink-0 text-rose-600" />
+            <span>{errorMsg}</span>
+          </div>
+        )}
+
         {/* Interactive Comparison Box */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
           {/* Input: Average Weak Bullet */}
-          <div className="p-5 sm:p-6 rounded-xl bg-white border border-slate-200 shadow-sm flex flex-col justify-between min-h-[230px]">
+          <div className="p-5 sm:p-6 rounded-xl bg-white border border-slate-200 shadow-sm flex flex-col justify-between min-h-[250px]">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold uppercase tracking-wider text-rose-600 flex items-center gap-1">
                   <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
-                  Standard / Weak Bullet
+                  Your Bullet
                 </span>
-                <span className="text-xs text-slate-500 font-medium">Unquantified & Passive</span>
+                <span className="text-xs text-slate-500 font-medium">Example</span>
               </div>
               <textarea
                 value={inputBullet}
                 onChange={(e) => setInputBullet(e.target.value)}
+                maxLength={300}
                 rows={3}
                 className="w-full bg-transparent text-xs sm:text-sm text-slate-900 placeholder-slate-400 resize-none outline-none focus:ring-0 leading-relaxed font-sans"
                 placeholder="Type any ordinary resume bullet here..."
@@ -133,8 +201,8 @@ export function InteractiveBulletDemo() {
             </div>
 
             <div className="pt-4 mt-auto border-t border-slate-100 flex items-center justify-between gap-3 h-12">
-              <span className="text-xs text-slate-500 italic truncate max-w-[200px]" title={contextText}>
-                Context: {contextText}
+              <span className="text-xs text-slate-400 font-mono">
+                {inputBullet.length}/300
               </span>
               <GlassButton
                 onClick={handleTransform}
@@ -155,29 +223,73 @@ export function InteractiveBulletDemo() {
             </div>
           </div>
 
-          {/* Output: Google XYZ Optimized Bullet */}
-          <div className="p-5 sm:p-6 rounded-xl bg-indigo-50/70 border border-indigo-200 flex flex-col justify-between min-h-[230px] shadow-sm">
+          {/* Output: XYZ Optimized Bullet */}
+          <div className="p-5 sm:p-6 rounded-xl bg-indigo-50/70 border border-indigo-200 flex flex-col justify-between min-h-[250px] shadow-sm">
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold uppercase tracking-wider text-emerald-600 flex items-center gap-1.5">
                   <Sparkles className="h-3.5 w-3.5 text-indigo-600" />
-                  Karyvo AI XYZ Transformation
+                  XYZ Transformation
                 </span>
-                <span className="text-xs text-emerald-600 font-mono font-bold bg-emerald-100 px-2 py-0.5 rounded-md border border-emerald-200">
-                  ATS Score: 98%
+                <span className="text-xs text-slate-600 font-medium bg-white/80 px-2 py-0.5 rounded-md border border-slate-200">
+                  Example
                 </span>
               </div>
-              <p className="text-xs sm:text-sm text-slate-900 font-medium leading-relaxed">
-                {improvedBullet}
-              </p>
+
+              {/* Rewritten Bullet Text with highlighted placeholder if needed */}
+              <div className="text-xs sm:text-sm text-slate-900 font-medium leading-relaxed">
+                {outputData.needsMetric && !userCustomNumber.trim() ? (
+                  <>
+                    {displayRewritten.split("[add your number]").map((part, i, arr) => (
+                      <span key={i}>
+                        {part}
+                        {i < arr.length - 1 && (
+                          <span className="inline-block px-1.5 py-0.5 mx-0.5 rounded bg-amber-200 text-amber-900 font-bold border border-amber-300">
+                            [add your number]
+                          </span>
+                        )}
+                      </span>
+                    ))}
+                  </>
+                ) : (
+                  <span>{displayRewritten}</span>
+                )}
+              </div>
+
+              {/* Real Number Input when needsMetric is true */}
+              {outputData.needsMetric && (
+                <div className="mt-3 p-2.5 rounded-lg bg-white border border-amber-200 space-y-1.5">
+                  <label htmlFor="user-real-number" className="block text-xs font-bold text-amber-800">
+                    {outputData.question || "By how much did it improve? Add your real number:"}
+                  </label>
+                  <input
+                    id="user-real-number"
+                    type="text"
+                    value={userCustomNumber}
+                    onChange={(e) => setUserCustomNumber(e.target.value)}
+                    placeholder="e.g. 35%, 10k users, 2.5x, ₹15L"
+                    maxLength={50}
+                    className="w-full text-xs px-2.5 py-1.5 rounded border border-slate-200 focus:outline-none focus:ring-1 focus:ring-amber-500 bg-amber-50/30 text-slate-900"
+                  />
+                </div>
+              )}
             </div>
 
             <div className="pt-4 mt-auto border-t border-indigo-200/60 flex items-center justify-between gap-3 h-12">
-              {/* Informational Legend (not buttons/pills) */}
-              <div className="flex items-center gap-2.5 text-xs text-slate-600" aria-label="Formula element breakdown">
-                <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-indigo-600" aria-hidden="true" />Verbs</span>
-                <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-amber-500" aria-hidden="true" />Metrics</span>
-                <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-emerald-600" aria-hidden="true" />Tech</span>
+              {/* Honest Legend */}
+              <div className="flex items-center gap-2.5 text-xs text-slate-600" aria-label="XYZ breakdown">
+                <span className="flex items-center gap-1 font-medium">
+                  <span className="h-1.5 w-1.5 rounded-full bg-indigo-600" aria-hidden="true" />
+                  Result
+                </span>
+                <span className="flex items-center gap-1 font-medium">
+                  <span className="h-1.5 w-1.5 rounded-full bg-amber-500" aria-hidden="true" />
+                  Number
+                </span>
+                <span className="flex items-center gap-1 font-medium">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-600" aria-hidden="true" />
+                  How
+                </span>
               </div>
 
               <button
@@ -201,6 +313,14 @@ export function InteractiveBulletDemo() {
             </div>
           </div>
         </div>
+
+        {/* Footer callout under demo */}
+        <p className="text-center text-xs text-slate-600 pt-1">
+          Sign up free to save bullets and improve your whole resume.{" "}
+          <Link href="/signup" className="font-semibold text-indigo-600 hover:text-indigo-700 underline underline-offset-2">
+            Create free account
+          </Link>
+        </p>
       </GlassCard>
     </div>
   );

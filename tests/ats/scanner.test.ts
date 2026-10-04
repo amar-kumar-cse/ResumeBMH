@@ -5,7 +5,7 @@ describe("ATS Scanner Service", () => {
   it("scores an empty resume low with actionable issues", () => {
     const result = atsScanner.analyzeResume("", "Empty.pdf");
     expect(result.overallScore).toBeLessThan(60);
-    expect(result.verdict).toBe("Needs Attention - Key Gaps Detected");
+    expect(result.verdict).toBe("Needs work");
     expect(result.issues.length).toBeGreaterThan(0);
   });
 
@@ -38,6 +38,6 @@ describe("ATS Scanner Service", () => {
     expect(result.detectedSkills).toContain("PostgreSQL");
     expect(result.formattingScore).toBeGreaterThanOrEqual(70);
     expect(result.quantificationScore).toBeGreaterThanOrEqual(70);
-    expect(result.verdict).toMatch(/Good Health|Excellent Health/);
+    expect(["Good", "Strong"]).toContain(result.verdict);
   });
 });

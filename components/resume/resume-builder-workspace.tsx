@@ -758,7 +758,7 @@ export function ResumeBuilderWorkspace({ initialResume, profile, versions: initi
                             type="button"
                             onClick={() => handleImproveBullet("exp", exp.id, bIdx)}
                             disabled={improvingIndex === `exp-${exp.id}-${bIdx}`}
-                            title="Transform using Google XYZ Formula"
+                            title="Transform using the XYZ Method"
                             className="px-2.5 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-700 text-xs flex items-center gap-1 font-medium transition-colors shrink-0 disabled:opacity-50"
                           >
                             <Sparkles className="h-3.5 w-3.5 text-indigo-600" />
@@ -1060,7 +1060,7 @@ export function ResumeBuilderWorkspace({ initialResume, profile, versions: initi
             <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
             <span>Real-time Tactile Document Rendering</span>
           </div>
-          <span className="font-heading text-xs text-indigo-600 font-bold">100% ATS Safe</span>
+          <span className="font-heading text-xs text-indigo-600 font-bold">Standard Single-Column Layout</span>
         </div>
 
         <PhysicallyLitResumePreview content={content} templateId={resume.templateId} />

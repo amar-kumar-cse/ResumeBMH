@@ -384,7 +384,7 @@ export function ATSScannerWorkspace({ initialScans, sampleResumeText }: Props) {
                       Drag & Drop your Resume (PDF or Image)
                     </h3>
                     <p className="text-xs text-slate-500 mt-1 max-w-md mx-auto">
-                      Click to browse your device. Our AI OCR parses scanned PDFs, images, and text formats with 100% layout fidelity.
+                      Click to browse your device. Our AI OCR parses scanned PDFs, images, and text formats with high layout fidelity.
                     </p>
 
                     <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
