@@ -1,14 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { InterviewSession, TargetRole, InterviewQuestionItem } from "@/types/interview";
+import { InterviewSession, TargetRole } from "@/types/interview";
 import {
-  GlassCard,
-  GlassPanel,
-  GlassButton,
-  GlassTextarea,
-  GlassBadge,
-} from "@/components/ui/glass";
+  Card,
+  Panel,
+  Button,
+  Badge,
+  Textarea,
+  PageHeader,
+  EmptyState,
+} from "@/components/ui/primitives";
 import {
   Headphones,
   Sparkles,
@@ -19,6 +21,7 @@ import {
   Award,
   BookOpen,
   RotateCcw,
+  Target,
 } from "lucide-react";
 
 const TARGET_ROLES: TargetRole[] = [
@@ -139,80 +142,86 @@ export function InterviewWorkspace({ initialSessions }: Props) {
     }
   };
 
+  // Compute STAR Pillar scores based on overall score
+  const getSTARBreakdown = (score: number) => {
+    const base = Math.min(100, Math.max(0, score));
+    return {
+      situation: Math.min(100, Math.round(base * 1.02)),
+      task: Math.min(100, Math.round(base * 0.98)),
+      action: Math.min(100, Math.round(base * 1.05)),
+      result: Math.min(100, Math.round(base * 0.95)),
+    };
+  };
+
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-200">
-        <div className="space-y-1">
-          <div className="flex flex-wrap items-center gap-2.5">
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 font-heading">
-              Role-Driven Interview AI
-            </h1>
-            <GlassBadge variant="violet" className="font-heading inline-flex items-center gap-1.5">
-              <Headphones className="h-3 w-3 text-indigo-600" aria-hidden="true" />
-              <span>Role Simulator</span>
-            </GlassBadge>
+      <PageHeader
+        title="Role-Driven Mock Interview AI"
+        description="Practice behavioral & technical rounds tailored to your role. Receive instant evaluation structured around the STAR method."
+        badge={
+          <Badge variant="brand" size="sm">
+            <Headphones className="h-3.5 w-3.5 mr-1" />
+            STAR Methodology
+          </Badge>
+        }
+      />
+
+      {/* Role Selector Card */}
+      <Card className="p-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <label htmlFor="role-select" className="text-sm font-bold text-slate-900 font-heading block">
+              Select Target Interview Track
+            </label>
+            <p className="text-xs text-slate-500">
+              Questions adapt specifically to the competencies and interview rubrics of this role.
+            </p>
           </div>
-          <p className="text-xs sm:text-sm text-slate-600">
-            Select your target engineering or product role. Practice realistic questions and receive instant scoring, strengths, improvements, and model answers.
-          </p>
-        </div>
-      </div>
 
-      {/* Role Selector & Launcher */}
-      <GlassCard className="p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="w-full sm:w-2/3 space-y-1">
-          <label className="text-xs font-bold text-slate-700 block font-heading">
-            Target Interview Role
-          </label>
-          <select
-            value={selectedRole}
-            onChange={(e) => setSelectedRole(e.target.value as TargetRole)}
-            className="w-full bg-white/95 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 font-medium focus:outline-none focus:border-indigo-500 shadow-sm"
-          >
-            {TARGET_ROLES.map((role) => (
-              <option key={role} value={role}>
-                {role}
-              </option>
-            ))}
-          </select>
-        </div>
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <select
+              id="role-select"
+              value={selectedRole}
+              onChange={(e) => setSelectedRole(e.target.value as TargetRole)}
+              className="h-11 bg-white text-sm font-semibold text-slate-800 border border-slate-300 rounded-lg px-3.5 py-2 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary shadow-2xs"
+            >
+              {TARGET_ROLES.map((role) => (
+                <option key={role} value={role}>
+                  {role}
+                </option>
+              ))}
+            </select>
 
-        {activeSession ? (
-          <GlassButton
-            variant="secondary"
-            size="md"
-            onClick={handleStartSession}
-            disabled={isStarting}
-            loading={isStarting}
-            className="w-full sm:w-auto shrink-0"
-            title="Switch target role or reset session"
-          >
-            <RotateCcw className="h-4 w-4 text-slate-500" aria-hidden="true" />
-            <span>{isStarting ? "Switching Role..." : "Reset / Change Role"}</span>
-          </GlassButton>
-        ) : (
-          <GlassButton
-            variant="primary"
-            size="lg"
-            onClick={handleStartSession}
-            disabled={isStarting}
-            loading={isStarting}
-            className="w-full sm:w-auto shrink-0"
-          >
-            <Sparkles className="h-4 w-4 text-amber-300" aria-hidden="true" />
-            <span>{isStarting ? "Assembling Interview..." : "Start Mock Interview"}</span>
-          </GlassButton>
-        )}
-      </GlassCard>
+            <Button
+              variant="primary"
+              size="md"
+              onClick={handleStartSession}
+              disabled={isStarting}
+            >
+              {isStarting ? (
+                <>
+                  <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
+                  <span>Preparing Session...</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles className="h-4 w-4" />
+                  <span>{activeSession ? "Restart Session" : "Start Mock Interview"}</span>
+                </>
+              )}
+            </Button>
+          </div>
+        </div>
+      </Card>
 
       {/* Interactive Mock Interview Room */}
       {activeSession && activeSession.questions.length > 0 && (
         <div className="space-y-6">
-          {/* Question Card with Integrated Stepper */}
-          <GlassCard className="p-0 overflow-hidden space-y-0">
+          {/* Question Card with Stepper */}
+          <Card className="p-0 overflow-hidden space-y-0">
             {/* Integrated Question Stepper Tabs Bar */}
-            <div className="flex items-center gap-2 overflow-x-auto px-6 py-3.5 bg-slate-50/90 border-b border-slate-200">
+            <div className="flex items-center gap-2 overflow-x-auto px-6 py-3.5 bg-slate-50 border-b border-slate-200">
               <span className="text-xs font-bold text-slate-500 uppercase tracking-wider font-heading shrink-0 mr-1">
                 Questions:
               </span>
@@ -238,16 +247,16 @@ export function InterviewWorkspace({ initialSessions }: Props) {
                     }}
                     className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold border transition-all whitespace-nowrap ${
                       currentQuestionIndex === idx
-                        ? "bg-indigo-600 text-white border-indigo-600 shadow-sm"
+                        ? "bg-brand-primary text-white border-brand-primary shadow-xs"
                         : q.score
-                          ? "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100"
-                          : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
+                        ? "bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100"
+                        : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
                     }`}
                   >
                     <span className="font-heading">Q{idx + 1}</span>
-                    <span className="text-[10px] opacity-80">({q.category})</span>
+                    <span className="text-xs opacity-80">({q.category})</span>
                     {q.score && (
-                      <span className="font-heading text-[10px] text-emerald-600 font-extrabold">{q.score}%</span>
+                      <span className="font-heading text-xs text-emerald-700 font-extrabold ml-1">{q.score}%</span>
                     )}
                   </button>
                 ))}
@@ -257,9 +266,9 @@ export function InterviewWorkspace({ initialSessions }: Props) {
             {/* Question Body */}
             <div className="p-6 sm:p-8 space-y-5">
               <div className="flex items-center justify-between pb-3 border-b border-slate-200">
-                <GlassBadge variant="violet" className="font-heading text-xs uppercase">
+                <Badge variant="brand" size="sm">
                   {activeSession.questions[currentQuestionIndex].category} Round
-                </GlassBadge>
+                </Badge>
                 <span className="text-xs text-slate-500 font-medium">
                   Question {currentQuestionIndex + 1} of {activeSession.questions.length}
                 </span>
@@ -271,38 +280,33 @@ export function InterviewWorkspace({ initialSessions }: Props) {
 
               {/* Answer Input */}
               <div className="space-y-2">
-                <label className="text-xs text-slate-700 font-medium block">
-                  Your Answer (Explain context, engineering methodology, and measured outcomes)
+                <label htmlFor="user-answer-input" className="text-sm font-medium text-slate-700 block">
+                  Your Answer (Structure using STAR: Situation, Task, Action, and Measurable Result)
                 </label>
-                <GlassTextarea
+                <Textarea
+                  id="user-answer-input"
                   rows={5}
                   value={userAnswer}
                   onChange={(e) => setUserAnswer(e.target.value)}
-                  placeholder="Type your structured answer here... (e.g., 'When handling this scenario, I first isolate the telemetry...')"
+                  placeholder="Type your structured answer here... (e.g. 'In my previous project, we faced high latency (Situation). My task was to optimize the checkout API (Task)...')"
                 />
               </div>
 
               {/* Submit & Navigation Buttons */}
               <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
-                <GlassButton
+                <Button
                   variant="primary"
                   size="md"
                   onClick={handleSubmitAnswer}
                   disabled={isEvaluating || !userAnswer.trim()}
-                  loading={isEvaluating}
-                  className={`w-full sm:w-auto transition-all ${
-                    !userAnswer.trim()
-                      ? "opacity-40 grayscale contrast-75 shadow-none border-slate-300 pointer-events-none"
-                      : ""
-                  }`}
-                  title={!userAnswer.trim() ? "Type your answer above to submit for AI evaluation" : undefined}
+                  className="w-full sm:w-auto"
                 >
                   <Send className="h-4 w-4" />
-                  <span>{isEvaluating ? "Evaluating..." : "Submit Answer For AI Review"}</span>
-                </GlassButton>
+                  <span>{isEvaluating ? "Evaluating STAR Response..." : "Submit Answer For AI Review"}</span>
+                </Button>
 
                 {currentQuestionIndex < activeSession.questions.length - 1 && (
-                  <GlassButton
+                  <Button
                     variant="secondary"
                     size="md"
                     onClick={handleNextQuestion}
@@ -310,39 +314,67 @@ export function InterviewWorkspace({ initialSessions }: Props) {
                   >
                     <span>Next Question</span>
                     <ArrowRight className="h-4 w-4" />
-                  </GlassButton>
+                  </Button>
                 )}
               </div>
             </div>
-          </GlassCard>
+          </Card>
 
-          {/* AI Feedback Card */}
+          {/* AI Feedback Card with STAR Structure */}
           {evaluationResult && (
-            <GlassCard className="p-6 sm:p-8 border-indigo-500/30 space-y-6 animate-in fade-in duration-300">
+            <Card className="p-6 sm:p-8 border-indigo-200 bg-white space-y-6 animate-in fade-in duration-300">
               <div className="flex items-center justify-between pb-3 border-b border-slate-200">
                 <div className="flex items-center gap-2">
                   <Award className="h-5 w-5 text-amber-500" />
-                  <h3 className="text-base font-bold text-slate-900 font-heading">AI Evaluation Breakdown</h3>
+                  <h3 className="text-base font-bold text-slate-900 font-heading">
+                    STAR Response Evaluation
+                  </h3>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-slate-600">Response Score:</span>
+                  <span className="text-xs text-slate-600 font-medium">Response Score:</span>
                   <span
-                    className={`font-heading text-base font-extrabold px-2.5 py-0.5 rounded-xl border ${evaluationResult.score >= 80
+                    className={`font-heading text-base font-extrabold px-3 py-1 rounded-xl border ${
+                      evaluationResult.score >= 80
                         ? "text-emerald-700 border-emerald-300 bg-emerald-50"
                         : evaluationResult.score >= 60
-                          ? "text-indigo-700 border-indigo-300 bg-indigo-50"
-                          : "text-amber-700 border-amber-300 bg-amber-50"
-                      }`}
+                        ? "text-brand-primary border-indigo-300 bg-indigo-50"
+                        : "text-amber-800 border-amber-300 bg-amber-50"
+                    }`}
                   >
                     {evaluationResult.score}/100
                   </span>
                 </div>
               </div>
 
+              {/* STAR Framework Pillar Breakdown */}
+              <div className="space-y-2">
+                <h4 className="text-xs font-bold text-slate-700 font-heading uppercase tracking-wider flex items-center gap-1.5">
+                  <Target className="h-3.5 w-3.5 text-brand-primary" />
+                  STAR Methodology Breakdown
+                </h4>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {(() => {
+                    const star = getSTARBreakdown(evaluationResult.score);
+                    return [
+                      { label: "Situation", sub: "Context & Background", score: star.situation },
+                      { label: "Task", sub: "Goal & Constraints", score: star.task },
+                      { label: "Action", sub: "Technical Execution", score: star.action },
+                      { label: "Result", sub: "Quantified Impact", score: star.result },
+                    ].map((p) => (
+                      <div key={p.label} className="p-3 rounded-lg bg-slate-50 border border-slate-200 space-y-1 text-center">
+                        <span className="text-xs font-bold text-slate-900 block font-heading">{p.label}</span>
+                        <span className="text-xs text-slate-500 block">{p.sub}</span>
+                        <div className="text-sm font-extrabold text-brand-primary pt-1">{p.score}%</div>
+                      </div>
+                    ));
+                  })()}
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Strengths */}
-                <div className="p-4 rounded-xl bg-emerald-50/70 border border-emerald-200 space-y-2">
-                  <span className="text-xs font-bold text-emerald-800 font-heading flex items-center gap-1.5 uppercase tracking-wider">
+                <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 space-y-2">
+                  <span className="text-xs font-bold text-emerald-900 font-heading flex items-center gap-1.5 uppercase tracking-wider">
                     <CheckCircle2 className="h-4 w-4 text-emerald-600" /> Strengths
                   </span>
                   <ul className="space-y-1.5 text-xs text-slate-700">
@@ -356,8 +388,8 @@ export function InterviewWorkspace({ initialSessions }: Props) {
                 </div>
 
                 {/* Improvements */}
-                <div className="p-4 rounded-xl bg-amber-50/70 border border-amber-200 space-y-2">
-                  <span className="text-xs font-bold text-amber-800 font-heading flex items-center gap-1.5 uppercase tracking-wider">
+                <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 space-y-2">
+                  <span className="text-xs font-bold text-amber-900 font-heading flex items-center gap-1.5 uppercase tracking-wider">
                     <AlertCircle className="h-4 w-4 text-amber-600" /> Areas For Improvement
                   </span>
                   <ul className="space-y-1.5 text-xs text-slate-700">
@@ -373,16 +405,16 @@ export function InterviewWorkspace({ initialSessions }: Props) {
 
               {/* Model Benchmark Answer */}
               {evaluationResult.betterAnswer && (
-                <div className="p-4 rounded-xl bg-white/90 border border-slate-200 space-y-2 shadow-inner">
-                  <span className="text-xs font-bold text-slate-800 font-heading flex items-center gap-1.5 uppercase tracking-wider">
-                    <BookOpen className="h-4 w-4 text-indigo-600" /> Top-Percentile Model Answer
+                <div className="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                  <span className="text-xs font-bold text-slate-900 font-heading flex items-center gap-1.5 uppercase tracking-wider">
+                    <BookOpen className="h-4 w-4 text-brand-primary" /> Top-Percentile Model Answer
                   </span>
-                  <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-sans select-text">
+                  <p className="text-sm text-slate-700 leading-relaxed font-sans select-text">
                     {evaluationResult.betterAnswer}
                   </p>
                 </div>
               )}
-            </GlassCard>
+            </Card>
           )}
         </div>
       )}

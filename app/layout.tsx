@@ -3,6 +3,7 @@ import { Inter, Manrope } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/navigation/navbar";
 import { Footer } from "@/components/navigation/footer";
+import { AmbientSpotlight } from "@/components/landing/ambient-spotlight";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -32,7 +33,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${manrope.variable}`}>
-      <body className="font-sans sky-cloud-canvas text-slate-800 flex flex-col min-h-screen selection:bg-indigo-500/20 selection:text-indigo-900 antialiased">
+      <body className="font-sans sky-cloud-canvas text-slate-800 flex flex-col min-h-screen selection:bg-blue-500/20 selection:text-blue-900 antialiased">
+        <AmbientSpotlight />
         <Navbar />
         <main className="flex-1 w-full relative z-10">{children}</main>
         <Footer />

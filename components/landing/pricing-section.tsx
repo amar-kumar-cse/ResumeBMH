@@ -77,23 +77,23 @@ export function PricingSection() {
         {/* Pricing Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-16 items-stretch">
           {/* Free Tier */}
-          <Card className="flex flex-col justify-between p-8 bg-white border-slate-200">
+          <Card className="flex flex-col justify-between p-8 bg-white/85 backdrop-blur-xl border border-white/85 shadow-[0_10px_30px_-5px_rgba(30,58,138,0.06)] rounded-2xl">
             <div>
               <div className="flex items-center justify-between mb-4">
                 <Badge variant="neutral">Free Forever</Badge>
               </div>
 
-              <h3 className="text-2xl font-bold text-ink mb-2">Starter</h3>
-              <p className="text-base text-ink-muted mb-6">
+              <h3 className="text-2xl font-bold text-slate-900 font-heading mb-2">Starter</h3>
+              <p className="text-base text-slate-600 mb-6">
                 Core tools for students, freshers, and individual job applications.
               </p>
 
               <div className="flex items-baseline gap-2 mb-6 pb-6 border-b border-slate-100">
-                <span className="text-4xl font-extrabold text-ink">₹0</span>
-                <span className="text-base text-ink-subtle">free forever</span>
+                <span className="text-4xl font-extrabold text-slate-900">₹0</span>
+                <span className="text-base text-slate-500">free forever</span>
               </div>
 
-              <ul className="space-y-3 text-base text-ink-muted mb-8">
+              <ul className="space-y-3 text-base text-slate-600 mb-8">
                 <li className="flex items-center gap-2.5">
                   <Check className="w-5 h-5 text-emerald-600 shrink-0" aria-hidden="true" />
                   <span>Master Career Profile</span>
@@ -129,9 +129,9 @@ export function PricingSection() {
           </Card>
 
           {/* Pro Tier */}
-          <Card className="flex flex-col justify-between p-8 bg-white border-accent ring-2 ring-accent/15 relative">
+          <Card className="flex flex-col justify-between p-8 bg-gradient-to-b from-white/95 via-blue-50/40 to-white/95 backdrop-blur-xl border-2 border-blue-500/80 shadow-[0_20px_50px_-10px_rgba(37,99,235,0.18)] relative rounded-2xl">
             <div className="absolute -top-3.5 right-6">
-              <span className="bg-accent text-white text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
+              <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 text-white text-xs font-bold uppercase tracking-wider px-3.5 py-1 rounded-full shadow-md shadow-blue-500/30">
                 Most Popular
               </span>
             </div>
@@ -141,24 +141,24 @@ export function PricingSection() {
                 <Badge variant="accent">Full Career Suite</Badge>
               </div>
 
-              <h3 className="text-2xl font-bold text-ink mb-2">Karyvo Pro</h3>
-              <p className="text-base text-ink-muted mb-6">
+              <h3 className="text-2xl font-bold text-slate-900 font-heading mb-2">Karyvo Pro</h3>
+              <p className="text-base text-slate-600 mb-6">
                 For active job seekers who want unlimited tailoring and interview prep.
               </p>
 
               <div className="flex items-baseline gap-2 mb-6 pb-6 border-b border-slate-100">
-                <span className="text-4xl font-extrabold text-accent">
+                <span className="text-4xl font-extrabold text-blue-600">
                   {billingCycle === "monthly" ? "₹499" : "₹2,999"}
                 </span>
-                <span className="text-base text-ink-subtle">
+                <span className="text-base text-slate-500">
                   {billingCycle === "monthly" ? "/ month" : "/ year (₹250/mo)"}
                 </span>
               </div>
 
-              <ul className="space-y-3 text-base text-ink-muted mb-8">
+              <ul className="space-y-3 text-base text-slate-600 mb-8">
                 <li className="flex items-center gap-2.5">
                   <Check className="w-5 h-5 text-emerald-600 shrink-0" aria-hidden="true" />
-                  <span className="font-semibold text-ink">Everything in Free, plus:</span>
+                  <span className="font-semibold text-slate-900">Everything in Free, plus:</span>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <Check className="w-5 h-5 text-emerald-600 shrink-0" aria-hidden="true" />
@@ -194,11 +194,11 @@ export function PricingSection() {
 
         {/* Feature Comparison Table */}
         <div className="max-w-4xl mx-auto">
-          <h3 className="text-xl font-bold text-ink mb-6 text-center">
+          <h3 className="text-xl font-bold text-slate-900 font-heading mb-6 text-center">
             Detailed Feature Breakdown
           </h3>
 
-          <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-subtle">
+          <div className="overflow-x-auto rounded-2xl border border-white/80 bg-white/85 backdrop-blur-xl shadow-card">
             <table className="w-full text-left border-collapse text-base">
               <thead>
                 <tr className="border-b border-slate-200 bg-slate-50/70">

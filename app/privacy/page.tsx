@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft, Shield, Lock, Eye, FileText, CheckCircle2 } from "lucide-react";
-import { GlassPanel } from "@/components/ui/glass";
+import { Card, Badge } from "@/components/ui/primitives";
 
 export const metadata = {
   title: "Privacy Policy | Karyvo AI Builder",
@@ -9,22 +9,22 @@ export const metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto space-y-8">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 hover:text-indigo-600 transition-colors"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 hover:text-brand-primary transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
           <span>Back to Home</span>
         </Link>
 
         <div className="space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 border border-indigo-200/60 text-indigo-700">
-            <Shield className="h-3.5 w-3.5" />
-            <span>Privacy & Data Transparency</span>
-          </div>
-          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight font-heading">
+          <Badge variant="brand" size="sm">
+            <Shield className="h-3.5 w-3.5 mr-1" />
+            Privacy & Data Transparency
+          </Badge>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight font-heading">
             Privacy Policy & AI Transparency Notice
           </h1>
           <p className="text-sm text-slate-600">
@@ -32,10 +32,10 @@ export default function PrivacyPolicyPage() {
           </p>
         </div>
 
-        <GlassPanel className="p-8 space-y-8 text-slate-700 leading-relaxed text-sm">
+        <Card className="p-8 sm:p-10 space-y-8 text-slate-700 leading-relaxed text-sm bg-white border-slate-200">
           <section className="space-y-3">
             <h2 className="text-lg font-bold text-slate-900 font-heading flex items-center gap-2">
-              <Lock className="h-5 w-5 text-indigo-600" />
+              <Lock className="h-5 w-5 text-brand-primary" />
               <span>1. Your Career Data Belongs Exclusively to You</span>
             </h2>
             <p>
@@ -48,7 +48,7 @@ export default function PrivacyPolicyPage() {
 
           <section className="space-y-3">
             <h2 className="text-lg font-bold text-slate-900 font-heading flex items-center gap-2">
-              <Eye className="h-5 w-5 text-indigo-600" />
+              <Eye className="h-5 w-5 text-brand-primary" />
               <span>2. AI Document Processing & OCR Disclosure</span>
             </h2>
             <p>
@@ -85,7 +85,7 @@ export default function PrivacyPolicyPage() {
 
           <section className="space-y-3">
             <h2 className="text-lg font-bold text-slate-900 font-heading flex items-center gap-2">
-              <FileText className="h-5 w-5 text-indigo-600" />
+              <FileText className="h-5 w-5 text-brand-primary" />
               <span>4. Data Retention, Portability & Deletion</span>
             </h2>
             <p>
@@ -98,16 +98,16 @@ export default function PrivacyPolicyPage() {
             </ul>
           </section>
 
-          <section className="space-y-3 pt-4 border-t border-slate-200">
+          <section className="space-y-3 pt-6 border-t border-slate-200">
             <h2 className="text-base font-bold text-slate-900 font-heading">Contact & Security Inquiries</h2>
             <p className="text-xs text-slate-500">
               For questions regarding privacy, security compliance, or data subject requests, please reach out to{" "}
-              <a href="mailto:support@karyvo.ai" className="text-indigo-600 hover:underline">
+              <a href="mailto:support@karyvo.ai" className="text-brand-primary hover:underline">
                 support@karyvo.ai
               </a>.
             </p>
           </section>
-        </GlassPanel>
+        </Card>
       </div>
     </div>
   );

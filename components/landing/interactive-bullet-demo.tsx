@@ -134,34 +134,34 @@ export function InteractiveBulletDemo() {
 
   return (
     <div id="interactive-demo" className="w-full max-w-4xl mx-auto scroll-mt-24">
-      <GlassCard variant="interactive" className="p-7 sm:p-9 rounded-2xl space-y-7 bg-white border border-slate-200 shadow-card">
+      <GlassCard variant="interactive" className="p-7 sm:p-9 rounded-2xl space-y-7 shadow-[0_20px_50px_-10px_rgba(30,58,138,0.1)]">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/70 pb-5">
           <div>
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs font-semibold text-accent uppercase tracking-wider">
+              <span className="text-xs font-semibold text-blue-600 uppercase tracking-wider">
                 Interactive Live Demo
               </span>
             </div>
-            <h3 className="text-xl sm:text-2xl font-bold text-ink tracking-tight mt-1">
+            <h3 className="text-xl sm:text-2xl font-bold text-slate-900 font-heading tracking-tight mt-1">
               The XYZ Method Bullet Improver
             </h3>
-            <p className="text-sm text-ink-muted mt-0.5">
+            <p className="text-sm text-slate-600 mt-0.5">
               Accomplished [X], as measured by [Y], by doing [Z]. Popularised by Laszlo Bock, former Google VP of People Operations.
             </p>
           </div>
 
           {/* Presets */}
-          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 border border-slate-200 self-start sm:self-auto">
+          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-white/80 border border-slate-200/80 backdrop-blur-sm self-start sm:self-auto shadow-xs">
             {PRESETS.map((p, idx) => (
               <button
                 key={p.role}
                 onClick={() => handleSelectPreset(idx)}
-                className={`h-9 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all inline-flex items-center justify-center ${
+                className={`h-9 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all inline-flex items-center justify-center cursor-pointer ${
                   selectedPreset === idx
-                    ? "bg-accent text-white shadow-sm"
-                    : "text-ink-muted hover:text-ink"
+                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm shadow-blue-500/25"
+                    : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
                 }`}
               >
                 {p.role}
@@ -181,7 +181,7 @@ export function InteractiveBulletDemo() {
         {/* Interactive Comparison Box */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
           {/* Input: Average Weak Bullet */}
-          <div className="p-5 sm:p-6 rounded-xl bg-white border border-slate-200 shadow-sm flex flex-col justify-between min-h-[250px]">
+          <div className="p-5 sm:p-6 rounded-xl bg-white/85 border border-slate-200/80 shadow-sm flex flex-col justify-between min-h-[250px] backdrop-blur-md">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold uppercase tracking-wider text-rose-600 flex items-center gap-1">
@@ -208,7 +208,7 @@ export function InteractiveBulletDemo() {
                 type="button"
                 onClick={handleTransform}
                 disabled={isLoading || !inputBullet.trim()}
-                className="h-9 px-4 text-xs font-semibold rounded-lg bg-accent text-white hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors inline-flex items-center gap-2 shadow-sm"
+                className="h-9 px-4 text-xs font-semibold rounded-lg bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 hover:from-blue-700 hover:to-indigo-700 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed transition-all inline-flex items-center gap-2 text-white shadow-md shadow-blue-500/25 cursor-pointer"
               >
                 {isLoading ? (
                   <span className="animate-spin h-3.5 w-3.5 border-2 border-white border-t-transparent rounded-full" />
@@ -223,11 +223,11 @@ export function InteractiveBulletDemo() {
           </div>
 
           {/* Output: XYZ Optimized Bullet */}
-          <div className="p-5 sm:p-6 rounded-xl bg-accent-light/40 border border-accent-border/50 flex flex-col justify-between min-h-[250px] shadow-sm">
+          <div className="p-5 sm:p-6 rounded-xl bg-blue-50/70 border border-blue-200/70 flex flex-col justify-between min-h-[250px] shadow-sm backdrop-blur-md">
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold uppercase tracking-wider text-accent flex items-center gap-1.5">
-                  <Sparkles className="h-3.5 w-3.5 text-accent" />
+                <span className="text-xs font-semibold uppercase tracking-wider text-blue-700 flex items-center gap-1.5">
+                  <Sparkles className="h-3.5 w-3.5 text-blue-600" />
                   XYZ Transformation
                 </span>
                 <span className="text-xs text-ink-subtle font-medium bg-white px-2 py-0.5 rounded-md border border-slate-200">

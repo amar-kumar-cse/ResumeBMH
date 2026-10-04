@@ -6,10 +6,12 @@ import { Resume, ResumeVersion } from "@/types/resume";
 import { ATSScanResult } from "@/types/ats";
 import { InterviewSession } from "@/types/interview";
 import {
-  GlassCard,
-  GlassBadge,
-  GlassButton,
-} from "@/components/ui/glass";
+  Card,
+  Badge,
+  Button,
+  PageHeader,
+  EmptyState,
+} from "@/components/ui/primitives";
 import {
   User,
   FileText,
@@ -17,9 +19,9 @@ import {
   Send,
   Headphones,
   Crown,
-  Sparkles,
   ArrowRight,
   History,
+  Plus,
 } from "lucide-react";
 
 interface Props {
@@ -37,30 +39,10 @@ export function DashboardWorkspace({
   atsScans,
   interviews,
 }: Props) {
-  const primaryResume = resumes[0] || {
-    id: "res-new",
-    userId: profile?.userId || "user-default",
-    title: `${profile?.fullName || "Technical"} Resume (Standard)`,
-    targetRole: profile?.experience?.[0]?.role || "Software Development Engineer",
-    templateId: "modern-tech",
-    isPrimary: true,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    content: {
-      personal: {
-        fullName: profile?.fullName || "Your Full Name",
-        summary: profile?.summary || "Complete professional summary configured.",
-      },
-      education: profile?.education || [],
-      experience: profile?.experience || [],
-      projects: profile?.projects || [],
-      skills: profile?.skills || { technical: [], frameworks: [], tools: [], soft: [] },
-      certifications: profile?.certifications || [],
-      achievements: profile?.achievements || [],
-    },
-  };
-  const latestScan = atsScans[0];
-  const latestInterview = interviews[0];
+  const hasResumes = resumes && resumes.length > 0;
+  const primaryResume = hasResumes ? resumes[0] : null;
+  const latestScan = atsScans?.[0];
+  const latestInterview = interviews?.[0];
 
   // Calculate profile completeness %
   let profileScore = 40;
@@ -73,224 +55,292 @@ export function DashboardWorkspace({
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-      {/* Welcome & Overview Banner */}
-      {/* Issue 5 fix: removed redundant "Open Resume Builder" CTA from header;
-          that action is already prominent inside the Active Primary Resume card below. */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-200/80">
-        <div className="space-y-1">
-          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-slate-900 font-heading flex items-center gap-2">
-            Welcome back, {displayName}
-            <Sparkles className="h-6 w-6 text-amber-500" aria-hidden="true" />
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-600">
-            India-first unified career cockpit. All tools draw directly from your single Master Career Profile.
-          </p>
-        </div>
-      </div>
+      {/* Page Header */}
+      <PageHeader
+        badge="Career Cockpit"
+        title={`Welcome back, ${displayName}`}
+        description="One unified hub for your Master Career Profile, ATS documents, and interview practice."
+        actions={
+          <Link href="/resume">
+            <Button size="md" className="gap-2">
+              <Plus className="w-4 h-4" />
+              <span>New Resume</span>
+            </Button>
+          </Link>
+        }
+      />
 
-      {/* Top 4 Quick Stats Grid */}
+      {/* Top Quick Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Profile Completeness */}
-        <GlassCard className="p-5 space-y-3">
+        {/* Profile Strength */}
+        <Card className="p-5 space-y-3 bg-white">
           <div className="flex justify-between items-center">
-            {/* Issue 1 fix: converted from all-caps tracking-wider to sentence case */}
-            <span className="text-xs text-slate-500 font-semibold flex items-center gap-1.5">
-              <User className="h-4 w-4 text-indigo-600" aria-hidden="true" /> Profile strength
+            <span className="text-sm text-ink-muted font-semibold flex items-center gap-1.5">
+              <User className="w-4 h-4 text-accent" aria-hidden="true" />
+              <span>Profile strength</span>
             </span>
-            <span className="font-heading font-extrabold text-indigo-700 text-sm">{profileScore}%</span>
+            <span className="font-heading font-extrabold text-accent text-sm">
+              {profileScore}%
+            </span>
           </div>
-          <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden" role="progressbar" aria-valuenow={profileScore} aria-valuemin={0} aria-valuemax={100} aria-label={`Profile strength: ${profileScore}%`}>
+          <div
+            className="w-full h-2 rounded-full bg-slate-100 overflow-hidden"
+            role="progressbar"
+            aria-valuenow={profileScore}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label={`Profile strength: ${profileScore}%`}
+          >
             <div
-              className="h-full bg-gradient-to-r from-indigo-600 to-violet-600 rounded-full"
+              className="h-full bg-accent rounded-full transition-all"
               style={{ width: `${profileScore}%` }}
             />
           </div>
-          {/* Issue 2 fix: text-[11px] → text-xs */}
-          <Link href="/profile" className="text-xs text-indigo-600 hover:underline flex items-center gap-1 font-medium">
-            Update master profile <ArrowRight className="h-3 w-3" aria-hidden="true" />
+          <Link
+            href="/profile"
+            className="text-xs text-accent hover:text-accent-hover font-semibold flex items-center gap-1"
+          >
+            <span>Edit Master Profile</span>
+            <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
           </Link>
-        </GlassCard>
+        </Card>
 
-        {/* ATS Health */}
-        <GlassCard className="p-5 space-y-3">
+        {/* ATS Baseline */}
+        <Card className="p-5 space-y-3 bg-white">
           <div className="flex justify-between items-center">
-            {/* Issue 1 fix: sentence case */}
-            <span className="text-xs text-slate-500 font-semibold flex items-center gap-1.5">
-              <ShieldCheck className="h-4 w-4 text-emerald-600" aria-hidden="true" /> ATS baseline
+            <span className="text-sm text-ink-muted font-semibold flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-emerald-600" aria-hidden="true" />
+              <span>ATS audit score</span>
             </span>
             <span className="font-heading font-extrabold text-emerald-700 text-sm">
               {latestScan ? `${latestScan.overallScore}/100` : "Ready"}
             </span>
           </div>
-          <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden" role="progressbar" aria-valuenow={latestScan ? latestScan.overallScore : 88} aria-valuemin={0} aria-valuemax={100} aria-label={`ATS score: ${latestScan ? latestScan.overallScore : 88}`}>
+          <div
+            className="w-full h-2 rounded-full bg-slate-100 overflow-hidden"
+            role="progressbar"
+            aria-valuenow={latestScan ? latestScan.overallScore : 85}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label={`ATS score: ${latestScan ? latestScan.overallScore : 85}`}
+          >
             <div
-              className="h-full bg-emerald-500 rounded-full"
-              style={{ width: `${latestScan ? latestScan.overallScore : 88}%` }}
+              className="h-full bg-emerald-500 rounded-full transition-all"
+              style={{ width: `${latestScan ? latestScan.overallScore : 85}%` }}
             />
           </div>
-          {/* Issue 2 fix: text-[11px] → text-xs */}
-          <Link href="/ats" className="text-xs text-emerald-700 hover:underline flex items-center gap-1 font-medium">
-            Run standalone scan <ArrowRight className="h-3 w-3" aria-hidden="true" />
+          <Link
+            href="/ats"
+            className="text-xs text-emerald-700 hover:text-emerald-800 font-semibold flex items-center gap-1"
+          >
+            <span>Run standalone scan</span>
+            <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
           </Link>
-        </GlassCard>
+        </Card>
 
         {/* Version Snapshots */}
-        <GlassCard className="p-5 space-y-3">
+        <Card className="p-5 space-y-3 bg-white">
           <div className="flex justify-between items-center">
-            {/* Issue 1 fix: sentence case */}
-            <span className="text-xs text-slate-500 font-semibold flex items-center gap-1.5">
-              <History className="h-4 w-4 text-amber-600" aria-hidden="true" /> Resume versions
+            <span className="text-sm text-ink-muted font-semibold flex items-center gap-1.5">
+              <History className="w-4 h-4 text-amber-600" aria-hidden="true" />
+              <span>Resume versions</span>
             </span>
-            <span className="font-heading font-extrabold text-amber-800 text-sm">{versions.length} saved</span>
+            <span className="font-heading font-extrabold text-amber-800 text-sm">
+              {versions?.length || 0} saved
+            </span>
           </div>
-          {/* Issue 3 fix: text-[11px] → text-xs */}
-          <p className="text-xs text-slate-600 truncate">
-            Latest: {versions[0]?.versionLabel || "Initial version"}
+          <p className="text-xs text-ink-muted truncate">
+            Latest: {versions?.[0]?.versionLabel || "No snapshots yet"}
           </p>
-          {/* Issue 2 fix: text-[11px] → text-xs */}
-          <Link href="/resume" className="text-xs text-amber-700 hover:underline flex items-center gap-1 font-medium">
-            Manage labeled versions <ArrowRight className="h-3 w-3" aria-hidden="true" />
+          <Link
+            href="/resume"
+            className="text-xs text-amber-700 hover:text-amber-800 font-semibold flex items-center gap-1"
+          >
+            <span>Manage snapshots</span>
+            <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
           </Link>
-        </GlassCard>
+        </Card>
 
         {/* Mock Interview Status */}
-        <GlassCard className="p-5 space-y-3">
+        <Card className="p-5 space-y-3 bg-white">
           <div className="flex justify-between items-center">
-            {/* Issue 4 fix: sentence case */}
-            <span className="text-xs text-slate-500 font-semibold flex items-center gap-1.5">
-              <Headphones className="h-4 w-4 text-indigo-600" aria-hidden="true" /> Interview prep
+            <span className="text-sm text-ink-muted font-semibold flex items-center gap-1.5">
+              <Headphones className="w-4 h-4 text-accent" aria-hidden="true" />
+              <span>Interview prep</span>
             </span>
-            <span className="font-heading font-extrabold text-indigo-700 text-sm">
+            <span className="font-heading font-extrabold text-accent text-sm">
               {latestInterview ? `${latestInterview.overallScore || 85}%` : "5 roles"}
             </span>
           </div>
-          {/* Issue 3 fix: text-[11px] → text-xs */}
-          <p className="text-xs text-slate-600 truncate">
+          <p className="text-xs text-ink-muted truncate">
             {latestInterview ? latestInterview.targetRole : "Practice tech roles"}
           </p>
-          {/* Issue 2 fix: text-[11px] → text-xs */}
-          <Link href="/interview" className="text-xs text-indigo-600 hover:underline flex items-center gap-1 font-medium">
-            Start mock session <ArrowRight className="h-3 w-3" aria-hidden="true" />
+          <Link
+            href="/interview"
+            className="text-xs text-accent hover:text-accent-hover font-semibold flex items-center gap-1"
+          >
+            <span>Start mock session</span>
+            <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
           </Link>
-        </GlassCard>
+        </Card>
       </div>
 
       {/* Main Grid: Active Resume & Connected Hub */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left Column: Primary Resume & Version Snapshots */}
         <div className="lg:col-span-7 space-y-6">
-          <GlassCard className="p-6 space-y-4">
+          <Card className="p-6 sm:p-7 space-y-4 bg-white">
             <div className="flex justify-between items-center pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2">
-                <FileText className="h-5 w-5 text-indigo-600" aria-hidden="true" />
-                <h2 className="text-base font-bold text-slate-900 font-heading">Active primary resume</h2>
+                <FileText className="w-5 h-5 text-accent" aria-hidden="true" />
+                <h2 className="text-base font-bold text-ink font-heading">
+                  Active primary resume
+                </h2>
               </div>
-              <GlassBadge variant="violet" className="text-xs">
-                {primaryResume.templateId.toUpperCase()}
-              </GlassBadge>
+              {primaryResume && (
+                <Badge variant="accent">
+                  {primaryResume.templateId.toUpperCase()}
+                </Badge>
+              )}
             </div>
 
-            <div className="space-y-2">
-              <h3 className="text-lg font-bold text-slate-900 font-heading">{primaryResume.title}</h3>
-              <p className="text-xs text-slate-500">
-                Targeting: <span className="text-indigo-700 font-semibold">{primaryResume.targetRole}</span>
-              </p>
-              <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed pt-1">
-                {primaryResume.content.personal.summary || "Complete professional summary configured."}
-              </p>
-            </div>
+            {primaryResume ? (
+              <>
+                <div className="space-y-2">
+                  <h3 className="text-lg font-bold text-ink font-heading">
+                    {primaryResume.title}
+                  </h3>
+                  <p className="text-sm text-ink-muted">
+                    Target role:{" "}
+                    <span className="font-semibold text-accent">
+                      {primaryResume.targetRole}
+                    </span>
+                  </p>
+                  <p className="text-sm text-ink-muted line-clamp-2 leading-relaxed pt-1">
+                    {primaryResume.content.personal.summary ||
+                      "Complete professional summary configured."}
+                  </p>
+                </div>
 
-            <div className="flex flex-wrap items-center gap-3 pt-3 border-t border-slate-100">
-              <Link href="/resume">
-                <GlassButton variant="primary" size="sm">
-                  Edit in 7-step builder
-                </GlassButton>
-              </Link>
-              <Link href="/ats">
-                <GlassButton variant="secondary" size="sm">
-                  Run ATS audit
-                </GlassButton>
-              </Link>
-            </div>
-          </GlassCard>
+                <div className="flex flex-wrap items-center gap-3 pt-3 border-t border-slate-100">
+                  <Link href="/resume">
+                    <Button variant="primary" size="sm">
+                      Edit in 7-step builder
+                    </Button>
+                  </Link>
+                  <Link href="/ats">
+                    <Button variant="outline" size="sm">
+                      Run ATS audit
+                    </Button>
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <EmptyState
+                icon={FileText}
+                title="No resumes created yet"
+                description="Use the 7-step wizard to build your first tailored resume using verified XYZ bullet formatting."
+                action={
+                  <Link href="/resume">
+                    <Button size="sm">Create first resume</Button>
+                  </Link>
+                }
+              />
+            )}
+          </Card>
 
           {/* Version History Quick Viewer */}
-          {/* Issue 4 fix: removed uppercase + tracking-wider from section heading */}
-          <GlassCard className="p-6 space-y-4">
+          <Card className="p-6 sm:p-7 space-y-4 bg-white">
             <div className="flex justify-between items-center pb-2 border-b border-slate-100">
               <div className="flex items-center gap-2">
-                <History className="h-4 w-4 text-amber-600" aria-hidden="true" />
-                <h3 className="text-sm font-bold text-slate-900 font-heading">
+                <History className="w-4 h-4 text-amber-600" aria-hidden="true" />
+                <h3 className="text-sm font-bold text-ink font-heading">
                   Labeled resume versions
                 </h3>
               </div>
-              <Link href="/resume" className="text-xs text-indigo-600 hover:underline">
-                View all ({versions.length})
+              <Link
+                href="/resume"
+                className="text-xs text-accent hover:text-accent-hover font-semibold"
+              >
+                View all ({versions?.length || 0})
               </Link>
             </div>
 
-            <div className="space-y-2.5">
-              {versions.map((v) => (
-                <div
-                  key={v.id}
-                  className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center justify-between transition-colors"
-                >
-                  <div>
-                    <span className="text-xs font-bold text-slate-900 font-heading">{v.versionLabel}</span>
-                    {/* Issue 3 fix: text-[10px] → text-xs */}
-                    <span className="text-xs text-slate-500 block mt-0.5">
-                      {new Date(v.createdAt).toLocaleDateString("en-IN")} · v{v.versionNumber}
-                    </span>
+            {versions && versions.length > 0 ? (
+              <div className="space-y-2.5">
+                {versions.map((v) => (
+                  <div
+                    key={v.id}
+                    className="p-3.5 rounded-lg bg-slate-50 border border-slate-200/80 flex items-center justify-between transition-colors"
+                  >
+                    <div>
+                      <span className="text-sm font-bold text-ink">
+                        {v.versionLabel}
+                      </span>
+                      <span className="text-xs text-ink-subtle block mt-0.5">
+                        {new Date(v.createdAt).toLocaleDateString("en-IN")} · v{v.versionNumber}
+                      </span>
+                    </div>
+                    <Link href="/resume">
+                      <Badge variant="accent" className="cursor-pointer">
+                        Restore
+                      </Badge>
+                    </Link>
                   </div>
-                  <Link href="/resume">
-                    <GlassBadge variant="violet" className="hover:bg-indigo-100 cursor-pointer">
-                      Restore
-                    </GlassBadge>
-                  </Link>
-                </div>
-              ))}
-            </div>
-          </GlassCard>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-ink-muted py-4 text-center">
+                No snapshots saved yet. Save named versions in the resume builder as you apply to different roles.
+              </p>
+            )}
+          </Card>
         </div>
 
         {/* Right Column: Connected Platform Shortcuts */}
         <div className="lg:col-span-5 space-y-6">
-          <GlassCard className="p-6 space-y-4">
-            {/* Issue 6 fix: removed uppercase + tracking-wider from section heading */}
-            <h3 className="text-sm font-bold text-slate-900 pb-2 border-b border-slate-100 font-heading">
+          <Card className="p-6 sm:p-7 space-y-4 bg-white">
+            <h3 className="text-sm font-bold text-ink pb-2 border-b border-slate-100 font-heading">
               Connected platform tools
             </h3>
 
-            {/* Issue 8 fix: increased description text from text-[11px] → text-xs for readability */}
             <div className="space-y-3">
               {/* Standalone ATS Scanner */}
               <Link
                 href="/ats"
-                className="group block p-4 rounded-xl bg-white border border-slate-200 hover:border-emerald-500/50 shadow-sm transition-all duration-200"
+                className="group block p-4 rounded-xl bg-slate-50 border border-slate-200 hover:border-emerald-500/50 transition-all duration-200"
               >
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5 group-hover:text-emerald-700 font-heading">
-                    <ShieldCheck className="h-4 w-4 text-emerald-600" aria-hidden="true" /> Standalone ATS scanner
+                  <span className="text-sm font-bold text-ink flex items-center gap-1.5 group-hover:text-emerald-700">
+                    <ShieldCheck className="w-4 h-4 text-emerald-600" aria-hidden="true" />
+                    <span>Standalone ATS scanner</span>
                   </span>
-                  <ArrowRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-emerald-600 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+                  <ArrowRight
+                    className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 transition-transform group-hover:translate-x-0.5"
+                    aria-hidden="true"
+                  />
                 </div>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Grades formatting, completeness, keyword strength &amp; quantified metrics without needing a JD.
+                <p className="text-xs text-ink-muted leading-relaxed">
+                  Grades formatting, completeness, keyword strength &amp; quantified metrics without needing a job description.
                 </p>
               </Link>
 
               {/* Cover Letter AI */}
               <Link
                 href="/cover-letter"
-                className="group block p-4 rounded-xl bg-white border border-slate-200 hover:border-indigo-500/50 shadow-sm transition-all duration-200"
+                className="group block p-4 rounded-xl bg-slate-50 border border-slate-200 hover:border-accent transition-all duration-200"
               >
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5 group-hover:text-indigo-700 font-heading">
-                    <Send className="h-4 w-4 text-indigo-600" aria-hidden="true" /> Role cover letter AI
+                  <span className="text-sm font-bold text-ink flex items-center gap-1.5 group-hover:text-accent">
+                    <Send className="w-4 h-4 text-accent" aria-hidden="true" />
+                    <span>Role cover letter builder</span>
                   </span>
-                  <ArrowRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-indigo-600 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+                  <ArrowRight
+                    className="w-4 h-4 text-slate-400 group-hover:text-accent transition-transform group-hover:translate-x-0.5"
+                    aria-hidden="true"
+                  />
                 </div>
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-xs text-ink-muted leading-relaxed">
                   Enter company, role &amp; tone for a persuasive, grounded cover letter ready for export.
                 </p>
               </Link>
@@ -298,36 +348,42 @@ export function DashboardWorkspace({
               {/* Interview AI */}
               <Link
                 href="/interview"
-                className="group block p-4 rounded-xl bg-white border border-slate-200 hover:border-amber-500/50 shadow-sm transition-all duration-200"
+                className="group block p-4 rounded-xl bg-slate-50 border border-slate-200 hover:border-amber-500/50 transition-all duration-200"
               >
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5 group-hover:text-amber-700 font-heading">
-                    <Headphones className="h-4 w-4 text-amber-600" aria-hidden="true" /> Role mock interview AI
+                  <span className="text-sm font-bold text-ink flex items-center gap-1.5 group-hover:text-amber-700">
+                    <Headphones className="w-4 h-4 text-amber-600" aria-hidden="true" />
+                    <span>Role mock interview AI</span>
                   </span>
-                  <ArrowRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-amber-600 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+                  <ArrowRight
+                    className="w-4 h-4 text-slate-400 group-hover:text-amber-600 transition-transform group-hover:translate-x-0.5"
+                    aria-hidden="true"
+                  />
                 </div>
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-xs text-ink-muted leading-relaxed">
                   Select your target role, submit answers, and receive instant scoring with model solutions.
                 </p>
               </Link>
             </div>
-          </GlassCard>
+          </Card>
 
           {/* Pro Upgrade Promotion */}
-          <GlassCard variant="gold" className="p-6 space-y-3">
+          <Card className="p-6 space-y-3 bg-amber-50/40 border-amber-200">
             <div className="flex items-center gap-2">
-              <Crown className="h-5 w-5 text-amber-600 fill-amber-500/20" aria-hidden="true" />
-              <h3 className="text-sm font-bold text-slate-900 font-heading">Upgrade to Karyvo Pro</h3>
+              <Crown className="w-5 h-5 text-amber-600" aria-hidden="true" />
+              <h3 className="text-sm font-bold text-ink font-heading">
+                Upgrade to Karyvo Pro
+              </h3>
             </div>
-            <p className="text-xs text-amber-950/80 leading-relaxed">
-              Unlock unlimited AI bullet enhancements, unlimited named version snapshots, and priority interview feedback.
+            <p className="text-xs text-ink-muted leading-relaxed">
+              Unlock unlimited AI bullet enhancements, unlimited named version snapshots, and role-specific mock interview simulations.
             </p>
             <Link href="/pricing" className="block pt-1">
-              <GlassButton variant="gold" size="sm" className="w-full">
+              <Button variant="primary" size="sm" className="w-full">
                 View Pro plans (₹499/mo)
-              </GlassButton>
+              </Button>
             </Link>
-          </GlassCard>
+          </Card>
         </div>
       </div>
     </div>

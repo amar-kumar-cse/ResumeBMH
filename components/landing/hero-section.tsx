@@ -1,8 +1,8 @@
 import React from "react";
 import Link from "next/link";
-import { ArrowRight, ShieldCheck, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { Container, Button, Badge } from "./ui/primitives";
-import { HeroBulletPreview } from "./hero-bullet-preview";
+import { Hero3DResumeCard } from "./hero-3d-card";
 
 export function HeroSection() {
   return (
@@ -10,19 +10,20 @@ export function HeroSection() {
       <Container>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           {/* Left Column: Headline, Subhead, CTAs */}
-          <div className="lg:col-span-6 space-y-6 text-center lg:text-left flex flex-col items-center lg:items-start">
-            <Badge variant="accent">
+          <div className="lg:col-span-6 space-y-6 text-center lg:text-left flex flex-col items-center lg:items-start z-10">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/85 border border-blue-200/80 text-blue-700 shadow-sm text-xs font-semibold backdrop-blur-md">
+              <Sparkles className="h-3.5 w-3.5 text-amber-500" />
               <span>The XYZ Method • Popularised by Laszlo Bock</span>
-            </Badge>
+            </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-extrabold text-ink font-heading tracking-tight leading-[1.12]">
+            <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-extrabold text-slate-900 font-heading tracking-tight leading-[1.12]">
               Write resumes hiring managers read.{" "}
-              <span className="text-accent block sm:inline">
+              <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 bg-clip-text text-transparent block sm:inline">
                 Grounded in your real experience.
               </span>
             </h1>
 
-            <p className="text-base sm:text-lg text-ink-muted max-w-xl mx-auto lg:mx-0 leading-relaxed">
+            <p className="text-base sm:text-lg text-slate-600 max-w-xl mx-auto lg:mx-0 leading-relaxed font-sans">
               Karyvo structures your career history into verified, measurable bullet points using Laszlo Bock&apos;s XYZ formula. No invented percentages. No robotic fluff.
             </p>
 
@@ -44,23 +45,23 @@ export function HeroSection() {
             {/* Quick Proof Points */}
             <div className="pt-6 border-t border-slate-200/80 w-full grid grid-cols-3 gap-4 text-center lg:text-left">
               <div>
-                <span className="block text-sm sm:text-base font-bold text-ink">Free ATS audit</span>
-                <span className="text-xs text-ink-subtle">No card needed</span>
+                <span className="block text-sm sm:text-base font-bold text-slate-900 font-heading">Free ATS audit</span>
+                <span className="text-xs text-slate-500">No card needed</span>
               </div>
               <div>
-                <span className="block text-sm sm:text-base font-bold text-ink">Clean single-column</span>
-                <span className="text-xs text-ink-subtle">ATS parseable PDF</span>
+                <span className="block text-sm sm:text-base font-bold text-slate-900 font-heading">Clean single-column</span>
+                <span className="text-xs text-slate-500">ATS parseable PDF</span>
               </div>
               <div>
-                <span className="block text-sm sm:text-base font-bold text-ink">Private & secure</span>
-                <span className="text-xs text-ink-subtle">Your data stays yours</span>
+                <span className="block text-sm sm:text-base font-bold text-slate-900 font-heading">Private & secure</span>
+                <span className="text-xs text-slate-500">Your data stays yours</span>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Hero Product Preview (Before/After XYZ transformation) */}
-          <div className="lg:col-span-6 flex justify-center w-full">
-            <HeroBulletPreview />
+          {/* Right Column: Hero 3D Interactive Rotating Resume Card */}
+          <div className="lg:col-span-6 flex justify-center w-full z-10">
+            <Hero3DResumeCard />
           </div>
         </div>
       </Container>

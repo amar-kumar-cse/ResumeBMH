@@ -9,15 +9,14 @@ import {
   Send,
   Headphones,
   Crown,
-  Sparkles,
   LayoutDashboard,
   Menu,
   X,
   ChevronDown,
   LogOut,
+  CreditCard,
 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { GlassBadge } from "@/components/ui/glass";
+import { useEffect, useState, useRef } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 export function Navbar() {
@@ -25,11 +24,23 @@ export function Navbar() {
   const router = useRouter();
   const [isPro, setIsPro] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [toolsOpen, setToolsOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [authReady, setAuthReady] = useState(false);
+  const accountRef = useRef<HTMLDivElement>(null);
 
-  // Track the signed-in user (verified with Supabase) and keep it in sync on login/logout.
+  // Close account dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (accountRef.current && !accountRef.current.contains(event.target as Node)) {
+        setAccountOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Track signed-in user
   useEffect(() => {
     const supabase = createSupabaseBrowserClient();
     if (!supabase) {
@@ -54,7 +65,7 @@ export function Navbar() {
     };
   }, []);
 
-  // Subscription status is only requested for signed-in users.
+  // Subscription status verified from server
   useEffect(() => {
     if (!userEmail) {
       setIsPro(false);
@@ -75,6 +86,7 @@ export function Navbar() {
     await supabase?.auth.signOut();
     setUserEmail(null);
     setMobileOpen(false);
+    setAccountOpen(false);
     router.replace("/");
     router.refresh();
   }
@@ -82,257 +94,304 @@ export function Navbar() {
   // Close menus on route change
   useEffect(() => {
     setMobileOpen(false);
-    setToolsOpen(false);
+    setAccountOpen(false);
   }, [pathname]);
 
-  const primaryLinks = [
+  const appNavLinks = [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { href: "/resume", label: "Resume Builder", icon: FileText },
+    { href: "/resume", label: "Resume", icon: FileText },
     { href: "/ats", label: "ATS Scanner", icon: ShieldCheck },
-    { href: "/interview", label: "Interview AI", icon: Headphones },
+    { href: "/interview", label: "Interview", icon: Headphones },
   ];
 
-  const secondaryLinks = [
-    { href: "/profile", label: "Master Profile", icon: User },
-    { href: "/cover-letter", label: "Cover Letter", icon: Send },
+  const landingNavLinks = [
+    { href: "/#features", label: "Features" },
+    { href: "/#how-it-works", label: "How it works" },
+    { href: "/#pricing", label: "Pricing" },
+    { href: "/#faq", label: "FAQ" },
   ];
-
-  const allNavLinks = [...primaryLinks, ...secondaryLinks];
-  const isSecondaryActive = secondaryLinks.some(
-    (item) => pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href))
-  );
 
   return (
     <header className="sticky top-0 z-50 w-full px-4 sm:px-6 lg:px-8 pt-3 pb-2">
-      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 rounded-2xl border border-white/70 bg-white/75 backdrop-blur-xl shadow-[0_10px_30px_-5px_rgba(30,58,138,0.1),0_4px_12px_-2px_rgba(0,0,0,0.03)]">
+      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 rounded-2xl border border-white/80 bg-white/85 backdrop-blur-xl shadow-[0_10px_30px_-5px_rgba(30,58,138,0.08),0_4px_12px_-2px_rgba(0,0,0,0.03)]">
         {/* Brand Logo: Clean text wordmark Karyvo */}
-        <Link href="/" className="flex items-center gap-2 group select-none">
-          <span className="text-xl font-extrabold tracking-tight text-ink font-heading group-hover:text-accent transition-colors">
+        <Link href="/" className="flex items-center gap-2.5 group select-none">
+          <div className="h-8 w-8 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-blue-600 flex items-center justify-center text-white font-extrabold text-sm shadow-sm shadow-blue-500/30 group-hover:scale-105 transition-transform">
+            K
+          </div>
+          <span className="text-xl font-extrabold tracking-tight text-slate-900 font-heading group-hover:text-blue-600 transition-colors">
             Karyvo
           </span>
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-1 p-1 rounded-xl bg-slate-100/80 border border-slate-200/60 shadow-inner">
-          {pathname === "/" ? (
-            <>
-              <Link
-                href="#features"
-                className="px-3 py-1.5 rounded-lg text-xs font-medium text-ink-muted hover:text-ink hover:bg-white/60 transition-colors"
-              >
-                Features
-              </Link>
-              <Link
-                href="#how-it-works"
-                className="px-3 py-1.5 rounded-lg text-xs font-medium text-ink-muted hover:text-ink hover:bg-white/60 transition-colors"
-              >
-                How it works
-              </Link>
-              <Link
-                href="#pricing"
-                className="px-3 py-1.5 rounded-lg text-xs font-medium text-ink-muted hover:text-ink hover:bg-white/60 transition-colors"
-              >
-                Pricing
-              </Link>
-              <Link
-                href="#faq"
-                className="px-3 py-1.5 rounded-lg text-xs font-medium text-ink-muted hover:text-ink hover:bg-white/60 transition-colors"
-              >
-                FAQ
-              </Link>
-            </>
-          ) : (
-            primaryLinks.map((item) => {
+        <nav className="hidden md:flex items-center gap-1 p-1 rounded-xl bg-slate-100/80 border border-slate-200/70 backdrop-blur-sm">
+          {userEmail ? (
+            appNavLinks.map((item) => {
               const Icon = item.icon;
-              const isActive = pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href));
+              const isActive =
+                pathname === item.href ||
+                (item.href !== "/" && pathname?.startsWith(item.href));
               return (
                 <Link
                   key={item.href}
                   href={item.href}
                   aria-current={isActive ? "page" : undefined}
-                  className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-all duration-200 ${
+                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-sm font-medium transition-all ${
                     isActive
-                      ? "text-accent bg-white shadow-sm font-semibold after:absolute after:bottom-0 after:left-2.5 after:right-2.5 after:h-0.5 after:bg-accent after:rounded-full"
-                      : "text-ink-muted hover:text-ink hover:bg-white/60 font-medium"
+                      ? "text-accent bg-white shadow-sm font-semibold"
+                      : "text-ink-muted hover:text-ink hover:bg-white/60"
                   }`}
                 >
-                  <Icon className={`h-3.5 w-3.5 ${isActive ? "text-accent" : "text-ink-subtle"}`} />
+                  <Icon
+                    className={`w-4 h-4 ${
+                      isActive ? "text-accent" : "text-ink-subtle"
+                    }`}
+                  />
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })
+          ) : pathname === "/" ? (
+            landingNavLinks.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="px-3.5 py-1.5 rounded-md text-sm font-medium text-ink-muted hover:text-ink hover:bg-white/60 transition-colors"
+              >
+                {item.label}
+              </Link>
+            ))
+          ) : (
+            appNavLinks.map((item) => {
+              const Icon = item.icon;
+              const isActive =
+                pathname === item.href ||
+                (item.href !== "/" && pathname?.startsWith(item.href));
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-sm font-medium transition-all ${
+                    isActive
+                      ? "text-accent bg-white shadow-sm font-semibold"
+                      : "text-ink-muted hover:text-ink hover:bg-white/60"
+                  }`}
+                >
+                  <Icon
+                    className={`w-4 h-4 ${
+                      isActive ? "text-accent" : "text-ink-subtle"
+                    }`}
+                  />
                   <span>{item.label}</span>
                 </Link>
               );
             })
           )}
-
-          {/* Tools Dropdown */}
-          <div className="relative">
-            <button
-              onClick={() => setToolsOpen(!toolsOpen)}
-              aria-expanded={toolsOpen}
-              aria-haspopup="true"
-              className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs transition-all ${
-                isSecondaryActive
-                  ? "text-accent bg-white shadow-sm font-semibold"
-                  : "text-ink-muted hover:text-ink hover:bg-white/60 font-medium"
-              }`}
-            >
-              <span>{pathname === "/" ? "Tools" : "More"}</span>
-              <ChevronDown className={`h-3 w-3 transition-transform ${toolsOpen ? "rotate-180 text-accent" : "text-ink-subtle"}`} />
-            </button>
-
-            {toolsOpen && (
-              <div className="absolute right-0 mt-2 w-48 rounded-xl bg-white border border-slate-200/80 p-1.5 shadow-lg space-y-0.5 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
-                {secondaryLinks.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href));
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      aria-current={isActive ? "page" : undefined}
-                      onClick={() => setToolsOpen(false)}
-                      className={`flex items-center gap-2 px-2.5 py-2 rounded-lg text-xs font-medium transition-colors ${
-                        isActive
-                          ? "bg-indigo-50 text-indigo-700 font-semibold"
-                          : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                      }`}
-                    >
-                      <Icon className={`h-3.5 w-3.5 ${isActive ? "text-indigo-600" : "text-slate-400"}`} />
-                      <span>{item.label}</span>
-                    </Link>
-                  );
-                })}
-              </div>
-            )}
-          </div>
         </nav>
 
-        {/* Actions (Pro Badge, Mobile Toggle) */}
-        <div className="flex items-center gap-2">
+        {/* Actions (Pro Status, Account Menu or Auth Buttons, Mobile Toggle) */}
+        <div className="flex items-center gap-2.5">
+          {/* Pro Status */}
           <Link
             href="/pricing"
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-slate-200/80 bg-white/90 hover:bg-slate-50 text-slate-700 hover:text-slate-900 font-heading text-xs font-semibold shadow-sm transition-all"
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold shadow-sm transition-all ${
+              isPro
+                ? "bg-amber-50 border-amber-200 text-amber-800"
+                : "bg-white border-slate-200 text-ink-muted hover:text-ink hover:bg-slate-50"
+            }`}
           >
-            <Crown className="h-3.5 w-3.5 text-amber-500 fill-amber-500/20" aria-hidden="true" />
-            <span>{isPro ? "Pro Active" : "Upgrade Pro"}</span>
+            <Crown
+              className={`w-3.5 h-3.5 ${
+                isPro ? "text-amber-600 fill-amber-500/20" : "text-slate-400"
+              }`}
+              aria-hidden="true"
+            />
+            <span>{isPro ? "Pro Active" : "Pricing"}</span>
           </Link>
 
-          {/* Account (desktop) */}
+          {/* Account Menu (Desktop) */}
           {authReady && (
-            <div className="hidden md:flex items-center gap-2">
+            <div className="hidden md:flex items-center">
               {userEmail ? (
-                <>
-                  <span
-                    className="max-w-[10rem] truncate text-xs font-medium text-slate-600"
-                    title={userEmail}
-                  >
-                    {userEmail}
-                  </span>
+                <div className="relative" ref={accountRef}>
                   <button
-                    onClick={handleSignOut}
-                    className="flex items-center gap-1.5 rounded-xl border border-slate-200/80 bg-white/90 px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm transition-all hover:bg-slate-50 hover:text-slate-900"
+                    type="button"
+                    onClick={() => setAccountOpen(!accountOpen)}
+                    aria-expanded={accountOpen}
+                    aria-haspopup="true"
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-ink text-sm font-semibold shadow-sm transition-all"
                   >
-                    <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
-                    <span>Log out</span>
+                    <User className="w-4 h-4 text-accent" />
+                    <span className="max-w-[8rem] truncate font-medium text-xs">
+                      {userEmail.split("@")[0]}
+                    </span>
+                    <ChevronDown
+                      className={`w-3.5 h-3.5 text-ink-subtle transition-transform ${
+                        accountOpen ? "rotate-180 text-accent" : ""
+                      }`}
+                    />
                   </button>
-                </>
+
+                  {accountOpen && (
+                    <div className="absolute right-0 mt-2 w-56 rounded-xl bg-white border border-slate-200/90 p-1.5 shadow-elevated space-y-0.5 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                      <div className="px-3 py-2 border-b border-slate-100">
+                        <span className="block text-xs text-ink-subtle">Signed in as</span>
+                        <span className="block text-xs font-semibold text-ink truncate" title={userEmail}>
+                          {userEmail}
+                        </span>
+                      </div>
+
+                      <Link
+                        href="/profile"
+                        onClick={() => setAccountOpen(false)}
+                        className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-ink-muted hover:text-ink hover:bg-slate-50 font-medium transition-colors"
+                      >
+                        <User className="w-4 h-4 text-accent" />
+                        <span>Master Profile</span>
+                      </Link>
+
+                      <Link
+                        href="/cover-letter"
+                        onClick={() => setAccountOpen(false)}
+                        className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-ink-muted hover:text-ink hover:bg-slate-50 font-medium transition-colors"
+                      >
+                        <Send className="w-4 h-4 text-accent" />
+                        <span>Cover Letter</span>
+                      </Link>
+
+                      <Link
+                        href="/pricing"
+                        onClick={() => setAccountOpen(false)}
+                        className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-ink-muted hover:text-ink hover:bg-slate-50 font-medium transition-colors"
+                      >
+                        <CreditCard className="w-4 h-4 text-accent" />
+                        <span>Billing & Plan</span>
+                      </Link>
+
+                      <div className="pt-1 mt-1 border-t border-slate-100">
+                        <button
+                          type="button"
+                          onClick={handleSignOut}
+                          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-rose-600 hover:bg-rose-50 font-medium transition-colors"
+                        >
+                          <LogOut className="w-4 h-4" />
+                          <span>Log out</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               ) : (
-                <>
+                <div className="flex items-center gap-2">
                   <Link
                     href="/login"
-                    className="rounded-xl px-3 py-1.5 text-xs font-semibold text-ink-muted transition-colors hover:text-accent"
+                    className="px-3.5 py-1.5 text-sm font-semibold text-slate-600 hover:text-blue-600 transition-colors"
                   >
                     Log in
                   </Link>
                   <Link
                     href="/signup"
-                    className="rounded-xl bg-accent hover:bg-accent-hover px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition-colors"
+                    className="rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 hover:from-blue-700 hover:to-indigo-700 px-4 py-1.5 text-sm font-semibold text-white shadow-sm shadow-blue-500/25 transition-all active:scale-95"
                   >
                     Sign up
                   </Link>
-                </>
+                </div>
               )}
             </div>
           )}
 
           {/* Mobile Hamburger Button */}
           <button
+            type="button"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle navigation menu"
-            className="md:hidden flex items-center justify-center h-8 w-8 rounded-xl border border-slate-200 bg-white/80 text-slate-600 hover:text-slate-900 transition-colors shadow-sm"
+            className="md:hidden flex items-center justify-center w-9 h-9 rounded-lg border border-slate-200 bg-white text-ink-muted hover:text-ink transition-colors shadow-sm"
           >
-            {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+            {mobileOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Glass Dropdown Menu */}
+      {/* Mobile Slide-down Menu */}
       {mobileOpen && (
-        <div className="md:hidden mt-2 mx-auto max-w-7xl rounded-2xl border border-white/80 bg-white/95 backdrop-blur-2xl p-4 shadow-xl space-y-2 animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="md:hidden mt-2 mx-auto max-w-7xl rounded-xl border border-slate-200 bg-white p-4 shadow-elevated space-y-3 animate-in fade-in slide-in-from-top-2 duration-150">
           <div className="grid grid-cols-2 gap-2 pb-3 border-b border-slate-100">
-            {allNavLinks.map((item) => {
+            {appNavLinks.map((item) => {
               const Icon = item.icon;
-              const isActive = pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href));
+              const isActive =
+                pathname === item.href ||
+                (item.href !== "/" && pathname?.startsWith(item.href));
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center gap-2 p-2.5 rounded-xl text-xs font-medium transition-all ${isActive
-                    ? "text-indigo-700 bg-indigo-50 border border-indigo-200 font-semibold"
-                    : "text-slate-600 hover:bg-slate-50"
-                    }`}
+                  className={`flex items-center gap-2 p-2.5 rounded-lg text-sm font-medium transition-all ${
+                    isActive
+                      ? "text-accent bg-accent-light border border-accent-border/50 font-semibold"
+                      : "text-ink-muted hover:bg-slate-50"
+                  }`}
                 >
-                  <Icon className={`h-4 w-4 ${isActive ? "text-indigo-600" : "text-slate-400"}`} />
+                  <Icon
+                    className={`w-4 h-4 ${
+                      isActive ? "text-accent" : "text-ink-subtle"
+                    }`}
+                  />
                   <span>{item.label}</span>
                 </Link>
               );
             })}
           </div>
 
-          <div className="flex items-center gap-2 pt-1">
+          <div className="grid grid-cols-2 gap-2 pb-3 border-b border-slate-100">
             <Link
-              href="/resume"
-              className="flex-1 py-2 rounded-xl border border-slate-200 bg-white text-center text-xs font-semibold text-slate-700 hover:text-indigo-600 shadow-sm"
+              href="/profile"
+              className="flex items-center gap-2 p-2 rounded-lg text-sm text-ink-muted hover:bg-slate-50 font-medium"
             >
-              Build Resume
+              <User className="w-4 h-4 text-accent" />
+              <span>Master Profile</span>
             </Link>
             <Link
-              href="/pricing"
-              className="flex-1 py-2 rounded-xl border border-amber-300 bg-amber-50 text-center text-xs font-bold text-amber-800 shadow-sm"
+              href="/cover-letter"
+              className="flex items-center gap-2 p-2 rounded-lg text-sm text-ink-muted hover:bg-slate-50 font-medium"
             >
-              {isPro ? "Pro Active" : "Pricing Plans"}
+              <Send className="w-4 h-4 text-accent" />
+              <span>Cover Letter</span>
             </Link>
           </div>
 
           {authReady && (
-            <div className="flex items-center gap-2 border-t border-slate-100 pt-3">
+            <div className="pt-1">
               {userEmail ? (
-                <>
-                  <span className="min-w-0 flex-1 truncate text-xs font-medium text-slate-600" title={userEmail}>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-xs text-ink-subtle truncate max-w-[14rem]" title={userEmail}>
                     {userEmail}
                   </span>
                   <button
+                    type="button"
                     onClick={handleSignOut}
-                    className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-rose-600 shadow-sm"
                   >
-                    <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
+                    <LogOut className="w-3.5 h-3.5" />
                     <span>Log out</span>
                   </button>
-                </>
+                </div>
               ) : (
-                <>
+                <div className="flex items-center gap-2">
                   <Link
                     href="/login"
-                    className="flex-1 rounded-xl border border-slate-200 bg-white py-2 text-center text-xs font-semibold text-slate-700 shadow-sm"
+                    className="flex-1 py-2 text-center rounded-lg border border-slate-200 bg-white text-sm font-semibold text-ink shadow-sm"
                   >
                     Log in
                   </Link>
                   <Link
                     href="/signup"
-                    className="flex-1 rounded-xl bg-accent hover:bg-accent-hover py-2 text-center text-xs font-semibold text-white shadow-sm transition-colors"
+                    className="flex-1 py-2 text-center rounded-lg bg-accent text-sm font-semibold text-white shadow-sm"
                   >
                     Sign up
                   </Link>
-                </>
+                </div>
               )}
             </div>
           )}

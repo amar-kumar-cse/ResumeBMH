@@ -4,13 +4,16 @@ import { ShieldCheck } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="border-t border-slate-200 bg-white py-12 text-ink-muted">
+    <footer className="border-t border-white/70 bg-white/80 backdrop-blur-xl py-12 text-ink-muted relative z-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 mb-10">
           {/* Brand info */}
           <div className="space-y-3">
-            <Link href="/" className="inline-block">
-              <span className="text-xl font-extrabold text-ink tracking-tight font-heading">
+            <Link href="/" className="inline-flex items-center gap-2 group">
+              <div className="h-7 w-7 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white font-extrabold text-xs shadow-sm shadow-blue-500/25">
+                K
+              </div>
+              <span className="text-xl font-extrabold text-slate-900 tracking-tight font-heading group-hover:text-blue-600 transition-colors">
                 Karyvo
               </span>
             </Link>

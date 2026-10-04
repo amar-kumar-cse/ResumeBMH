@@ -3,23 +3,21 @@
 import { useState, useRef, ChangeEvent, DragEvent } from "react";
 import { ATSScanResult } from "@/types/ats";
 import {
-  GlassCard,
-  GlassPanel,
-  GlassButton,
-  GlassInput,
-  GlassBadge,
-} from "@/components/ui/glass";
+  Card,
+  Panel,
+  Button,
+  Badge,
+  Input,
+} from "@/components/ui/primitives";
 import {
   ShieldCheck,
   AlertTriangle,
+  AlertCircle,
   CheckCircle2,
-  TrendingUp,
   FileText,
   Sparkles,
-  ArrowRight,
   Zap,
   Check,
-  Layers,
   SlidersHorizontal,
   UploadCloud,
   Image as ImageIcon,
@@ -29,7 +27,7 @@ import {
   EyeOff,
   Copy,
   Briefcase,
-  RefreshCw,
+  HelpCircle,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -141,7 +139,6 @@ export function ATSScannerWorkspace({ initialScans, sampleResumeText }: Props) {
   const handleRunScan = async () => {
     setUploadError(null);
 
-    // If in upload mode and file is selected, do multipart upload
     if (inputMode === "upload") {
       if (!selectedFile) {
         setUploadError("Please select or drop a resume file to scan.");
@@ -155,7 +152,7 @@ export function ATSScannerWorkspace({ initialScans, sampleResumeText }: Props) {
         const formData = new FormData();
         formData.append("file", selectedFile);
 
-        setTimeout(() => setScanStep("Auditing headers & layout against ATS standards..."), 1200);
+        setTimeout(() => setScanStep("Auditing headers & layout against parsing standards..."), 1200);
         setTimeout(() => setScanStep("Evaluating power action verbs & quantification metrics..."), 2400);
 
         const res = await fetch("/api/ats/scan", {
@@ -185,14 +182,13 @@ export function ATSScannerWorkspace({ initialScans, sampleResumeText }: Props) {
         setScanStep("");
       }
     } else {
-      // Manual text mode scan
       if (!resumeText.trim()) {
         setUploadError("Please paste or enter your resume text first.");
         return;
       }
 
       setIsScanning(true);
-      setScanStep("Analyzing text payload against corporate ATS models...");
+      setScanStep("Analyzing text payload against ATS layout criteria...");
 
       try {
         const res = await fetch("/api/ats/scan", {
@@ -233,58 +229,88 @@ export function ATSScannerWorkspace({ initialScans, sampleResumeText }: Props) {
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 85) return "text-emerald-600 border-emerald-500/40 bg-emerald-500/10";
-    if (score >= 70) return "text-indigo-600 border-indigo-500/40 bg-indigo-500/10";
-    return "text-amber-600 border-amber-500/40 bg-amber-500/10";
+    if (score >= 85) return "text-emerald-700 border-emerald-500 bg-emerald-50";
+    if (score >= 70) return "text-brand-primary border-brand-primary bg-indigo-50";
+    return "text-amber-700 border-amber-500 bg-amber-50";
   };
 
   const getScoreBadge = (score: number) => {
-    if (score >= 88)
+    if (score >= 85)
       return {
-        label: "Excellent Health - High ATS Compatibility",
+        label: "Ready for Applications (Strong Parse Fidelity)",
         variant: "emerald" as const,
-        description: "Exceptional structure, power action verbs, and quantifiable metrics detected.",
+        description: "Clear single-column layout, power action verbs, and measurable impact detected.",
       };
-    if (score >= 75)
+    if (score >= 70)
       return {
-        label: "Good Health - Ready for Review",
-        variant: "violet" as const,
-        description: "Strong baseline formatting and keyword coverage. Adding more measurable impact is recommended.",
+        label: "Good Baseline (Few Recommended Upgrades)",
+        variant: "brand" as const,
+        description: "Solid structure and keyword coverage. Adding more concrete metrics will boost ranking.",
       };
     return {
-      label: "Needs Attention - Key Gaps Detected",
+      label: "Needs Attention (Actionable Improvements Found)",
       variant: "amber" as const,
-      description: "Needs metric quantification and stronger action verbs to prevent automatic filtration.",
+      description: "Needs metric quantification and stronger action verbs to avoid automated filtration.",
     };
   };
+
+  // Group actionable fixes into Critical vs Warning
+  const categorizeFixes = (fixes: string[] = []) => {
+    const criticalKeywords = ["contact", "email", "phone", "table", "column", "unparseable", "missing section", "header"];
+    const critical: { text: string; howToFix: string }[] = [];
+    const warning: { text: string; howToFix: string }[] = [];
+
+    fixes.forEach((fix) => {
+      const lower = fix.toLowerCase();
+      const isCritical = criticalKeywords.some((k) => lower.includes(k));
+
+      if (isCritical) {
+        critical.push({
+          text: fix,
+          howToFix: "Use standard single-column sections without nested multi-column tables or header boxes.",
+        });
+      } else {
+        warning.push({
+          text: fix,
+          howToFix: "Rewrite with the XYZ formula: 'Accomplished [X] as measured by [Y], by doing [Z]'. Add concrete numbers.",
+        });
+      }
+    });
+
+    return { critical, warning };
+  };
+
+  const { critical: criticalIssues, warning: warningIssues } = categorizeFixes(
+    currentResult?.actionableFixes || []
+  );
 
   return (
     <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Header */}
-      <div className="space-y-4 pb-6 border-b border-slate-200/80">
-        <div className="space-y-1">
-          <div className="flex flex-wrap items-center gap-2">
+      <div className="space-y-4 pb-6 border-b border-slate-200">
+        <div className="space-y-1.5">
+          <div className="flex flex-wrap items-center gap-2.5">
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 font-heading flex items-center gap-2">
               <ShieldCheck className="h-7 w-7 text-emerald-600" />
-              Corporate ATS Resume Engine
+              ATS Resume Health Scanner
             </h1>
-            <GlassBadge variant="emerald" className="font-heading">
-              Universal Grader & Studio
-            </GlassBadge>
+            <Badge variant="brand" size="sm">
+              Standard Parser Audit
+            </Badge>
           </div>
-          <p className="text-xs sm:text-sm text-slate-600 max-w-2xl">
-            Drop your PDF or image resume directly to audit against Fortune 500 ATS algorithms (Workday, Taleo, Greenhouse, Lever).
+          <p className="text-sm text-slate-600 max-w-2xl">
+            Audit your resume layout, keyword density, and metric quantification against single-column ATS parsing standards.
           </p>
         </div>
 
         {/* View Switcher: ATS Audit vs Tailoring Studio */}
-        <div className="inline-flex items-center p-1 rounded-2xl bg-white/80 border border-slate-200 shadow-sm">
+        <div className="inline-flex items-center p-1 rounded-xl bg-slate-100 border border-slate-200 shadow-2xs">
           <button
             type="button"
             onClick={() => setActiveTab("ats-audit")}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               activeTab === "ats-audit"
-                ? "bg-indigo-600 text-white shadow-sm"
+                ? "bg-brand-primary text-white shadow-sm"
                 : "text-slate-600 hover:text-slate-900"
             }`}
           >
@@ -293,9 +319,9 @@ export function ATSScannerWorkspace({ initialScans, sampleResumeText }: Props) {
           <button
             type="button"
             onClick={() => setActiveTab("tailoring-studio")}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               activeTab === "tailoring-studio"
-                ? "bg-indigo-600 text-white shadow-sm"
+                ? "bg-brand-primary text-white shadow-sm"
                 : "text-slate-600 hover:text-slate-900"
             }`}
           >
@@ -310,48 +336,43 @@ export function ATSScannerWorkspace({ initialScans, sampleResumeText }: Props) {
       {activeTab === "ats-audit" && (
         <div className="space-y-8">
           {/* Input Panel with Mode Toggle (Upload File vs Text) */}
-          <GlassPanel
-            header={
-              <div className="flex items-center justify-between w-full">
-                <span className="font-heading font-bold text-slate-900 text-sm flex items-center gap-2">
-                  <FileText className="h-4 w-4 text-indigo-600" />
-                  Resume Document Input
-                </span>
-                <div className="flex items-center gap-1 bg-slate-100/90 p-0.5 rounded-xl border border-slate-200">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setInputMode("upload");
-                      setUploadError(null);
-                    }}
-                    className={`px-3 py-1 text-xs font-medium rounded-lg transition-all flex items-center gap-1.5 ${
-                      inputMode === "upload"
-                        ? "bg-white text-indigo-600 shadow-sm font-semibold"
-                        : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    <UploadCloud className="h-3.5 w-3.5" />
-                    <span>Upload File (PDF / Image)</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setInputMode("text");
-                      setUploadError(null);
-                    }}
-                    className={`px-3 py-1 text-xs font-medium rounded-lg transition-all flex items-center gap-1.5 ${
-                      inputMode === "text"
-                        ? "bg-white text-indigo-600 shadow-sm font-semibold"
-                        : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    <FileText className="h-3.5 w-3.5" />
-                    <span>Paste / Edit Text</span>
-                  </button>
-                </div>
+          <Panel
+            title="Resume Document Input"
+            subtitle="Upload a PDF / Image, or paste plain text directly for parsing analysis."
+            actions={
+              <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setInputMode("upload");
+                    setUploadError(null);
+                  }}
+                  className={`px-3 py-1 text-xs font-semibold rounded-md transition-all flex items-center gap-1.5 ${
+                    inputMode === "upload"
+                      ? "bg-white text-brand-primary shadow-xs"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  <UploadCloud className="h-3.5 w-3.5" />
+                  <span>Upload File</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setInputMode("text");
+                    setUploadError(null);
+                  }}
+                  className={`px-3 py-1 text-xs font-semibold rounded-md transition-all flex items-center gap-1.5 ${
+                    inputMode === "text"
+                      ? "bg-white text-brand-primary shadow-xs"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  <FileText className="h-3.5 w-3.5" />
+                  <span>Paste Text</span>
+                </button>
               </div>
             }
-            className="space-y-4"
           >
             {/* MODE 1: FILE UPLOAD (DRAG & DROP ZONE) */}
             {inputMode === "upload" && (
@@ -372,42 +393,42 @@ export function ATSScannerWorkspace({ initialScans, sampleResumeText }: Props) {
                     onClick={() => fileInputRef.current?.click()}
                     className={`relative cursor-pointer rounded-2xl border-2 border-dashed p-8 text-center transition-all duration-200 ${
                       isDragOver
-                        ? "border-indigo-600 bg-indigo-50/80 scale-[1.01] shadow-lg shadow-indigo-100"
-                        : "border-slate-300 hover:border-indigo-500 bg-gradient-to-b from-slate-50/60 via-white to-indigo-50/20 hover:bg-indigo-50/30"
+                        ? "border-brand-primary bg-indigo-50/80 scale-[1.01]"
+                        : "border-slate-300 hover:border-brand-primary bg-slate-50/60 hover:bg-indigo-50/30"
                     }`}
                   >
-                    <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 mb-4 shadow-sm group-hover:scale-105 transition-transform">
-                      <UploadCloud className="h-8 w-8" />
+                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50 border border-indigo-100 text-brand-primary mb-3 shadow-2xs">
+                      <UploadCloud className="h-7 w-7" />
                     </div>
 
                     <h3 className="text-base font-bold text-slate-900 font-heading">
                       Drag & Drop your Resume (PDF or Image)
                     </h3>
                     <p className="text-xs text-slate-500 mt-1 max-w-md mx-auto">
-                      Click to browse your device. Our AI OCR parses scanned PDFs, images, and text formats with high layout fidelity.
+                      Click to browse your device. Our parser extracts text, layout structures, and contact information.
                     </p>
 
                     <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
-                      <span className="text-[11px] font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 px-2.5 py-0.5 rounded-md">
+                      <span className="text-xs font-semibold text-brand-primary bg-indigo-50 border border-indigo-200 px-2.5 py-0.5 rounded-md">
                         PDF (Recommended)
                       </span>
-                      <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-md">
-                        PNG / JPG / WEBP (Images)
+                      <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-md">
+                        PNG / JPG / WEBP
                       </span>
-                      <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded-md">
+                      <span className="text-xs font-semibold text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded-md">
                         Max 12MB
                       </span>
                     </div>
                   </div>
                 ) : (
                   /* Selected File Card */
-                  <div className="flex items-center justify-between p-4 rounded-2xl bg-white border border-slate-200 shadow-sm">
+                  <div className="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-200">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-100">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-indigo-50 text-brand-primary border border-indigo-100">
                         {selectedFile.type.startsWith("image/") ? (
-                          <ImageIcon className="h-6 w-6" />
+                          <ImageIcon className="h-5 w-5" />
                         ) : (
-                          <FileCheck className="h-6 w-6" />
+                          <FileCheck className="h-5 w-5" />
                         )}
                       </div>
                       <div>
@@ -415,7 +436,7 @@ export function ATSScannerWorkspace({ initialScans, sampleResumeText }: Props) {
                           <span className="text-sm font-bold text-slate-900 font-heading max-w-xs sm:max-w-md truncate">
                             {selectedFile.name}
                           </span>
-                          <span className="text-[10px] font-semibold uppercase px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">
+                          <span className="text-xs font-semibold uppercase px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">
                             Ready to scan
                           </span>
                         </div>
@@ -431,14 +452,14 @@ export function ATSScannerWorkspace({ initialScans, sampleResumeText }: Props) {
                       <button
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
-                        className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition-colors"
+                        className="text-xs font-semibold text-brand-primary hover:underline px-2.5 py-1"
                       >
                         Change File
                       </button>
                       <button
                         type="button"
                         onClick={handleRemoveFile}
-                        className="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
+                        className="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-200 transition-colors"
                         title="Remove file"
                       >
                         <X className="h-4 w-4" />
@@ -457,19 +478,19 @@ export function ATSScannerWorkspace({ initialScans, sampleResumeText }: Props) {
                   value={resumeText}
                   onChange={(e) => setResumeText(e.target.value)}
                   placeholder="Paste full resume text or load from current active resume..."
-                  className="w-full bg-white border border-slate-200 rounded-xl p-4 text-xs font-mono text-slate-800 focus:outline-none focus:border-indigo-500 leading-relaxed shadow-sm"
+                  className="w-full bg-white border border-slate-300 rounded-lg p-3.5 text-xs font-mono text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary leading-relaxed shadow-2xs"
                 />
 
-                <div className="flex items-center gap-2">
-                  <label htmlFor="ats-file-label" className="text-xs text-slate-700 font-medium shrink-0">
+                <div className="flex items-center gap-3">
+                  <label htmlFor="ats-file-label" className="text-sm font-medium text-slate-700 shrink-0">
                     File Label:
                   </label>
-                  <GlassInput
+                  <Input
                     id="ats-file-label"
                     type="text"
                     value={resumeName}
                     onChange={(e) => setResumeName(e.target.value)}
-                    className="py-1.5 px-3 text-xs w-full sm:w-64"
+                    className="w-full sm:w-72"
                   />
                 </div>
               </div>
@@ -477,29 +498,29 @@ export function ATSScannerWorkspace({ initialScans, sampleResumeText }: Props) {
 
             {/* Error Message */}
             {uploadError && (
-              <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
+              <div className="p-3.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2 mt-3">
                 <AlertTriangle className="h-4 w-4 shrink-0 text-rose-600" />
                 <span>{uploadError}</span>
               </div>
             )}
 
-            {/* Privacy & AI Disclosure Notice */}
-            <div className="flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-200/80 text-[11px] text-slate-500">
-              <ShieldCheck className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+            {/* Privacy & Transparency Notice */}
+            <div className="flex items-center gap-2 p-3 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-600 mt-4">
+              <ShieldCheck className="h-4 w-4 text-slate-400 shrink-0" />
               <span>
-                Privacy Guarantee: Your resume is processed securely. Images or complex PDFs may use Google Gemini Vision OCR in accordance with our{" "}
-                <Link href="/privacy" className="text-indigo-600 underline hover:text-indigo-700">Privacy Policy</Link>.
+                Your resume is processed securely. Images or complex PDFs may use Google Gemini Vision OCR in accordance with our{" "}
+                <Link href="/privacy" className="text-brand-primary underline font-medium">Privacy Policy</Link>.
               </span>
             </div>
 
             {/* Action Bar */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-3 border-t border-slate-100">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-4 border-t border-slate-200 mt-4">
               <div className="flex items-center gap-2">
                 {resumeText && (
                   <button
                     type="button"
                     onClick={() => setShowExtractedText(!showExtractedText)}
-                    className="text-xs text-slate-600 hover:text-indigo-600 font-medium flex items-center gap-1.5 py-1 px-2.5 rounded-lg hover:bg-slate-100 transition-colors"
+                    className="text-xs text-slate-600 hover:text-brand-primary font-medium flex items-center gap-1.5 py-1 px-2.5 rounded-lg hover:bg-slate-100 transition-colors"
                   >
                     {showExtractedText ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
                     <span>{showExtractedText ? "Hide Parsed Text" : "View Extracted Text"}</span>
@@ -507,166 +528,178 @@ export function ATSScannerWorkspace({ initialScans, sampleResumeText }: Props) {
                 )}
               </div>
 
-              <div className="flex items-center gap-3">
-                <GlassButton
-                  variant="primary"
-                  size="md"
-                  onClick={handleRunScan}
-                  disabled={isScanning || (inputMode === "upload" ? !selectedFile : !resumeText.trim())}
-                  loading={isScanning}
-                  className="w-full sm:w-auto shadow-md shadow-indigo-100"
-                >
-                  <Zap className="h-4 w-4 fill-current text-white" />
-                  <span>
-                    {isScanning
-                      ? scanStep || "Auditing Resume..."
-                      : inputMode === "upload"
-                      ? "Scan Uploaded Resume"
-                      : "Run ATS Universal Scan"}
-                  </span>
-                </GlassButton>
-              </div>
+              <Button
+                variant="primary"
+                size="md"
+                onClick={handleRunScan}
+                disabled={isScanning || (inputMode === "upload" ? !selectedFile : !resumeText.trim())}
+                className="w-full sm:w-auto"
+              >
+                <Zap className="h-4 w-4 text-white" />
+                <span>
+                  {isScanning
+                    ? scanStep || "Auditing Resume..."
+                    : inputMode === "upload"
+                    ? "Scan Uploaded Resume"
+                    : "Run ATS Scan"}
+                </span>
+              </Button>
             </div>
 
             {/* Collapsible Parsed Text Viewer */}
             {showExtractedText && resumeText && (
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2 animate-in fade-in duration-300">
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2 mt-4 animate-in fade-in duration-200">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-slate-800 font-heading flex items-center gap-1.5">
-                    <FileText className="h-3.5 w-3.5 text-indigo-600" />
-                    Exact Text Parsed by ATS Engine ({resumeText.split(/\s+/).length} words)
+                    <FileText className="h-4 w-4 text-brand-primary" />
+                    Exact Text Parsed ({resumeText.split(/\s+/).length} words)
                   </span>
                   <button
                     type="button"
                     onClick={handleCopyExtractedText}
-                    className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 px-2 py-1 rounded hover:bg-indigo-50"
+                    className="text-xs font-semibold text-brand-primary hover:underline flex items-center gap-1 px-2 py-1 rounded"
                   >
-                    {copiedText ? <Check className="h-3 w-3 text-emerald-600" /> : <Copy className="h-3 w-3" />}
+                    {copiedText ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}
                     <span>{copiedText ? "Copied!" : "Copy Text"}</span>
                   </button>
                 </div>
-                <pre className="text-[11px] font-mono text-slate-700 bg-white p-3 rounded-lg border border-slate-200 overflow-x-auto max-h-60 leading-relaxed whitespace-pre-wrap">
+                <pre className="text-xs font-mono text-slate-700 bg-white p-3.5 rounded-lg border border-slate-200 overflow-x-auto max-h-60 leading-relaxed whitespace-pre-wrap">
                   {resumeText}
                 </pre>
               </div>
             )}
-          </GlassPanel>
+          </Panel>
 
           {/* Results Dashboard */}
           {currentResult && (
-            <div className="space-y-6 animate-in fade-in duration-500">
-              {/* Top Score Banner */}
-              <GlassCard className="p-6 sm:p-8 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-                {/* Overall Radial Gauge */}
-                <div className="md:col-span-4 flex flex-col items-center justify-center text-center p-5 rounded-2xl bg-white border border-slate-200 shadow-sm">
-                  <div
-                    className={`flex h-28 w-28 items-center justify-center rounded-full border-4 ${getScoreColor(
-                      currentResult.overallScore
-                    )} shadow-md mb-3`}
-                  >
-                    <span className="text-3xl font-extrabold font-heading text-slate-900">
-                      {currentResult.overallScore}
-                    </span>
-                    <span className="text-xs text-slate-500 font-heading">/100</span>
-                  </div>
-                  <div className="text-base font-bold text-slate-900 font-heading">Resume Health Score</div>
-                  <p className="text-[11px] text-slate-500 mt-0.5">Calculated across structure, content, keywords & metrics</p>
+            <div className="space-y-6 animate-in fade-in duration-300">
+              {/* Top Score Banner with Methodology */}
+              <Card className="p-6 sm:p-8 space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                  {/* Overall Radial Gauge */}
+                  <div className="md:col-span-4 flex flex-col items-center justify-center text-center p-6 rounded-2xl bg-slate-50 border border-slate-200">
+                    <div
+                      className={`flex h-28 w-28 items-center justify-center rounded-full border-4 ${getScoreColor(
+                        currentResult.overallScore
+                      )} shadow-sm mb-3`}
+                    >
+                      <span className="text-3xl font-extrabold font-heading text-slate-900">
+                        {currentResult.overallScore}
+                      </span>
+                      <span className="text-xs text-slate-500 font-heading">/100</span>
+                    </div>
+                    <div className="text-base font-bold text-slate-900 font-heading">Resume Health Score</div>
+                    <p className="text-xs text-slate-500 mt-1">Calculated across 4 objective pillars</p>
 
-                  {/* Verdict Badge */}
-                  <div className="mt-2">
-                    <GlassBadge variant={getScoreBadge(currentResult.overallScore).variant} className="text-[11px]">
-                      {getScoreBadge(currentResult.overallScore).label}
-                    </GlassBadge>
+                    {/* Verdict Badge */}
+                    <div className="mt-2.5">
+                      <Badge variant={getScoreBadge(currentResult.overallScore).variant} size="sm">
+                        {getScoreBadge(currentResult.overallScore).label}
+                      </Badge>
+                    </div>
+                    <p className="text-xs text-slate-600 mt-2 px-2 leading-relaxed">
+                      {getScoreBadge(currentResult.overallScore).description}
+                    </p>
                   </div>
-                  <p className="text-xs text-slate-500 mt-2 px-2">
-                    {getScoreBadge(currentResult.overallScore).description}
-                  </p>
+
+                  {/* 4 Pillar Breakdown Bars */}
+                  <div className="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Pillar 1: Formatting */}
+                    <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-2">
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="font-semibold text-slate-800">1. Formatting Compliance</span>
+                        <span className="font-heading font-extrabold text-emerald-600">
+                          {currentResult.formattingScore}%
+                        </span>
+                      </div>
+                      <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden border border-slate-200">
+                        <div
+                          className="h-full bg-emerald-500 rounded-full transition-all duration-700"
+                          style={{ width: `${currentResult.formattingScore}%` }}
+                        />
+                      </div>
+                      <span className="text-xs text-slate-500 block">Single-column headers, safe fonts, no multi-column tables</span>
+                    </div>
+
+                    {/* Pillar 2: Completeness */}
+                    <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-2">
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="font-semibold text-slate-800">2. Section Completeness</span>
+                        <span className="font-heading font-extrabold text-brand-primary">
+                          {currentResult.completenessScore}%
+                        </span>
+                      </div>
+                      <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden border border-slate-200">
+                        <div
+                          className="h-full bg-brand-primary rounded-full transition-all duration-700"
+                          style={{ width: `${currentResult.completenessScore}%` }}
+                        />
+                      </div>
+                      <span className="text-xs text-slate-500 block">Contact info, education, work history, skills density</span>
+                    </div>
+
+                    {/* Pillar 3: Keyword Strength */}
+                    <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-2">
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="font-semibold text-slate-800">3. Action Verbs & Keywords</span>
+                        <span className="font-heading font-extrabold text-amber-600">
+                          {currentResult.keywordStrengthScore}%
+                        </span>
+                      </div>
+                      <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden border border-slate-200">
+                        <div
+                          className="h-full bg-amber-500 rounded-full transition-all duration-700"
+                          style={{ width: `${currentResult.keywordStrengthScore}%` }}
+                        />
+                      </div>
+                      <span className="text-xs text-slate-500 block">Power verbs density, zero passive phrases, domain keywords</span>
+                    </div>
+
+                    {/* Pillar 4: Quantification */}
+                    <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-2">
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="font-semibold text-slate-800">4. Quantification & Metrics</span>
+                        <span className="font-heading font-extrabold text-amber-600">
+                          {currentResult.quantificationScore}%
+                        </span>
+                      </div>
+                      <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden border border-slate-200">
+                        <div
+                          className="h-full bg-amber-500 rounded-full transition-all duration-700"
+                          style={{ width: `${currentResult.quantificationScore}%` }}
+                        />
+                      </div>
+                      <span className="text-xs text-slate-500 block">Numbers, % improvements, scale, throughput metrics</span>
+                    </div>
+                  </div>
                 </div>
 
-                {/* 4 Pillar Breakdown Bars */}
-                <div className="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Pillar 1: Formatting */}
-                  <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-sm space-y-1.5">
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="font-semibold text-slate-800">1. Formatting Compliance</span>
-                      <span className="font-heading font-extrabold text-emerald-600">
-                        {currentResult.formattingScore}%
-                      </span>
-                    </div>
-                    <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
-                      <div
-                        className="h-full bg-emerald-500 rounded-full transition-all duration-1000"
-                        style={{ width: `${currentResult.formattingScore}%` }}
-                      />
-                    </div>
-                    <span className="text-xs text-slate-600 block">Header standard, fonts, layout safety</span>
-                  </div>
-
-                  {/* Pillar 2: Completeness */}
-                  <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-sm space-y-1.5">
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="font-semibold text-slate-800">2. Section Completeness</span>
-                      <span className="font-heading font-extrabold text-indigo-600">
-                        {currentResult.completenessScore}%
-                      </span>
-                    </div>
-                    <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
-                      <div
-                        className="h-full bg-indigo-500 rounded-full transition-all duration-1000"
-                        style={{ width: `${currentResult.completenessScore}%` }}
-                      />
-                    </div>
-                    <span className="text-xs text-slate-600 block">Contact, LinkedIn, GitHub, length density</span>
-                  </div>
-
-                  {/* Pillar 3: Keyword Strength */}
-                  <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-sm space-y-1.5">
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="font-semibold text-slate-800">3. Keyword & Action Verbs</span>
-                      <span className="font-heading font-extrabold text-amber-600">
-                        {currentResult.keywordStrengthScore}%
-                      </span>
-                    </div>
-                    <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
-                      <div
-                        className="h-full bg-amber-500 rounded-full transition-all duration-1000"
-                        style={{ width: `${currentResult.keywordStrengthScore}%` }}
-                      />
-                    </div>
-                    <span className="text-xs text-slate-600 block">Power verbs density, zero passive phrases</span>
-                  </div>
-
-                  {/* Pillar 4: Quantification */}
-                  <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-sm space-y-1.5">
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="font-semibold text-slate-800">4. Quantification & Metrics</span>
-                      <span className="font-heading font-extrabold text-amber-600">
-                        {currentResult.quantificationScore}%
-                      </span>
-                    </div>
-                    <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
-                      <div
-                        className="h-full bg-gradient-to-r from-amber-500 to-amber-400 rounded-full transition-all duration-1000"
-                        style={{ width: `${currentResult.quantificationScore}%` }}
-                      />
-                    </div>
-                    <span className="text-xs text-slate-600 block">Numbers, latency %, financial, throughput</span>
+                {/* Plain-Language Calculation Methodology Box */}
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-3">
+                  <HelpCircle className="h-5 w-5 text-slate-400 shrink-0 mt-0.5" />
+                  <div className="space-y-1 text-xs text-slate-600">
+                    <span className="font-bold text-slate-900 block">How this score is calculated:</span>
+                    <p className="leading-relaxed">
+                      Your overall score is an unweighted average of 4 objective pillars (25% each): Formatting Compliance,
+                      Section Completeness, Keyword Strength, and Metric Quantification. No subjective or paywalled bias is applied.
+                      Scores above 80 indicate strong readiness for applicant tracking systems.
+                    </p>
                   </div>
                 </div>
-              </GlassCard>
+              </Card>
 
               {/* Detected Profile & Keyword Matrix */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
                 {/* Detected Domain & Skills */}
-                <GlassCard className="p-6 h-full flex flex-col space-y-3">
-                  <div className="min-h-[36px] flex items-center justify-between pb-2 border-b border-slate-100">
+                <Card className="p-6 h-full flex flex-col space-y-3">
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-200">
                     <h3 className="text-sm font-bold text-slate-900 font-heading flex items-center gap-2">
-                      <Briefcase className="h-4 w-4 text-indigo-600 shrink-0" />
+                      <Briefcase className="h-4 w-4 text-brand-primary shrink-0" />
                       <span>Detected Domain Profile</span>
                     </h3>
-                    <GlassBadge variant="violet" className="text-xs">
+                    <Badge variant="brand" size="sm">
                       {currentResult.detectedRole || "Software Engineer"}
-                    </GlassBadge>
+                    </Badge>
                   </div>
 
                   <p className="text-xs text-slate-600">
@@ -687,22 +720,22 @@ export function ATSScannerWorkspace({ initialScans, sampleResumeText }: Props) {
                       <span className="text-xs text-slate-500 italic">No specific skills cataloged yet.</span>
                     )}
                   </div>
-                </GlassCard>
+                </Card>
 
                 {/* Missing Keyword Recommendations */}
-                <GlassCard className="p-6 h-full flex flex-col space-y-3">
-                  <div className="min-h-[36px] flex items-center justify-between pb-2 border-b border-slate-100">
+                <Card className="p-6 h-full flex flex-col space-y-3">
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-200">
                     <h3 className="text-sm font-bold text-slate-900 font-heading flex items-center gap-2">
                       <Sparkles className="h-4 w-4 text-amber-600 shrink-0" />
                       <span>Recommended Industry Keywords</span>
                     </h3>
-                    <span className="text-xs font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
-                      Boost Score
+                    <span className="text-xs font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
+                      Opportunity
                     </span>
                   </div>
 
                   <p className="text-xs text-slate-600">
-                    Terms frequently parsed by top recruiters hiring for {currentResult.detectedRole || "your role"}:
+                    Commonly parsed keywords for {currentResult.detectedRole || "your role"}:
                   </p>
 
                   <div className="flex flex-wrap gap-1.5 pt-1">
@@ -721,77 +754,100 @@ export function ATSScannerWorkspace({ initialScans, sampleResumeText }: Props) {
                       </span>
                     )}
                   </div>
-                </GlassCard>
+                </Card>
               </div>
 
-              {/* Actionable Fixes & Strengths Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
-                {/* Strengths */}
-                <GlassCard className="p-6 h-full flex flex-col space-y-3">
-                  <div className="min-h-[36px] flex items-center justify-between pb-2 border-b border-slate-100">
-                    <h3 className="text-sm font-bold text-slate-900 font-heading flex items-center gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-                      <span>Verified Strengths</span>
-                    </h3>
-                    <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
-                      {currentResult.strengths?.length || 0} Passed
-                    </span>
+              {/* Grouped Findings by Severity: Critical, Warnings, Passed */}
+              <div className="space-y-4">
+                <h3 className="text-base font-bold text-slate-900 font-heading">
+                  Audit Findings by Severity
+                </h3>
+
+                {/* 1. CRITICAL ISSUES (MUST FIX) */}
+                {criticalIssues.length > 0 && (
+                  <Card className="p-6 border-red-200 bg-red-50/30 space-y-3">
+                    <div className="flex items-center justify-between pb-2 border-b border-red-200">
+                      <div className="flex items-center gap-2">
+                        <AlertCircle className="h-5 w-5 text-red-600" />
+                        <h4 className="text-sm font-bold text-red-900 font-heading">
+                          Critical Issues ({criticalIssues.length}) — Must Fix
+                        </h4>
+                      </div>
+                      <Badge variant="rose" size="sm">High Priority</Badge>
+                    </div>
+
+                    <div className="space-y-3 pt-1">
+                      {criticalIssues.map((issue, idx) => (
+                        <div key={idx} className="p-3 rounded-lg bg-white border border-red-200 space-y-1">
+                          <p className="text-xs font-semibold text-red-900">{issue.text}</p>
+                          <p className="text-xs text-slate-600">
+                            <span className="font-semibold text-slate-700">How to fix:</span> {issue.howToFix}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
+                )}
+
+                {/* 2. WARNINGS (RECOMMENDED IMPROVEMENTS) */}
+                {warningIssues.length > 0 && (
+                  <Card className="p-6 border-amber-200 bg-amber-50/30 space-y-3">
+                    <div className="flex items-center justify-between pb-2 border-b border-amber-200">
+                      <div className="flex items-center gap-2">
+                        <AlertTriangle className="h-5 w-5 text-amber-600" />
+                        <h4 className="text-sm font-bold text-amber-900 font-heading">
+                          Recommended Improvements ({warningIssues.length})
+                        </h4>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setActiveTab("tailoring-studio")}
+                        className="text-xs text-brand-primary hover:underline font-semibold flex items-center gap-1"
+                      >
+                        <Sparkles className="h-3.5 w-3.5" /> Fix in Studio →
+                      </button>
+                    </div>
+
+                    <div className="space-y-3 pt-1">
+                      {warningIssues.map((issue, idx) => (
+                        <div key={idx} className="p-3 rounded-lg bg-white border border-amber-200 space-y-1">
+                          <p className="text-xs font-semibold text-amber-900">{issue.text}</p>
+                          <p className="text-xs text-slate-600">
+                            <span className="font-semibold text-slate-700">How to fix:</span> {issue.howToFix}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
+                )}
+
+                {/* 3. PASSED CHECKS / VERIFIED STRENGTHS */}
+                <Card className="p-6 border-emerald-200 bg-emerald-50/20 space-y-3">
+                  <div className="flex items-center justify-between pb-2 border-b border-emerald-200">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+                      <h4 className="text-sm font-bold text-emerald-900 font-heading">
+                        Passed Checks & Verified Strengths ({currentResult.strengths?.length || 0})
+                      </h4>
+                    </div>
+                    <Badge variant="emerald" size="sm">Passed</Badge>
                   </div>
-                  <div className="flex-1 flex flex-col pt-1">
+
+                  <div className="pt-1">
                     {currentResult.strengths && currentResult.strengths.length > 0 ? (
-                      <ul className="space-y-2 text-xs">
+                      <ul className="space-y-2">
                         {currentResult.strengths.map((str, idx) => (
-                          <li key={idx} className="flex items-start gap-2 text-slate-700">
+                          <li key={idx} className="flex items-start gap-2 text-xs text-slate-700">
                             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
                             <span>{str}</span>
                           </li>
                         ))}
                       </ul>
                     ) : (
-                      <div className="flex-1 flex items-center justify-center p-6 text-center rounded-xl bg-slate-50/80 border border-slate-200/60">
-                        <p className="text-xs text-slate-500 italic">
-                          No specific strengths identified for this scan yet.
-                        </p>
-                      </div>
+                      <p className="text-xs text-slate-500 italic">No specific strengths cataloged yet.</p>
                     )}
                   </div>
-                </GlassCard>
-
-                {/* Actionable Recommendations */}
-                <GlassCard className="p-6 h-full flex flex-col space-y-3">
-                  <div className="min-h-[36px] flex items-center justify-between pb-2 border-b border-slate-100">
-                    <h3 className="text-sm font-bold text-slate-900 font-heading flex items-center gap-2">
-                      <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0" />
-                      <span>Actionable Recommendations</span>
-                    </h3>
-                    <button
-                      type="button"
-                      onClick={() => setActiveTab("tailoring-studio")}
-                      className="text-xs text-indigo-700 hover:text-indigo-800 font-semibold flex items-center gap-1 transition-colors px-2.5 py-1 rounded-lg bg-indigo-50 border border-indigo-200 shadow-sm"
-                    >
-                      <Sparkles className="h-3 w-3 text-indigo-600" />
-                      <span>Fix in Studio →</span>
-                    </button>
-                  </div>
-                  <div className="flex-1 flex flex-col pt-1">
-                    {currentResult.actionableFixes && currentResult.actionableFixes.length > 0 ? (
-                      <ul className="space-y-2 text-xs">
-                        {currentResult.actionableFixes.map((fix, idx) => (
-                          <li key={idx} className="flex items-start gap-2 text-slate-700">
-                            <span className="h-1.5 w-1.5 rounded-full bg-amber-500 mt-1.5 shrink-0" />
-                            <span>{fix}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <div className="flex-1 flex items-center justify-center p-6 text-center rounded-xl bg-slate-50/80 border border-slate-200/60">
-                        <p className="text-xs text-slate-500 italic">
-                          No critical issues detected. Excellent resume alignment!
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </GlassCard>
+                </Card>
               </div>
             </div>
           )}
@@ -803,17 +859,16 @@ export function ATSScannerWorkspace({ initialScans, sampleResumeText }: Props) {
       {/* ============================================================= */}
       {activeTab === "tailoring-studio" && (
         <div className="space-y-6">
-          <GlassPanel header="AI Resume Tailoring Studio">
-            <p className="text-xs text-slate-600">
-              Target a specific career level or specialization. Karyvo analyzes gaps, recommends power upgrades, and lets you approve changes before saving an isolated labeled version.
-            </p>
-
+          <Panel
+            title="AI Resume Tailoring Studio"
+            subtitle="Target a specific specialization. Identify gaps, incorporate approved upgrades, and save a distinct version."
+          >
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
               <div className="sm:col-span-2">
-                <label className="text-xs text-slate-600 font-medium block mb-1">
+                <label className="text-sm font-medium text-slate-700 block mb-1.5">
                   Target Specialization / Role Focus
                 </label>
-                <GlassInput
+                <Input
                   type="text"
                   value={tailorRole}
                   onChange={(e) => setTailorRole(e.target.value)}
@@ -821,20 +876,20 @@ export function ATSScannerWorkspace({ initialScans, sampleResumeText }: Props) {
                 />
               </div>
               <div className="flex items-end">
-                <GlassButton variant="primary" size="md" className="w-full">
+                <Button variant="primary" size="md" className="w-full">
                   <Sparkles className="h-4 w-4 text-white" />
                   <span>Synthesize Role Gaps</span>
-                </GlassButton>
+                </Button>
               </div>
             </div>
-          </GlassPanel>
+          </Panel>
 
           {/* Comparison Flow Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Column 1: Current Resume Gaps */}
-            <GlassCard className="space-y-3">
-              <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
-                <FileText className="h-4 w-4 text-indigo-600" />
+            <Card className="p-6 space-y-3">
+              <div className="flex items-center gap-2 pb-2 border-b border-slate-200">
+                <FileText className="h-4 w-4 text-brand-primary" />
                 <h3 className="text-sm font-bold text-slate-900 font-heading">1. Detected Keywords</h3>
               </div>
               <p className="text-xs text-slate-600">High-value terms found in your current Master Profile:</p>
@@ -843,16 +898,16 @@ export function ATSScannerWorkspace({ initialScans, sampleResumeText }: Props) {
                   ? currentResult.detectedSkills.slice(0, 6)
                   : ["PostgreSQL", "Next.js", "Redis", "Distributed Systems", "REST/gRPC"]
                 ).map((t) => (
-                  <GlassBadge key={t} variant="emerald" className="text-xs">
+                  <Badge key={t} variant="emerald" size="sm">
                     ✓ {t}
-                  </GlassBadge>
+                  </Badge>
                 ))}
               </div>
-            </GlassCard>
+            </Card>
 
             {/* Column 2: Missing Skill Opportunities */}
-            <GlassCard className="space-y-3">
-              <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
+            <Card className="p-6 space-y-3">
+              <div className="flex items-center gap-2 pb-2 border-b border-slate-200">
                 <AlertTriangle className="h-4 w-4 text-amber-600" />
                 <h3 className="text-sm font-bold text-slate-900 font-heading">2. Missing Power Keywords</h3>
               </div>
@@ -862,16 +917,16 @@ export function ATSScannerWorkspace({ initialScans, sampleResumeText }: Props) {
                   ? currentResult.missingKeywords
                   : ["High Throughput", "Fault Tolerance", "Canary Rollouts", "p99 SLA", "Micro-benchmarking"]
                 ).map((t) => (
-                  <GlassBadge key={t} variant="amber" className="text-xs">
+                  <Badge key={t} variant="amber" size="sm">
                     + {t}
-                  </GlassBadge>
+                  </Badge>
                 ))}
               </div>
-            </GlassCard>
+            </Card>
 
             {/* Column 3: Tailoring Suggestions with Approval */}
-            <GlassCard className="space-y-3">
-              <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
+            <Card className="p-6 space-y-3">
+              <div className="flex items-center gap-2 pb-2 border-b border-slate-200">
                 <SlidersHorizontal className="h-4 w-4 text-emerald-600" />
                 <h3 className="text-sm font-bold text-slate-900 font-heading">3. Proposed Upgrades</h3>
               </div>
@@ -886,15 +941,15 @@ export function ATSScannerWorkspace({ initialScans, sampleResumeText }: Props) {
                   <div
                     key={sug.id}
                     onClick={() => setTailorApproved({ ...tailorApproved, [sug.id]: !sug.approved })}
-                    className={`p-2.5 rounded-xl border text-xs cursor-pointer transition-all flex items-start gap-2 ${
+                    className={`p-3 rounded-lg border text-xs cursor-pointer transition-all flex items-start gap-2.5 ${
                       tailorApproved[sug.id]
                         ? "bg-emerald-50 border-emerald-300 text-emerald-800 font-medium"
                         : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
                     }`}
                   >
                     <div
-                      className={`h-4 w-4 rounded flex items-center justify-center mt-0.5 ${
-                        tailorApproved[sug.id] ? "bg-emerald-600 text-white font-bold" : "border border-slate-300"
+                      className={`h-4 w-4 rounded flex items-center justify-center mt-0.5 shrink-0 ${
+                        tailorApproved[sug.id] ? "bg-emerald-600 text-white font-bold" : "border border-slate-300 bg-white"
                       }`}
                     >
                       {tailorApproved[sug.id] && "✓"}
@@ -904,7 +959,7 @@ export function ATSScannerWorkspace({ initialScans, sampleResumeText }: Props) {
                 ))}
               </div>
 
-              <GlassButton
+              <Button
                 variant="primary"
                 size="sm"
                 onClick={() => {
@@ -913,10 +968,10 @@ export function ATSScannerWorkspace({ initialScans, sampleResumeText }: Props) {
                 }}
                 className="w-full mt-2"
               >
-                <Check className="h-3.5 w-3.5" />
+                <Check className="h-4 w-4" />
                 <span>{versionSaved ? "Snapshot Saved to Versions!" : "Create Tailored Version"}</span>
-              </GlassButton>
-            </GlassCard>
+              </Button>
+            </Card>
           </div>
         </div>
       )}
