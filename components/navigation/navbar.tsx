@@ -105,46 +105,65 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full px-4 sm:px-6 lg:px-8 pt-3 pb-2">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 rounded-2xl border border-white/70 bg-white/75 backdrop-blur-xl shadow-[0_10px_30px_-5px_rgba(30,58,138,0.1),0_4px_12px_-2px_rgba(0,0,0,0.03)]">
-        {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group select-none">
-          <div className="relative flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 via-violet-600 to-indigo-800 p-0.5 shadow-[0_2px_10px_rgba(79,70,229,0.25)] transition-transform duration-300 group-hover:scale-105">
-            <div className="flex h-full w-full items-center justify-center rounded-lg bg-white">
-              <Sparkles className="h-4 w-4 text-indigo-600 group-hover:text-violet-600 transition-colors" />
-            </div>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="text-base font-extrabold tracking-tight text-slate-900 font-heading">
-              KARYVO
-            </span>
-            <GlassBadge variant="violet" className="text-xs py-0 px-1.5 font-bold">
-              AI
-            </GlassBadge>
-          </div>
+        {/* Brand Logo: Clean text wordmark Karyvo */}
+        <Link href="/" className="flex items-center gap-2 group select-none">
+          <span className="text-xl font-extrabold tracking-tight text-ink font-heading group-hover:text-accent transition-colors">
+            Karyvo
+          </span>
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-1 p-1 rounded-xl bg-slate-100/75 border border-slate-200/60 shadow-inner">
-          {primaryLinks.map((item) => {
-            const Icon = item.icon;
-            const isActive = pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href));
-            return (
+        <nav className="hidden md:flex items-center gap-1 p-1 rounded-xl bg-slate-100/80 border border-slate-200/60 shadow-inner">
+          {pathname === "/" ? (
+            <>
               <Link
-                key={item.href}
-                href={item.href}
-                aria-current={isActive ? "page" : undefined}
-                className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-all duration-200 ${
-                  isActive
-                    ? "text-indigo-950 bg-white shadow-sm font-semibold after:absolute after:bottom-0 after:left-2.5 after:right-2.5 after:h-0.5 after:bg-indigo-600 after:rounded-full"
-                    : "text-slate-600 hover:text-slate-900 hover:bg-white/60 font-medium"
-                }`}
+                href="#features"
+                className="px-3 py-1.5 rounded-lg text-xs font-medium text-ink-muted hover:text-ink hover:bg-white/60 transition-colors"
               >
-                <Icon className={`h-3.5 w-3.5 ${isActive ? "text-indigo-600" : "text-slate-400"}`} />
-                <span>{item.label}</span>
+                Features
               </Link>
-            );
-          })}
+              <Link
+                href="#how-it-works"
+                className="px-3 py-1.5 rounded-lg text-xs font-medium text-ink-muted hover:text-ink hover:bg-white/60 transition-colors"
+              >
+                How it works
+              </Link>
+              <Link
+                href="#pricing"
+                className="px-3 py-1.5 rounded-lg text-xs font-medium text-ink-muted hover:text-ink hover:bg-white/60 transition-colors"
+              >
+                Pricing
+              </Link>
+              <Link
+                href="#faq"
+                className="px-3 py-1.5 rounded-lg text-xs font-medium text-ink-muted hover:text-ink hover:bg-white/60 transition-colors"
+              >
+                FAQ
+              </Link>
+            </>
+          ) : (
+            primaryLinks.map((item) => {
+              const Icon = item.icon;
+              const isActive = pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href));
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-all duration-200 ${
+                    isActive
+                      ? "text-accent bg-white shadow-sm font-semibold after:absolute after:bottom-0 after:left-2.5 after:right-2.5 after:h-0.5 after:bg-accent after:rounded-full"
+                      : "text-ink-muted hover:text-ink hover:bg-white/60 font-medium"
+                  }`}
+                >
+                  <Icon className={`h-3.5 w-3.5 ${isActive ? "text-accent" : "text-ink-subtle"}`} />
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })
+          )}
 
-          {/* More Tools Dropdown */}
+          {/* Tools Dropdown */}
           <div className="relative">
             <button
               onClick={() => setToolsOpen(!toolsOpen)}
@@ -152,12 +171,12 @@ export function Navbar() {
               aria-haspopup="true"
               className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs transition-all ${
                 isSecondaryActive
-                  ? "text-indigo-950 bg-white shadow-sm font-semibold"
-                  : "text-slate-600 hover:text-slate-900 hover:bg-white/60 font-medium"
+                  ? "text-accent bg-white shadow-sm font-semibold"
+                  : "text-ink-muted hover:text-ink hover:bg-white/60 font-medium"
               }`}
             >
-              <span>More</span>
-              <ChevronDown className={`h-3 w-3 transition-transform ${toolsOpen ? "rotate-180 text-indigo-600" : "text-slate-400"}`} />
+              <span>{pathname === "/" ? "Tools" : "More"}</span>
+              <ChevronDown className={`h-3 w-3 transition-transform ${toolsOpen ? "rotate-180 text-accent" : "text-ink-subtle"}`} />
             </button>
 
             {toolsOpen && (
@@ -220,13 +239,13 @@ export function Navbar() {
                 <>
                   <Link
                     href="/login"
-                    className="rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-700 transition-colors hover:text-indigo-600"
+                    className="rounded-xl px-3 py-1.5 text-xs font-semibold text-ink-muted transition-colors hover:text-accent"
                   >
                     Log in
                   </Link>
                   <Link
                     href="/signup"
-                    className="rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm shadow-indigo-500/25 transition-all hover:brightness-105"
+                    className="rounded-xl bg-accent hover:bg-accent-hover px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition-colors"
                   >
                     Sign up
                   </Link>
@@ -309,7 +328,7 @@ export function Navbar() {
                   </Link>
                   <Link
                     href="/signup"
-                    className="flex-1 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 py-2 text-center text-xs font-semibold text-white shadow-sm"
+                    className="flex-1 rounded-xl bg-accent hover:bg-accent-hover py-2 text-center text-xs font-semibold text-white shadow-sm transition-colors"
                   >
                     Sign up
                   </Link>

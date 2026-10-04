@@ -13,9 +13,29 @@ const config: Config = {
         sans: ["var(--font-inter)", "system-ui", "-apple-system", "sans-serif"],
         heading: ["var(--font-manrope)", "var(--font-inter)", "sans-serif"],
       },
+      fontSize: {
+        xs: ["12px", { lineHeight: "16px" }],
+        sm: ["14px", { lineHeight: "20px" }],
+        base: ["16px", { lineHeight: "24px" }],
+        lg: ["20px", { lineHeight: "28px" }],
+        xl: ["28px", { lineHeight: "36px" }],
+        "2xl": ["40px", { lineHeight: "48px" }],
+        "3xl": ["64px", { lineHeight: "72px" }],
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        accent: {
+          DEFAULT: "var(--color-accent)",
+          hover: "var(--color-accent-hover)",
+          light: "var(--color-accent-light)",
+          border: "var(--color-accent-border)",
+        },
+        ink: {
+          DEFAULT: "var(--color-ink)",
+          muted: "var(--color-ink-muted)",
+          subtle: "var(--color-ink-subtle)",
+        },
         base: {
           darkest: "#05060E",
           dark: "#070814",

@@ -133,22 +133,22 @@ export function InteractiveBulletDemo() {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
-      <GlassCard variant="interactive" className="p-7 sm:p-9 rounded-2xl space-y-7">
+    <div id="interactive-demo" className="w-full max-w-4xl mx-auto scroll-mt-24">
+      <GlassCard variant="interactive" className="p-7 sm:p-9 rounded-2xl space-y-7 bg-white border border-slate-200 shadow-card">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
           <div>
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs font-semibold text-indigo-600 font-heading">
+              <span className="text-xs font-semibold text-accent uppercase tracking-wider">
                 Interactive Live Demo
               </span>
             </div>
-            <h3 className="text-xl sm:text-2xl font-black text-slate-900 font-heading mt-1">
+            <h3 className="text-xl sm:text-2xl font-bold text-ink tracking-tight mt-1">
               The XYZ Method Bullet Improver
             </h3>
-            <p className="text-xs text-slate-600 mt-0.5">
-              Accomplished [X], as measured by [Y], by doing [Z]. Popularised by Laszlo Bock, former Google HR head.
+            <p className="text-sm text-ink-muted mt-0.5">
+              Accomplished [X], as measured by [Y], by doing [Z]. Popularised by Laszlo Bock, former Google VP of People Operations.
             </p>
           </div>
 
@@ -160,8 +160,8 @@ export function InteractiveBulletDemo() {
                 onClick={() => handleSelectPreset(idx)}
                 className={`h-9 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all inline-flex items-center justify-center ${
                   selectedPreset === idx
-                    ? "bg-indigo-600 text-white shadow-sm"
-                    : "text-slate-600 hover:text-slate-900"
+                    ? "bg-accent text-white shadow-sm"
+                    : "text-ink-muted hover:text-ink"
                 }`}
               >
                 {p.role}
@@ -204,12 +204,11 @@ export function InteractiveBulletDemo() {
               <span className="text-xs text-slate-400 font-mono">
                 {inputBullet.length}/300
               </span>
-              <GlassButton
+              <button
+                type="button"
                 onClick={handleTransform}
                 disabled={isLoading || !inputBullet.trim()}
-                variant="primary"
-                size="sm"
-                className="h-9 px-4 text-xs font-bold gap-2 shadow-sm"
+                className="h-9 px-4 text-xs font-semibold rounded-lg bg-accent text-white hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors inline-flex items-center gap-2 shadow-sm"
               >
                 {isLoading ? (
                   <span className="animate-spin h-3.5 w-3.5 border-2 border-white border-t-transparent rounded-full" />
@@ -219,19 +218,19 @@ export function InteractiveBulletDemo() {
                     <span>Optimize</span>
                   </>
                 )}
-              </GlassButton>
+              </button>
             </div>
           </div>
 
           {/* Output: XYZ Optimized Bullet */}
-          <div className="p-5 sm:p-6 rounded-xl bg-indigo-50/70 border border-indigo-200 flex flex-col justify-between min-h-[250px] shadow-sm">
+          <div className="p-5 sm:p-6 rounded-xl bg-accent-light/40 border border-accent-border/50 flex flex-col justify-between min-h-[250px] shadow-sm">
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold uppercase tracking-wider text-emerald-600 flex items-center gap-1.5">
-                  <Sparkles className="h-3.5 w-3.5 text-indigo-600" />
+                <span className="text-xs font-semibold uppercase tracking-wider text-accent flex items-center gap-1.5">
+                  <Sparkles className="h-3.5 w-3.5 text-accent" />
                   XYZ Transformation
                 </span>
-                <span className="text-xs text-slate-600 font-medium bg-white/80 px-2 py-0.5 rounded-md border border-slate-200">
+                <span className="text-xs text-ink-subtle font-medium bg-white px-2 py-0.5 rounded-md border border-slate-200">
                   Example
                 </span>
               </div>
