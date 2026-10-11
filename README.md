@@ -1,4 +1,4 @@
-﻿# Karyvo — AI Resume Builder
+# Karyvo — AI Resume Builder
 
 > **Build Your Better Resume** — India-first AI career platform to build ATS-proof resumes, optimize bullets using the XYZ method (popularised by Laszlo Bock, former Google HR head), craft tailored role cover letters, and master technical and behavioral interview preparation with an interactive mock AI coach.
 
@@ -27,6 +27,14 @@
 - **Database / Backend**: Supabase (PostgreSQL with Row Level Security) + in-memory store for local testing/demo
 - **Rate Limiting**: Distributed Upstash Redis REST support with in-memory sliding window fallback
 - **Payments**: [Razorpay](https://razorpay.com/) Payment Gateway (atomic DB confirmation, webhook reconciliation)
+
+---
+
+## 🚀 1-Click Deployment
+
+Deploy your instance of **ResumeBMH** to Vercel with one click:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fnowicstdo-labs%2FResumeBMH&project-name=resumebmh&env=NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY,SUPABASE_SERVICE_ROLE_KEY,NEXT_PUBLIC_RAZORPAY_KEY_ID,RAZORPAY_KEY_ID,RAZORPAY_KEY_SECRET,NEXT_PUBLIC_APP_URL,GEMINI_API_KEY)
 
 ---
 
