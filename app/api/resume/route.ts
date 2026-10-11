@@ -5,6 +5,7 @@ import { Resume } from "@/types/resume";
 import { getUser } from "@/lib/auth/getUser";
 import { handleApiError } from "@/lib/apiError";
 import { rateLimit, RATE_LIMITS } from "@/lib/rateLimit";
+import { enforceFeatureQuota } from "@/lib/payments/pro";
 import crypto from "crypto";
 
 export async function GET(req: NextRequest) {
@@ -73,8 +74,9 @@ export async function POST(req: NextRequest) {
 
     const saved = await repository.saveResume(resumeToSave);
 
-    // If requested, create a labeled version snapshot
+    // If requested, create a labeled version snapshot (Pro feature)
     if (validated.createVersion) {
+      await enforceFeatureQuota(userId, "version-snapshot");
       const existingVersions = await repository.getVersionsByResumeId(resumeId, userId);
       const maxVersionNum = existingVersions.length > 0
         ? Math.max(...existingVersions.map((v) => v.versionNumber))

@@ -3,10 +3,14 @@ import { karyvoAI } from "@/lib/ai/provider";
 import { getUser } from "@/lib/auth/getUser";
 import { handleApiError } from "@/lib/apiError";
 import { rateLimit, RATE_LIMITS } from "@/lib/rateLimit";
+import { enforceFeatureQuota } from "@/lib/payments/pro";
 
 export async function POST(req: NextRequest) {
   try {
     const { userId } = await getUser(req);
+
+    // Free tier: 3 bullets/day, Pro: unlimited
+    await enforceFeatureQuota(userId, "ai-bullet");
 
     const { limited } = rateLimit(`ai-bullet:${userId}`, RATE_LIMITS.ai.maxRequests, RATE_LIMITS.ai.windowMs);
     if (limited) {

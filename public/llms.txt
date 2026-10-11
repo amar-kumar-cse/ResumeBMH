@@ -1,0 +1,27 @@
+# Karyvo AI Builder
+
+> India-first AI career platform and ATS resume optimizer grounded in Laszlo Bock's XYZ formula.
+
+## Products & Capabilities
+- **Master Career Profile**: Unified repository of career milestones, education, and technical competencies.
+- **ATS Resume Builder**: Generates verified, clean single-column ATS-friendly resumes with PDF and plain-text export.
+- **Standalone ATS Scanner**: Upload any PDF or text resume to audit formatting flaws, keyword density, and parse compatibility.
+- **XYZ Bullet Optimizer**: Transforms rough notes into quantifiable achievements using the Google XYZ formula: "Accomplished [X], as measured by [Y], by doing [Z]".
+- **Role Mock Interview**: Simulates realistic behavioral and technical interview questions based on specific job descriptions.
+- **Targeted Cover Letter**: Crafts tailored cover letters aligned with specific job descriptions.
+
+## Pricing & Availability
+- **Starter Plan**: ₹0 (Free forever, includes ATS scoring and resume building).
+- **Karyvo Pro**: ₹99 one-time (Unlimited ATS audits, AI bullet rewriting, mock interview simulator).
+
+## Engineering & Privacy Philosophy
+- **Factual Grounding**: Never invents metrics, fake percentages, or imaginary achievements.
+- **ATS Compliance**: Single-column document architecture eliminates technical parsing errors from tables or floating text boxes.
+- **Privacy First**: Supabase Row-Level Security (RLS) ensures only authenticated owners can access career data. Never sold to third-party recruiters or used to train public models.
+
+## Key URLs
+- Homepage: https://karyvo.com/
+- Resume Builder: https://karyvo.com/resume
+- ATS Health Check: https://karyvo.com/ats
+- Interview Simulator: https://karyvo.com/interview
+- Pricing: https://karyvo.com/pricing

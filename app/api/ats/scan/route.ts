@@ -31,6 +31,16 @@ export async function POST(req: NextRequest) {
 
     const contentType = req.headers.get("content-type") || "";
 
+    // Pre-flight check Content-Length before buffering large payloads in memory
+    const MAX_SIZE = 12 * 1024 * 1024;
+    const contentLength = req.headers.get("content-length");
+    if (contentLength && parseInt(contentLength, 10) > MAX_SIZE) {
+      return NextResponse.json(
+        { success: false, error: "File size exceeds the 12MB limit. Please upload a smaller file." },
+        { status: 413 }
+      );
+    }
+
     // 1. MULTIPART FILE UPLOAD (PDF, PNG, JPG, JPEG, WEBP, TXT)
     if (contentType.includes("multipart/form-data")) {
       const formData = await req.formData();
@@ -43,12 +53,11 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      // Max 12MB limit
-      const MAX_SIZE = 12 * 1024 * 1024;
+      // Max 12MB limit safeguard post-parsing
       if (file.size > MAX_SIZE) {
         return NextResponse.json(
           { success: false, error: "File size exceeds the 12MB limit. Please upload a smaller file." },
-          { status: 400 }
+          { status: 413 }
         );
       }
 

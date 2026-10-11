@@ -1,6 +1,6 @@
-# Karyvo AI Builder
+﻿# Karyvo — AI Resume Builder
 
-> **India-First AI Career Platform** — Build ATS-proof resumes, optimize bullets using the XYZ method (popularised by Laszlo Bock, former Google HR head), craft tailored role cover letters, and master technical and behavioral interview preparation with an interactive mock AI coach.
+> **Build Your Better Resume** — India-first AI career platform to build ATS-proof resumes, optimize bullets using the XYZ method (popularised by Laszlo Bock, former Google HR head), craft tailored role cover letters, and master technical and behavioral interview preparation with an interactive mock AI coach.
 
 ---
 
@@ -24,8 +24,9 @@
 - **Styling**: Tailwind CSS with custom Glassmorphism design tokens
 - **Icons**: [Lucide React](https://lucide.dev/)
 - **Validation**: [Zod](https://zod.dev/) schemas
-- **Database / Backend**: Supabase (PostgreSQL with Row Level Security) + Local Storage offline fallback
-- **Payments**: [Razorpay](https://razorpay.com/) Payment Gateway
+- **Database / Backend**: Supabase (PostgreSQL with Row Level Security) + in-memory store for local testing/demo
+- **Rate Limiting**: Distributed Upstash Redis REST support with in-memory sliding window fallback
+- **Payments**: [Razorpay](https://razorpay.com/) Payment Gateway (atomic DB confirmation, webhook reconciliation)
 
 ---
 
@@ -91,3 +92,4 @@ All AI generation pipelines in Karyvo run through strict anti-hallucination guar
 ## 📄 License
 
 This project is licensed under the MIT License.
+

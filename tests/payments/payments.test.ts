@@ -145,4 +145,80 @@ describe("Payments & Pro Gating (Step 2)", () => {
     const updated = await repository.getOrderByRazorpayId(order.orderId);
     expect(updated?.status).toBe("paid");
   });
+
+  it("atomic payment confirmation: confirmPaymentAndUpgradePro updates order and subscription together", async () => {
+    const atomicUser = "test-atomic-user-999";
+    const order = await paymentService.createProOrder(atomicUser, "monthly");
+
+    const result = await repository.confirmPaymentAndUpgradePro({
+      orderId: order.orderId,
+      paymentId: "pay_atomic_123",
+      userId: atomicUser,
+      billingCycle: "monthly",
+    });
+
+    expect(result.order.status).toBe("paid");
+    expect(result.order.razorpayPaymentId).toBe("pay_atomic_123");
+    expect(result.subscription.plan).toBe("pro");
+    expect(result.subscription.status).toBe("active");
+
+    const proStatus = await checkProStatus(atomicUser);
+    expect(proStatus.isPro).toBe(true);
+  });
+
+  it("order failure: markOrderFailed records failed status and error message", async () => {
+    const failUser = "test-fail-user-111";
+    const order = await paymentService.createProOrder(failUser, "monthly");
+
+    const failed = await repository.markOrderFailed(order.orderId, "Card declined by issuing bank", "BAD_REQUEST");
+    expect(failed?.status).toBe("failed");
+    expect(failed?.errorMessage).toBe("Card declined by issuing bank");
+
+    const retrieved = await repository.getOrderByRazorpayId(order.orderId);
+    expect(retrieved?.status).toBe("failed");
+  });
+
+  it("refund handling: markOrderRefunded marks order refunded and downgrades subscription to free", async () => {
+    const refundUser = "test-refund-user-222";
+    const order = await paymentService.createProOrder(refundUser, "monthly");
+
+    await repository.confirmPaymentAndUpgradePro({
+      orderId: order.orderId,
+      paymentId: "pay_refund_src",
+      userId: refundUser,
+      billingCycle: "monthly",
+    });
+
+    const beforeRefund = await checkProStatus(refundUser);
+    expect(beforeRefund.isPro).toBe(true);
+
+    const refunded = await repository.markOrderRefunded(order.orderId);
+    expect(refunded?.status).toBe("refunded");
+
+    const afterRefund = await checkProStatus(refundUser);
+    expect(afterRefund.isPro).toBe(false);
+    expect(afterRefund.plan).toBe("free");
+  });
+
+  it("cancellation grace period: canceling subscription retains Pro access until currentPeriodEnd", async () => {
+    const cancelUser = "test-cancel-grace-333";
+    const futureDate = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString();
+
+    await repository.upgradeToPro(cancelUser, {
+      billingCycle: "monthly",
+      orderId: "order_cancel_grace",
+      paymentId: "pay_cancel_grace",
+    });
+
+    // Cancel renewal
+    const canceledSub = await repository.cancelSubscription(cancelUser);
+    expect(canceledSub?.status).toBe("canceled");
+    expect(canceledSub?.currentPeriodEnd).toBeDefined();
+
+    // User STILL has Pro access during the remaining paid days
+    const proStatus = await checkProStatus(cancelUser);
+    expect(proStatus.isPro).toBe(true);
+    expect(proStatus.plan).toBe("pro");
+  });
 });
+

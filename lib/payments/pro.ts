@@ -13,7 +13,7 @@ export interface ProStatus {
  */
 export async function checkProStatus(userId: string): Promise<ProStatus> {
   const sub = await repository.getSubscription(userId);
-  if (!sub || sub.plan !== "pro" || sub.status !== "active") {
+  if (!sub || sub.plan !== "pro") {
     return {
       isPro: false,
       plan: "free",
@@ -33,12 +33,28 @@ export async function checkProStatus(userId: string): Promise<ProStatus> {
         currentPeriodEnd: sub.currentPeriodEnd,
       };
     }
+    // Still within paid period, even if user canceled auto-renewal
+    return {
+      isPro: true,
+      plan: "pro",
+      status: sub.status,
+      currentPeriodEnd: sub.currentPeriodEnd,
+    };
+  }
+
+  if (sub.status === "active") {
+    return {
+      isPro: true,
+      plan: "pro",
+      status: "active",
+      currentPeriodEnd: sub.currentPeriodEnd,
+    };
   }
 
   return {
-    isPro: true,
-    plan: "pro",
-    status: "active",
+    isPro: false,
+    plan: "free",
+    status: sub.status,
     currentPeriodEnd: sub.currentPeriodEnd,
   };
 }
@@ -55,4 +71,57 @@ export async function requirePro(userId: string): Promise<ProStatus> {
     throw error;
   }
   return status;
+}
+
+/**
+ * Enforces free-tier limits vs Pro entitlement.
+ * Free tier gets:
+ *   - 1 Cover Letter
+ *   - 1 Interview Session
+ *   - 3 AI Bullet Improvements / day
+ *   - 0 Version Snapshots (Pro only)
+ * Pro tier gets unlimited access across all features.
+ */
+export async function enforceFeatureQuota(
+  userId: string,
+  feature: "cover-letter" | "interview" | "ai-bullet" | "version-snapshot"
+): Promise<void> {
+  const proStatus = await checkProStatus(userId);
+  if (proStatus.isPro) {
+    return; // Pro users enjoy unlimited usage
+  }
+
+  if (feature === "version-snapshot") {
+    const err = new Error("Resume version snapshots require an active Karyvo Pro subscription.");
+    (err as Error & { status?: number }).status = 403;
+    throw err;
+  }
+
+  if (feature === "cover-letter") {
+    const letters = await repository.getCoverLetters(userId);
+    if (letters.length >= 1) {
+      const err = new Error("You have reached the free limit of 1 cover letter. Upgrade to Karyvo Pro for unlimited tailored cover letters.");
+      (err as Error & { status?: number }).status = 403;
+      throw err;
+    }
+  }
+
+  if (feature === "interview") {
+    const sessions = await repository.getInterviewSessions(userId);
+    if (sessions.length >= 1) {
+      const err = new Error("You have reached the free limit of 1 mock interview session. Upgrade to Karyvo Pro for unlimited interview prep.");
+      (err as Error & { status?: number }).status = 403;
+      throw err;
+    }
+  }
+
+  if (feature === "ai-bullet") {
+    const count = await repository.getDailyAIBulletCount(userId);
+    if (count >= 3) {
+      const err = new Error("You have reached the free limit of 3 AI bullet improvements today. Upgrade to Karyvo Pro for unlimited improvements.");
+      (err as Error & { status?: number }).status = 403;
+      throw err;
+    }
+    await repository.incrementDailyAIBulletCount(userId);
+  }
 }

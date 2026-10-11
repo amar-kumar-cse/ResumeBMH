@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import {
@@ -293,7 +293,7 @@ export function PricingWorkspace() {
             <ul className="space-y-3.5 text-xs text-slate-700 pt-5 border-t border-indigo-200">
               <li className="flex items-center gap-2.5">
                 <Sparkles className="h-4 w-4 text-brand-primary shrink-0" />
-                <span className="font-semibold text-slate-900">Unlimited 1-Click XYZ AI Bullet Improver</span>
+                <span className="font-semibold text-slate-900">Unlimited 1-Click AI Impact Bullet Optimizer</span>
               </li>
               <li className="flex items-center gap-2.5">
                 <Layers className="h-4 w-4 text-brand-primary shrink-0" />

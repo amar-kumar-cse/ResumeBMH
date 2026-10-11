@@ -134,4 +134,12 @@ describe("Real AI Provider & Factual Grounding (Step 3)", () => {
     expect(evalResult.feedbackImprovements.length).toBeGreaterThan(0);
     expect(evalResult.betterAnswer.length).toBeGreaterThan(30);
   });
+
+  it("improveBullet: verb selection is deterministic for identical inputs", async () => {
+    const raw = "responsible for leading database migrations across environments";
+    const res1 = await karyvoAI.improveBullet(raw);
+    const res2 = await karyvoAI.improveBullet(raw);
+    expect(res1.actionVerbUsed).toBe(res2.actionVerbUsed);
+    expect(res1.improved).toBe(res2.improved);
+  });
 });

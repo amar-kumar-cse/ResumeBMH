@@ -1,13 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 import { repository } from "@/lib/db/repository";
 import { checkProStatus } from "@/lib/payments/pro";
-import { getUser } from "@/lib/auth/getUser";
+import { getUser, getUserOptional } from "@/lib/auth/getUser";
 import { handleApiError } from "@/lib/apiError";
 import { rateLimit, RATE_LIMITS } from "@/lib/rateLimit";
 
 export async function GET(req: NextRequest) {
   try {
-    const { userId } = await getUser(req);
+    const auth = await getUserOptional(req);
+    if (!auth) {
+      // Graceful response for signed-out / anonymous visitors
+      return NextResponse.json({
+        success: true,
+        data: {
+          isPro: false,
+          plan: "free",
+          status: "inactive",
+          currentPeriodEnd: null,
+        },
+      });
+    }
+
+    const { userId } = auth;
     const subscription = await repository.getSubscription(userId);
     const proStatus = await checkProStatus(userId);
 

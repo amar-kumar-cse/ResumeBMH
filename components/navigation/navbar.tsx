@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import {
   FileText,
@@ -107,21 +108,33 @@ export function Navbar() {
   const landingNavLinks = [
     { href: "/#features", label: "Features" },
     { href: "/#how-it-works", label: "How it works" },
-    { href: "/#pricing", label: "Pricing" },
-    { href: "/#faq", label: "FAQ" },
+    { href: "/pricing", label: "Pricing" },
+    { href: "/support", label: "Support" },
   ];
 
   return (
     <header className="sticky top-0 z-50 w-full px-4 sm:px-6 lg:px-8 pt-3 pb-2">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 rounded-2xl border border-white/80 bg-white/85 backdrop-blur-xl shadow-[0_10px_30px_-5px_rgba(30,58,138,0.08),0_4px_12px_-2px_rgba(0,0,0,0.03)]">
-        {/* Brand Logo: Clean text wordmark Karyvo */}
+        {/* Brand Logo: Karyvo with modern app icon */}
         <Link href="/" className="flex items-center gap-2.5 group select-none">
-          <div className="h-8 w-8 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-blue-600 flex items-center justify-center text-white font-extrabold text-sm shadow-sm shadow-blue-500/30 group-hover:scale-105 transition-transform">
-            K
+          <div className="relative h-9 w-9 rounded-xl overflow-hidden shadow-sm shadow-blue-500/20 group-hover:scale-105 transition-transform flex items-center justify-center bg-blue-600">
+            <Image
+              src="/favicon.ico"
+              alt="Karyvo Logo"
+              width={36}
+              height={36}
+              className="h-full w-full object-cover"
+              priority
+            />
           </div>
-          <span className="text-xl font-extrabold tracking-tight text-slate-900 font-heading group-hover:text-blue-600 transition-colors">
-            Karyvo
-          </span>
+          <div className="flex flex-col">
+            <span className="font-brand text-[21px] font-extrabold tracking-[-0.03em] text-slate-900 leading-none flex items-center">
+              Resume<span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 bg-clip-text text-transparent font-black ml-0.5">BMH</span>
+            </span>
+            <span className="hidden sm:block text-[8px] font-bold text-slate-400 tracking-[0.22em] uppercase mt-1 leading-none">
+              Build Your Better Resume
+            </span>
+          </div>
         </Link>
 
         {/* Desktop Navigation */}
@@ -152,39 +165,21 @@ export function Navbar() {
                 </Link>
               );
             })
-          ) : pathname === "/" ? (
-            landingNavLinks.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="px-3.5 py-1.5 rounded-md text-sm font-medium text-ink-muted hover:text-ink hover:bg-white/60 transition-colors"
-              >
-                {item.label}
-              </Link>
-            ))
           ) : (
-            appNavLinks.map((item) => {
-              const Icon = item.icon;
-              const isActive =
-                pathname === item.href ||
-                (item.href !== "/" && pathname?.startsWith(item.href));
+            landingNavLinks.map((item) => {
+              const isActive = pathname === item.href;
               return (
                 <Link
                   key={item.href}
                   href={item.href}
                   aria-current={isActive ? "page" : undefined}
-                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-sm font-medium transition-all ${
+                  className={`px-3.5 py-1.5 rounded-md text-sm font-medium transition-colors ${
                     isActive
-                      ? "text-accent bg-white shadow-sm font-semibold"
-                      : "text-ink-muted hover:text-ink hover:bg-white/60"
+                      ? "text-blue-600 bg-white shadow-sm font-semibold"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
                   }`}
                 >
-                  <Icon
-                    className={`w-4 h-4 ${
-                      isActive ? "text-accent" : "text-ink-subtle"
-                    }`}
-                  />
-                  <span>{item.label}</span>
+                  {item.label}
                 </Link>
               );
             })
@@ -293,7 +288,7 @@ export function Navbar() {
                   </Link>
                   <Link
                     href="/signup"
-                    className="rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 hover:from-blue-700 hover:to-indigo-700 px-4 py-1.5 text-sm font-semibold text-white shadow-sm shadow-blue-500/25 transition-all active:scale-95"
+                    className="rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 hover:from-blue-700 hover:to-indigo-700 px-4 py-1.5 text-sm font-semibold text-white shadow-sm shadow-blue-500/25 transition-[transform,box-shadow] duration-150 ease-out active:scale-[0.98] active:duration-75 touch-manipulation"
                   >
                     Sign up
                   </Link>
@@ -317,49 +312,72 @@ export function Navbar() {
       {/* Mobile Slide-down Menu */}
       {mobileOpen && (
         <div className="md:hidden mt-2 mx-auto max-w-7xl rounded-xl border border-slate-200 bg-white p-4 shadow-elevated space-y-3 animate-in fade-in slide-in-from-top-2 duration-150">
-          <div className="grid grid-cols-2 gap-2 pb-3 border-b border-slate-100">
-            {appNavLinks.map((item) => {
-              const Icon = item.icon;
-              const isActive =
-                pathname === item.href ||
-                (item.href !== "/" && pathname?.startsWith(item.href));
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`flex items-center gap-2 p-2.5 rounded-lg text-sm font-medium transition-all ${
-                    isActive
-                      ? "text-accent bg-accent-light border border-accent-border/50 font-semibold"
-                      : "text-ink-muted hover:bg-slate-50"
-                  }`}
-                >
-                  <Icon
-                    className={`w-4 h-4 ${
-                      isActive ? "text-accent" : "text-ink-subtle"
-                    }`}
-                  />
-                  <span>{item.label}</span>
-                </Link>
-              );
-            })}
-          </div>
+          {userEmail ? (
+            <>
+              <div className="grid grid-cols-2 gap-2 pb-3 border-b border-slate-100">
+                {appNavLinks.map((item) => {
+                  const Icon = item.icon;
+                  const isActive =
+                    pathname === item.href ||
+                    (item.href !== "/" && pathname?.startsWith(item.href));
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={`flex items-center gap-2 p-2.5 rounded-lg text-sm font-medium transition-all ${
+                        isActive
+                          ? "text-accent bg-accent-light border border-accent-border/50 font-semibold"
+                          : "text-ink-muted hover:bg-slate-50"
+                      }`}
+                    >
+                      <Icon
+                        className={`w-4 h-4 ${
+                          isActive ? "text-accent" : "text-ink-subtle"
+                        }`}
+                      />
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
 
-          <div className="grid grid-cols-2 gap-2 pb-3 border-b border-slate-100">
-            <Link
-              href="/profile"
-              className="flex items-center gap-2 p-2 rounded-lg text-sm text-ink-muted hover:bg-slate-50 font-medium"
-            >
-              <User className="w-4 h-4 text-accent" />
-              <span>Master Profile</span>
-            </Link>
-            <Link
-              href="/cover-letter"
-              className="flex items-center gap-2 p-2 rounded-lg text-sm text-ink-muted hover:bg-slate-50 font-medium"
-            >
-              <Send className="w-4 h-4 text-accent" />
-              <span>Cover Letter</span>
-            </Link>
-          </div>
+              <div className="grid grid-cols-2 gap-2 pb-3 border-b border-slate-100">
+                <Link
+                  href="/profile"
+                  className="flex items-center gap-2 p-2 rounded-lg text-sm text-ink-muted hover:bg-slate-50 font-medium"
+                >
+                  <User className="w-4 h-4 text-accent" />
+                  <span>Master Profile</span>
+                </Link>
+                <Link
+                  href="/cover-letter"
+                  className="flex items-center gap-2 p-2 rounded-lg text-sm text-ink-muted hover:bg-slate-50 font-medium"
+                >
+                  <Send className="w-4 h-4 text-accent" />
+                  <span>Cover Letter</span>
+                </Link>
+              </div>
+            </>
+          ) : (
+            <div className="grid grid-cols-2 gap-2 pb-3 border-b border-slate-100">
+              {landingNavLinks.map((item) => {
+                const isActive = pathname === item.href;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`flex items-center gap-2 p-2.5 rounded-lg text-sm font-medium transition-all ${
+                      isActive
+                        ? "text-blue-600 bg-blue-50 font-semibold"
+                        : "text-slate-700 hover:bg-slate-50"
+                    }`}
+                  >
+                    <span>{item.label}</span>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
 
           {authReady && (
             <div className="pt-1">

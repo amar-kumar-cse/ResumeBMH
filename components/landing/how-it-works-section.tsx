@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import Link from "next/link";
 import { ArrowRight, UserCheck, Wand2, FileCheck2 } from "lucide-react";
 import { Container, Section, Card, SectionHeading } from "./ui/primitives";
@@ -24,7 +24,7 @@ const STEPS: Step[] = [
     number: "02",
     title: "Generate targeted materials",
     description:
-      "Select a target role or paste a job description. Karyvo pulls relevant achievements from your profile and formats them with the XYZ formula.",
+      "Select a target role or paste a job description. Karyvo pulls relevant achievements from your profile and formats them with quantifiable impact.",
     detail: "Every bullet is framed around measurable impact without hallucinating fake percentages.",
     icon: Wand2,
   },

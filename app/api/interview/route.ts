@@ -5,6 +5,7 @@ import { InterviewSession } from "@/types/interview";
 import { getUser } from "@/lib/auth/getUser";
 import { handleApiError } from "@/lib/apiError";
 import { rateLimit, RATE_LIMITS } from "@/lib/rateLimit";
+import { enforceFeatureQuota } from "@/lib/payments/pro";
 import crypto from "crypto";
 
 export async function GET(req: NextRequest) {
@@ -20,6 +21,9 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const { userId } = await getUser(req);
+
+    // Free tier: 1 mock interview session, Pro: unlimited
+    await enforceFeatureQuota(userId, "interview");
 
     const { limited } = rateLimit(`interview:${userId}`, RATE_LIMITS.ai.maxRequests, RATE_LIMITS.ai.windowMs);
     if (limited) {

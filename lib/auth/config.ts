@@ -28,8 +28,10 @@ export function getSupabaseEnv(): SupabaseEnv | null {
 export const DEMO_USER_ID = "00000000-0000-4000-8000-000000000001";
 
 export function isDemoMode(): boolean {
+  if (process.env.NODE_ENV === "production") {
+    return false;
+  }
   return (
-    process.env.NODE_ENV !== "production" &&
     process.env.DEMO_MODE === "true" &&
     getSupabaseEnv() === null
   );

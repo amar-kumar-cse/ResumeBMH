@@ -5,6 +5,7 @@ import { CoverLetter, CoverLetterTone } from "@/types/cover-letter";
 import { getUser } from "@/lib/auth/getUser";
 import { handleApiError } from "@/lib/apiError";
 import { rateLimit, RATE_LIMITS } from "@/lib/rateLimit";
+import { enforceFeatureQuota } from "@/lib/payments/pro";
 import crypto from "crypto";
 
 // M2: Allowed tone values — validated at runtime
@@ -28,6 +29,9 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const { userId } = await getUser(req);
+
+    // Free tier: 1 cover letter, Pro: unlimited
+    await enforceFeatureQuota(userId, "cover-letter");
 
     const { limited } = rateLimit(`cover-letter:${userId}`, RATE_LIMITS.ai.maxRequests, RATE_LIMITS.ai.windowMs);
     if (limited) {

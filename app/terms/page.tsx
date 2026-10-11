@@ -1,16 +1,60 @@
 import React from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, FileText, CheckCircle2 } from "lucide-react";
 import { Container, Section, Card } from "@/components/landing/ui/primitives";
+import { SITE_URL, getBreadcrumbSchema } from "@/lib/seo/config";
 
-export const metadata = {
-  title: "Terms of Service | Karyvo",
-  description: "Terms and conditions governing use of the Karyvo resume builder and career tools.",
+export const metadata: Metadata = {
+  title: "Terms of Service & Usage Agreement",
+  description:
+    "Terms and conditions governing use of the Karyvo resume builder, ATS health checker, and career preparation tools.",
+  alternates: {
+    canonical: "/terms",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    url: `${SITE_URL}/terms`,
+    title: "Terms of Service | Karyvo AI Career Platform",
+    description:
+      "Terms and conditions governing use of the Karyvo resume builder and career tools.",
+    images: [
+      {
+        url: `${SITE_URL}/opengraph-image`,
+        width: 1200,
+        height: 630,
+        alt: "Karyvo Terms of Service",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Terms of Service | Karyvo AI Career Platform",
+    description:
+      "Terms and conditions governing use of the Karyvo resume builder and career tools.",
+    images: [`${SITE_URL}/opengraph-image`],
+  },
+};
+
+const termsBreadcrumbs = [
+  { name: "Home", item: "/" },
+  { name: "Terms of Service", item: "/terms" },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [getBreadcrumbSchema(termsBreadcrumbs)],
 };
 
 export default function TermsPage() {
   return (
     <Section background="subtle">
+      {/* Schema.org Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Container size="narrow">
         <div className="space-y-6">
           <Link

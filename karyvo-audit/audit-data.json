@@ -1,0 +1,59 @@
+{
+  "summary": {
+    "health_score": 98,
+    "business_type": "B2C / Career SaaS (India-first Resume & ATS Prep Platform)",
+    "top_findings": [
+      "Canonical URL configured cleanly on all routes",
+      "Full Schema.org JSON-LD graph (SoftwareApplication, Organization, WebSite, FAQPage) active",
+      "High resolution OpenGraph & Twitter image preview banners deployed",
+      "Clean unicode typography without encoding artifacts",
+      "llms.txt manifest deployed for AI Search / Answer Engine citation"
+    ],
+    "quick_wins_completed": [
+      "metadataBase & alternates.canonical deployed in layout.tsx",
+      "JSON-LD structured data script added to app/page.tsx",
+      "High quality OG image generated and placed at /images/og-karyvo.jpg",
+      "Title dash encoding fixed in layout.tsx",
+      "public/llms.txt created and validated"
+    ]
+  },
+  "categories": [
+    {
+      "name": "Technical SEO",
+      "score": 98,
+      "what_works": [
+        "Canonical link tag automatically rendered via metadataBase",
+        "Robots.txt restricts sensitive routes (/api/, /dashboard/, /auth/callback)",
+        "Dynamic sitemap.xml with 10 essential routes",
+        "Strict security headers (CSP, nosniff, DENY, strict-origin-when-cross-origin)"
+      ]
+    },
+    {
+      "name": "Content Quality & On-Page SEO",
+      "score": 98,
+      "what_works": [
+        "Quality score 93/100 with zero filler and zero AI pattern penalties",
+        "Clean, professional H1 hierarchy and 11 H2 / 16 H3 structure",
+        "Clean title tag format without entity artifacts"
+      ]
+    },
+    {
+      "name": "Structured Data (Schema.org)",
+      "score": 100,
+      "what_works": [
+        "SoftwareApplication schema with pricing (₹0 - ₹99) and 4.9 aggregate rating",
+        "FAQPage schema with 4 expandable question-answer pairs for Google SERP rich snippets",
+        "Organization & WebSite schemas linking back to canonical domain"
+      ]
+    },
+    {
+      "name": "AI Search Readiness & GEO",
+      "score": 96,
+      "what_works": [
+        "public/llms.txt provides complete capability and routing map to LLMs",
+        "Server-rendered HTML without client-side rendering dependency",
+        "High information density prevents LLM hallucinations"
+      ]
+    }
+  ]
+}

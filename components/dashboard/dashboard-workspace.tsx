@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { MasterCareerProfile } from "@/types/profile";
@@ -239,7 +239,7 @@ export function DashboardWorkspace({
               <EmptyState
                 icon={FileText}
                 title="No resumes created yet"
-                description="Use the 7-step wizard to build your first tailored resume using verified XYZ bullet formatting."
+                description="Use the 7-step wizard to build your first tailored resume using quantified high-impact bullet formatting."
                 action={
                   <Link href="/resume">
                     <Button size="sm">Create first resume</Button>

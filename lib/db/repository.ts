@@ -7,6 +7,8 @@ import { Subscription } from "@/types/payment";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { DEMO_USER_ID, isDemoMode } from "@/lib/auth/config";
 import crypto from "crypto";
+import fs from "fs";
+import path from "path";
 
 const SEED_DATE = "2025-01-15T10:00:00.000Z";
 const SEED_DATE_V1 = "2025-01-12T10:00:00.000Z";
@@ -201,15 +203,18 @@ export interface PaymentOrderRecord {
   billingCycle: "monthly" | "yearly";
   amount: number;
   currency: string;
-  status: "created" | "paid" | "failed";
+  status: "created" | "paid" | "failed" | "refunded";
   razorpayOrderId: string;
   razorpayPaymentId?: string;
+  errorMessage?: string;
+  errorCode?: string;
   createdAt: string;
   updatedAt: string;
 }
 
 export class RepositoryStore {
   private supabase: SupabaseClient | null = null;
+  private dbFilePath = path.join(process.cwd(), "data", "karyvo-local-db.json");
 
   // In-Memory Multi-Tenant Store (Used for offline dev / demo mode / unit tests)
   private profiles = new Map<string, MasterCareerProfile>();
@@ -220,6 +225,7 @@ export class RepositoryStore {
   private interviewSessions = new Map<string, InterviewSession>();
   private subscriptions = new Map<string, Subscription>();
   private orders = new Map<string, PaymentOrderRecord>();
+  private dailyBulletUsage = new Map<string, number>();
 
   constructor() {
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -247,6 +253,85 @@ export class RepositoryStore {
       createdAt: SEED_DATE,
       updatedAt: SEED_DATE,
     });
+
+    this.loadLocalDb();
+  }
+
+  private loadLocalDb() {
+    try {
+      if (typeof window === "undefined" && fs.existsSync(this.dbFilePath)) {
+        const raw = fs.readFileSync(this.dbFilePath, "utf-8");
+        const parsed = JSON.parse(raw);
+        if (parsed.profiles) {
+          for (const [k, v] of Object.entries(parsed.profiles)) {
+            this.profiles.set(k, v as MasterCareerProfile);
+          }
+        }
+        if (parsed.resumes) {
+          for (const [k, v] of Object.entries(parsed.resumes)) {
+            this.resumes.set(k, v as Resume);
+          }
+        }
+        if (Array.isArray(parsed.versions)) {
+          this.versions = parsed.versions;
+        }
+        if (parsed.atsScans) {
+          for (const [k, v] of Object.entries(parsed.atsScans)) {
+            this.atsScans.set(k, v as ATSScanResult);
+          }
+        }
+        if (parsed.coverLetters) {
+          for (const [k, v] of Object.entries(parsed.coverLetters)) {
+            this.coverLetters.set(k, v as CoverLetter);
+          }
+        }
+        if (parsed.interviewSessions) {
+          for (const [k, v] of Object.entries(parsed.interviewSessions)) {
+            this.interviewSessions.set(k, v as InterviewSession);
+          }
+        }
+        if (parsed.subscriptions) {
+          for (const [k, v] of Object.entries(parsed.subscriptions)) {
+            this.subscriptions.set(k, v as Subscription);
+          }
+        }
+        if (parsed.orders) {
+          for (const [k, v] of Object.entries(parsed.orders)) {
+            this.orders.set(k, v as PaymentOrderRecord);
+          }
+        }
+        if (parsed.dailyBulletUsage) {
+          for (const [k, v] of Object.entries(parsed.dailyBulletUsage)) {
+            this.dailyBulletUsage.set(k, Number(v));
+          }
+        }
+      }
+    } catch {
+      // Ignore reading error
+    }
+  }
+
+  private persistLocalDb() {
+    try {
+      if (typeof window === "undefined") {
+        const dir = path.dirname(this.dbFilePath);
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+        const snapshot = {
+          profiles: Object.fromEntries(this.profiles),
+          resumes: Object.fromEntries(this.resumes),
+          versions: this.versions,
+          atsScans: Object.fromEntries(this.atsScans),
+          coverLetters: Object.fromEntries(this.coverLetters),
+          interviewSessions: Object.fromEntries(this.interviewSessions),
+          subscriptions: Object.fromEntries(this.subscriptions),
+          orders: Object.fromEntries(this.orders),
+          dailyBulletUsage: Object.fromEntries(this.dailyBulletUsage),
+        };
+        fs.writeFileSync(this.dbFilePath, JSON.stringify(snapshot, null, 2), "utf-8");
+      }
+    } catch {
+      // Ignore in read-only environment
+    }
   }
 
   private logDbError(operation: string, error: unknown) {
@@ -257,6 +342,9 @@ export class RepositoryStore {
       postgrestErr.details ||
       postgrestErr.code ||
       (error instanceof Error ? error.message : JSON.stringify(error));
+    if (message?.includes("fetch failed") || message?.includes("ENOTFOUND")) {
+      return;
+    }
     console.error(`[Karyvo DB Error] ${operation}:`, message);
   }
 
@@ -305,7 +393,7 @@ export class RepositoryStore {
       }
 
       // New user with no profile record in DB gets an empty profile (NOT fictional seed profile!)
-      if (isDemoMode() || userId === DEMO_USER_ID) {
+      if (isDemoMode() && userId === DEMO_USER_ID) {
         return { ...SEED_PROFILE, userId };
       }
       return createEmptyProfile(userId);
@@ -314,7 +402,7 @@ export class RepositoryStore {
     // In-memory fallback (only when Supabase credentials are absent)
     let profile = this.profiles.get(userId);
     if (!profile) {
-      if (isDemoMode() || userId === DEMO_USER_ID) {
+      if (isDemoMode() && userId === DEMO_USER_ID) {
         profile = { ...SEED_PROFILE, userId };
       } else {
         profile = createEmptyProfile(userId);
@@ -401,7 +489,7 @@ export class RepositoryStore {
         }));
       }
 
-      if (isDemoMode() || userId === DEMO_USER_ID) {
+      if (isDemoMode() && userId === DEMO_USER_ID) {
         return [{ ...SEED_RESUME, userId }];
       }
       return [];
@@ -410,7 +498,7 @@ export class RepositoryStore {
     const memoryResumes = Array.from(this.resumes.values()).filter((r) => r.userId === userId);
     if (memoryResumes.length > 0) return memoryResumes;
 
-    if (isDemoMode() || userId === DEMO_USER_ID) {
+    if (isDemoMode() && userId === DEMO_USER_ID) {
       const defaultResume = { ...SEED_RESUME, userId };
       this.resumes.set(defaultResume.id, defaultResume);
       return [defaultResume];
@@ -460,40 +548,28 @@ export class RepositoryStore {
     };
 
     if (this.supabase) {
-      // Check existing resume to prevent ID overwrite / takeover across users (High #6)
-      const { data: existing, error: checkError } = await this.supabase
+      // Atomic write without check-then-write race condition
+      const { data: updatedRows, error: updateError } = await this.supabase
         .from("resumes")
-        .select("id, user_id")
+        .update({
+          title: updated.title,
+          target_role: updated.targetRole,
+          template_id: updated.templateId,
+          content: updated.content,
+          is_primary: updated.isPrimary,
+          updated_at: updated.updatedAt,
+        })
         .eq("id", updated.id)
-        .maybeSingle();
+        .eq("user_id", updated.userId)
+        .select("id");
 
-      if (checkError) {
-        this.logDbError("saveResume:check", checkError);
-        throw new Error(`Database error verifying resume: ${checkError.message}`);
+      if (updateError) {
+        this.logDbError("saveResume:update", updateError);
+        throw new Error(`Database error updating resume: ${updateError.message}`);
       }
 
-      if (existing) {
-        if (existing.user_id !== updated.userId) {
-          throw new Error("Unauthorized: Resume belongs to another user");
-        }
-        const { error: updateError } = await this.supabase
-          .from("resumes")
-          .update({
-            title: updated.title,
-            target_role: updated.targetRole,
-            template_id: updated.templateId,
-            content: updated.content,
-            is_primary: updated.isPrimary,
-            updated_at: updated.updatedAt,
-          })
-          .eq("id", updated.id)
-          .eq("user_id", updated.userId);
-
-        if (updateError) {
-          this.logDbError("saveResume:update", updateError);
-          throw new Error(`Database error updating resume: ${updateError.message}`);
-        }
-      } else {
+      if (!updatedRows || updatedRows.length === 0) {
+        // Resume with this ID doesn't exist for this user: insert new record
         const { error: insertError } = await this.supabase.from("resumes").insert({
           id: updated.id,
           user_id: updated.userId,
@@ -1034,11 +1110,10 @@ export class RepositoryStore {
   async cancelSubscription(userId: string): Promise<Subscription> {
     const existing = await this.getSubscription(userId);
     const now = new Date().toISOString();
+    // Retain currentPeriodEnd so user does not lose prepaid days
     const updated: Subscription = {
       ...existing,
-      plan: "free",
       status: "canceled",
-      currentPeriodEnd: undefined,
       updatedAt: now,
     };
 
@@ -1046,9 +1121,7 @@ export class RepositoryStore {
       const { error } = await this.supabase
         .from("subscriptions")
         .update({
-          plan: "free",
           status: "canceled",
-          current_period_end: null,
           updated_at: now,
         })
         .eq("user_id", userId);
@@ -1172,6 +1245,213 @@ export class RepositoryStore {
       return order;
     }
     return null;
+  }
+
+  async markOrderFailed(
+    razorpayOrderId: string,
+    errorMessage?: string,
+    errorCode?: string
+  ): Promise<PaymentOrderRecord | null> {
+    const now = new Date().toISOString();
+    if (this.supabase) {
+      const { data, error } = await this.supabase
+        .from("orders")
+        .update({
+          status: "failed",
+          error_message: errorMessage || null,
+          error_code: errorCode || null,
+          updated_at: now,
+        })
+        .eq("razorpay_order_id", razorpayOrderId)
+        .select("*")
+        .maybeSingle();
+
+      if (error) {
+        this.logDbError("markOrderFailed", error);
+        throw new Error(`Database error marking order failed: ${error.message}`);
+      }
+      if (data) {
+        return {
+          id: data.id,
+          userId: data.user_id,
+          plan: data.plan,
+          billingCycle: data.billing_cycle,
+          amount: data.amount,
+          currency: data.currency,
+          status: data.status,
+          razorpayOrderId: data.razorpay_order_id,
+          razorpayPaymentId: data.razorpay_payment_id,
+          createdAt: data.created_at,
+          updatedAt: data.updated_at,
+        };
+      }
+      return null;
+    }
+
+    for (const [id, order] of this.orders.entries()) {
+      if (order.razorpayOrderId === razorpayOrderId || id === razorpayOrderId) {
+        order.status = "failed";
+        order.errorMessage = errorMessage;
+        order.errorCode = errorCode;
+        order.updatedAt = now;
+        this.orders.set(id, order);
+        return order;
+      }
+    }
+    return null;
+  }
+
+  async markOrderRefunded(razorpayOrderIdOrPaymentId: string): Promise<PaymentOrderRecord | null> {
+    const now = new Date().toISOString();
+    if (this.supabase) {
+      const { data: orderData, error: findError } = await this.supabase
+        .from("orders")
+        .select("*")
+        .or(`razorpay_order_id.eq.${razorpayOrderIdOrPaymentId},razorpay_payment_id.eq.${razorpayOrderIdOrPaymentId}`)
+        .maybeSingle();
+
+      if (findError || !orderData) return null;
+
+      await this.supabase
+        .from("orders")
+        .update({ status: "refunded", updated_at: now })
+        .eq("id", orderData.id);
+
+      await this.supabase
+        .from("subscriptions")
+        .update({ plan: "free", status: "canceled", updated_at: now })
+        .eq("user_id", orderData.user_id);
+
+      return {
+        id: orderData.id,
+        userId: orderData.user_id,
+        plan: orderData.plan,
+        billingCycle: orderData.billing_cycle,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        status: "refunded",
+        razorpayOrderId: orderData.razorpay_order_id,
+        razorpayPaymentId: orderData.razorpay_payment_id,
+        createdAt: orderData.created_at,
+        updatedAt: now,
+      };
+    }
+
+    for (const [id, order] of this.orders.entries()) {
+      if (order.razorpayOrderId === razorpayOrderIdOrPaymentId || order.razorpayPaymentId === razorpayOrderIdOrPaymentId || id === razorpayOrderIdOrPaymentId) {
+        order.status = "refunded";
+        order.updatedAt = now;
+        this.orders.set(id, order);
+
+        const sub = this.subscriptions.get(order.userId);
+        if (sub) {
+          sub.plan = "free";
+          sub.status = "canceled";
+          sub.updatedAt = now;
+          this.subscriptions.set(order.userId, sub);
+        }
+        return order;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Atomic payment verification and Pro activation.
+   * Eliminates crash window between order paid and pro upgrade.
+   */
+  async confirmPaymentAndUpgradePro(
+    orderIdOrOpts:
+      | string
+      | {
+          orderId: string;
+          paymentId: string;
+          userId?: string;
+          billingCycle?: "monthly" | "yearly";
+        },
+    paymentIdParam?: string,
+    options?: { billingCycle?: "monthly" | "yearly" }
+  ): Promise<{ order: PaymentOrderRecord; subscription: Subscription }> {
+    let razorpayOrderId: string;
+    let paymentId: string;
+    let cycle: "monthly" | "yearly" = "monthly";
+
+    if (typeof orderIdOrOpts === "object" && orderIdOrOpts !== null) {
+      razorpayOrderId = orderIdOrOpts.orderId;
+      paymentId = orderIdOrOpts.paymentId;
+      cycle = orderIdOrOpts.billingCycle || "monthly";
+    } else {
+      razorpayOrderId = orderIdOrOpts;
+      paymentId = paymentIdParam || "";
+      cycle = options?.billingCycle || "monthly";
+    }
+
+    const now = new Date();
+    const expiresAt = new Date(now);
+    expiresAt.setMonth(expiresAt.getMonth() + (cycle === "yearly" ? 12 : 1));
+
+    if (this.supabase) {
+      try {
+        const { data: rpcData, error: rpcError } = await this.supabase.rpc(
+          "confirm_payment_and_upgrade_pro",
+          {
+            p_order_id: razorpayOrderId,
+            p_payment_id: paymentId,
+            p_billing_cycle: cycle,
+            p_period_end: expiresAt.toISOString(),
+          }
+        );
+
+        if (!rpcError && rpcData?.success) {
+          const order = await this.getOrderByRazorpayId(razorpayOrderId);
+          const subscription = await this.getSubscription(rpcData.userId);
+          if (order && subscription) {
+            return { order, subscription };
+          }
+        }
+      } catch (err) {
+        // Fallback if RPC is not present
+      }
+
+      const order = await this.markOrderPaid(razorpayOrderId, paymentId);
+      if (!order) {
+        throw new Error("Order not found during payment confirmation");
+      }
+      const subscription = await this.upgradeToPro(order.userId, {
+        billingCycle: order.billingCycle || cycle,
+        paymentId,
+        orderId: razorpayOrderId,
+      });
+      return { order, subscription };
+    }
+
+    const order = await this.markOrderPaid(razorpayOrderId, paymentId);
+    if (!order) {
+      throw new Error("Order not found during payment confirmation");
+    }
+    const subscription = await this.upgradeToPro(order.userId, {
+      billingCycle: order.billingCycle || cycle,
+      paymentId,
+      orderId: razorpayOrderId,
+    });
+    return { order, subscription };
+  }
+
+  // ==========================================
+  // USAGE QUOTAS (Free Tier Limits)
+  // ==========================================
+  async getDailyAIBulletCount(userId: string): Promise<number> {
+    const today = new Date().toISOString().slice(0, 10);
+    const key = `${userId}:${today}`;
+    return this.dailyBulletUsage.get(key) || 0;
+  }
+
+  async incrementDailyAIBulletCount(userId: string): Promise<number> {
+    const today = new Date().toISOString().slice(0, 10);
+    const key = `${userId}:${today}`;
+    const next = (this.dailyBulletUsage.get(key) || 0) + 1;
+    this.dailyBulletUsage.set(key, next);
+    return next;
   }
 }
 

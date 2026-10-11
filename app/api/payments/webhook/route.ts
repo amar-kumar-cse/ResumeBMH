@@ -26,25 +26,46 @@ export async function POST(req: NextRequest) {
     const event = JSON.parse(rawBody);
     const eventType = event.event;
 
-    // Handle order.paid or payment.captured
+    // 1. Handle successful payment events (order.paid or payment.captured)
     if (eventType === "order.paid" || eventType === "payment.captured") {
       const paymentEntity = event.payload?.payment?.entity;
       const orderEntity = event.payload?.order?.entity;
 
       const razorpayOrderId = orderEntity?.id || paymentEntity?.order_id;
-      const razorpayPaymentId = paymentEntity?.id;
+      const razorpayPaymentId = paymentEntity?.id || "webhook_captured";
 
       if (razorpayOrderId) {
         const order = await repository.getOrderByRazorpayId(razorpayOrderId);
         if (order && order.status !== "paid") {
-          await repository.markOrderPaid(razorpayOrderId, razorpayPaymentId || "webhook_captured");
-          await repository.upgradeToPro(order.userId, {
-            billingCycle: order.billingCycle,
-            paymentId: razorpayPaymentId,
-            orderId: razorpayOrderId,
-          });
+          await repository.confirmPaymentAndUpgradePro(
+            razorpayOrderId,
+            razorpayPaymentId,
+            { billingCycle: order.billingCycle }
+          );
           console.log(`Webhook successfully fulfilled Pro subscription for user ${order.userId} on order ${razorpayOrderId}`);
         }
+      }
+    }
+
+    // 2. Handle failed payments (payment.failed)
+    if (eventType === "payment.failed") {
+      const paymentEntity = event.payload?.payment?.entity;
+      const razorpayOrderId = paymentEntity?.order_id;
+      if (razorpayOrderId) {
+        await repository.markOrderFailed(razorpayOrderId);
+        console.warn(`Webhook marked order ${razorpayOrderId} as failed.`);
+      }
+    }
+
+    // 3. Handle refunds (refund.processed, refund.created, payment.refunded)
+    if (eventType === "refund.processed" || eventType === "refund.created" || eventType === "payment.refunded") {
+      const refundEntity = event.payload?.refund?.entity;
+      const paymentEntity = event.payload?.payment?.entity;
+      const paymentId = refundEntity?.payment_id || paymentEntity?.id;
+
+      if (paymentId) {
+        await repository.markOrderRefunded(paymentId);
+        console.warn(`Webhook processed refund for payment ${paymentId}; downgraded user to free plan.`);
       }
     }
 

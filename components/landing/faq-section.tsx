@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from "react";
 import { ChevronDown } from "lucide-react";
@@ -33,7 +33,7 @@ const FAQS: FAQItem[] = [
   {
     question: "How is Karyvo different from pasting my resume into ChatGPT?",
     answer:
-      "General AI chatbots tend to generate verbose, robotic text with unverifiable claims and hallucinated statistics. Karyvo is built around a single Master Career Profile that acts as your verified source of truth, enforcing Laszlo Bock's XYZ structure ('Accomplished [X], as measured by [Y], by doing [Z]') and validating ATS document structure.",
+      "General AI chatbots tend to generate verbose, robotic text with unverifiable claims and hallucinated statistics. Karyvo is built around your verified Master Career Profile, optimizing bullet points with proven action verbs, quantifiable metrics, and strict ATS formatting standards.",
   },
   {
     question: "Can college freshers or career switchers use Karyvo?",

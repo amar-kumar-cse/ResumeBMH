@@ -3,6 +3,7 @@ import { repository } from "@/lib/db/repository";
 import { getUser } from "@/lib/auth/getUser";
 import { handleApiError } from "@/lib/apiError";
 import { rateLimit, RATE_LIMITS } from "@/lib/rateLimit";
+import { requirePro } from "@/lib/payments/pro";
 
 export async function GET(
   req: NextRequest,
@@ -10,6 +11,7 @@ export async function GET(
 ) {
   try {
     const { userId } = await getUser(req);
+    await requirePro(userId);
     const { id } = await params;
 
     const resume = await repository.getResumeById(id, userId);
@@ -30,6 +32,7 @@ export async function POST(
 ) {
   try {
     const { userId } = await getUser(req);
+    await requirePro(userId);
     const { id } = await params;
 
     const { limited } = rateLimit(`version-restore:${userId}`, RATE_LIMITS.standard.maxRequests, RATE_LIMITS.standard.windowMs);

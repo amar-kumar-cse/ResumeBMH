@@ -1,15 +1,59 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, Shield, Lock, Eye, FileText, CheckCircle2 } from "lucide-react";
 import { Card, Badge } from "@/components/ui/primitives";
+import { SITE_URL, getBreadcrumbSchema } from "@/lib/seo/config";
 
-export const metadata = {
-  title: "Privacy Policy | Karyvo AI Builder",
-  description: "Learn how Karyvo protects your resume data, career profiles, and AI processing integrity.",
+export const metadata: Metadata = {
+  title: "Privacy Policy & Career Data Security",
+  description:
+    "Learn how Karyvo protects your resume data, career profiles, and AI processing integrity with dedicated Supabase Row-Level Security.",
+  alternates: {
+    canonical: "/privacy",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    url: `${SITE_URL}/privacy`,
+    title: "Privacy Policy | Karyvo AI Career Platform",
+    description:
+      "Learn how Karyvo protects your resume data, career profiles, and AI processing integrity.",
+    images: [
+      {
+        url: `${SITE_URL}/opengraph-image`,
+        width: 1200,
+        height: 630,
+        alt: "Karyvo Privacy Policy",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Privacy Policy | Karyvo AI Career Platform",
+    description:
+      "Learn how Karyvo protects your resume data, career profiles, and AI processing integrity.",
+    images: [`${SITE_URL}/opengraph-image`],
+  },
+};
+
+const privacyBreadcrumbs = [
+  { name: "Home", item: "/" },
+  { name: "Privacy Policy", item: "/privacy" },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [getBreadcrumbSchema(privacyBreadcrumbs)],
 };
 
 export default function PrivacyPolicyPage() {
   return (
     <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
+      {/* Schema.org Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="max-w-4xl mx-auto space-y-8">
         <Link
           href="/"
@@ -102,8 +146,8 @@ export default function PrivacyPolicyPage() {
             <h2 className="text-base font-bold text-slate-900 font-heading">Contact & Security Inquiries</h2>
             <p className="text-xs text-slate-500">
               For questions regarding privacy, security compliance, or data subject requests, please reach out to{" "}
-              <a href="mailto:support@karyvo.ai" className="text-brand-primary hover:underline">
-                support@karyvo.ai
+              <a href="mailto:support@karyvo.com" className="text-brand-primary hover:underline">
+                support@karyvo.com
               </a>.
             </p>
           </section>

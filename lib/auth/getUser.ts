@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { DEMO_USER_ID, getSupabaseEnv, isDemoMode } from "@/lib/auth/config";
 
@@ -17,15 +18,25 @@ export class AuthError extends Error {
 
 /**
  * Authenticate the caller of an API route. FAILS CLOSED: if there is no valid,
- * server-verified Supabase user, an AuthError (HTTP 401) is thrown.
- *
- * Accepted credentials (in order):
- *   1. `Authorization: Bearer <access_token>` (API clients / mobile apps)
- *   2. The Supabase session cookies set by @supabase/ssr (the browser app)
+ * server-verified user (Clerk or Supabase), an AuthError (HTTP 401) is thrown.
  */
 export async function getUser(req: Request): Promise<AuthUser> {
   if (isDemoMode()) {
     return { userId: DEMO_USER_ID, email: "demo@karyvo.local" };
+  }
+
+  // 1. Clerk session check
+  if (process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && process.env.CLERK_SECRET_KEY) {
+    try {
+      const clerkAuth = await auth();
+      if (clerkAuth?.userId) {
+        const user = await currentUser().catch(() => null);
+        const email = user?.emailAddresses?.[0]?.emailAddress;
+        return { userId: clerkAuth.userId, email };
+      }
+    } catch {
+      // Proceed to bearer/Supabase fallback
+    }
   }
 
   const env = getSupabaseEnv();
@@ -35,7 +46,7 @@ export async function getUser(req: Request): Promise<AuthUser> {
     throw new AuthError("Authentication is not available");
   }
 
-  // 1. Bearer token
+  // 2. Bearer token
   const authHeader = req.headers.get("authorization");
   if (authHeader?.toLowerCase().startsWith("bearer ")) {
     const token = authHeader.slice(7).trim();
@@ -59,12 +70,40 @@ export async function getUser(req: Request): Promise<AuthUser> {
 }
 
 /**
+ * Optional authentication: returns verified user if valid session exists,
+ * or null for anonymous visitors (does NOT throw 401).
+ */
+export async function getUserOptional(req: Request): Promise<AuthUser | null> {
+  try {
+    return await getUser(req);
+  } catch (err) {
+    if (err instanceof AuthError) {
+      return null;
+    }
+    return null;
+  }
+}
+
+/**
  * For Server Components: the verified user, or null when signed out.
  * Never returns a value taken from an unverified cookie.
  */
 export async function getServerUser(): Promise<AuthUser | null> {
   if (isDemoMode()) {
     return { userId: DEMO_USER_ID, email: "demo@karyvo.local" };
+  }
+
+  if (process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && process.env.CLERK_SECRET_KEY) {
+    try {
+      const clerkAuth = await auth();
+      if (clerkAuth?.userId) {
+        const user = await currentUser().catch(() => null);
+        const email = user?.emailAddresses?.[0]?.emailAddress;
+        return { userId: clerkAuth.userId, email };
+      }
+    } catch {
+      // Proceed to Supabase check
+    }
   }
 
   const supabase = await createSupabaseServerClient();

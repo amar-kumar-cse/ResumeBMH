@@ -25,7 +25,7 @@ export const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(
       <div
         ref={ref}
         className={cn(
-          "rounded-2xl p-6 relative overflow-hidden transition-all duration-300",
+          "rounded-2xl p-6 relative overflow-hidden transition-[transform,box-shadow,background-color,border-color] duration-200 ease-out",
           variantStyles[variant],
           className
         )}
@@ -88,17 +88,17 @@ export const GlassButton = React.forwardRef<HTMLButtonElement, GlassButtonProps>
 
     const variantStyles = {
       primary:
-        "bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 hover:from-blue-700 hover:to-indigo-700 active:scale-95 text-white shadow-md shadow-blue-500/25 border border-blue-400/30",
+        "bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 hover:from-blue-700 hover:to-indigo-700 active:scale-[0.98] text-white shadow-md shadow-blue-500/25 border border-blue-400/30",
       secondary:
-        "bg-white/85 hover:bg-white active:scale-98 text-slate-800 border border-slate-200/90 shadow-sm backdrop-blur-md",
+        "bg-white/85 hover:bg-white active:scale-[0.98] text-slate-800 border border-slate-200/90 shadow-sm backdrop-blur-md",
       gold:
-        "bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:brightness-105 active:scale-95 text-slate-950 font-bold shadow-md shadow-amber-500/25 border border-amber-300",
+        "bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:brightness-105 active:scale-[0.98] text-slate-950 font-bold shadow-md shadow-amber-500/25 border border-amber-300",
       outline:
-        "bg-white/70 hover:bg-white text-slate-700 hover:text-slate-900 border border-slate-200 shadow-sm backdrop-blur-md",
+        "bg-white/70 hover:bg-white active:scale-[0.98] text-slate-700 hover:text-slate-900 border border-slate-200 shadow-sm backdrop-blur-md",
       ghost:
-        "bg-transparent hover:bg-white/60 text-slate-600 hover:text-slate-900 border border-transparent",
+        "bg-transparent hover:bg-white/60 active:scale-[0.98] text-slate-600 hover:text-slate-900 border border-transparent",
       danger:
-        "bg-rose-600 text-white hover:bg-rose-700 shadow-sm active:scale-95",
+        "bg-rose-600 text-white hover:bg-rose-700 shadow-sm active:scale-[0.98]",
     };
 
     return (
@@ -106,7 +106,7 @@ export const GlassButton = React.forwardRef<HTMLButtonElement, GlassButtonProps>
         ref={ref}
         disabled={disabled || isSpinning}
         className={cn(
-          "inline-flex items-center justify-center transition-all duration-200 select-none disabled:opacity-50 disabled:pointer-events-none cursor-pointer",
+          "inline-flex items-center justify-center transition-[transform,background-color,border-color,box-shadow,opacity] duration-150 ease-out active:duration-75 touch-manipulation select-none disabled:opacity-50 disabled:pointer-events-none cursor-pointer",
           sizeStyles[size],
           variantStyles[variant],
           className

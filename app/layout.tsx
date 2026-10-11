@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Manrope } from "next/font/google";
+import { Inter, Manrope, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/navigation/navbar";
 import { Footer } from "@/components/navigation/footer";
@@ -9,22 +9,73 @@ const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
   display: "swap",
-  weight: ["400", "500", "600", "700"],
 });
 
 const manrope = Manrope({
   subsets: ["latin"],
   variable: "--font-manrope",
   display: "swap",
-  weight: ["600", "700", "800"],
 });
 
+const brandFont = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-brand",
+  weight: ["700", "800"],
+  display: "swap",
+});
+
+import { SITE_URL, SITE_TITLE_DEFAULT, SITE_DESCRIPTION, SEO_KEYWORDS } from "@/lib/seo/config";
+
 export const metadata: Metadata = {
-  title: "Karyvo AI Builder — Build Your Resume. Beat ATS. Get Interview-Ready.",
-  description:
-    "India-first AI career platform. Master Career Profile powers Resume Builder, Standalone ATS Scanner, AI Bullet Improver, Cover Letter, and Role Interview simulator.",
-  keywords: ["AI Resume Builder", "ATS Scanner", "Interview AI", "India tech jobs", "SDE resume", "Fresher placement"],
+  metadataBase: new URL(SITE_URL),
+  alternates: {
+    canonical: "/",
+  },
+  icons: {
+    icon: "/favicon.ico",
+  },
+  title: {
+    default: SITE_TITLE_DEFAULT,
+    template: "%s | Karyvo",
+  },
+  description: SITE_DESCRIPTION,
+  keywords: SEO_KEYWORDS,
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    url: SITE_URL,
+    siteName: "Karyvo",
+    title: SITE_TITLE_DEFAULT,
+    description: SITE_DESCRIPTION,
+    images: [
+      {
+        url: `${SITE_URL}/opengraph-image`,
+        width: 1200,
+        height: 630,
+        alt: "Karyvo AI Resume Builder and Career Platform",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE_DEFAULT,
+    description: SITE_DESCRIPTION,
+    images: [`${SITE_URL}/opengraph-image`],
+  },
 };
+
+import { ClerkProvider } from "@clerk/nextjs";
 
 export default function RootLayout({
   children,
@@ -32,13 +83,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${manrope.variable}`}>
-      <body className="font-sans sky-cloud-canvas text-slate-800 flex flex-col min-h-screen selection:bg-blue-500/20 selection:text-blue-900 antialiased">
-        <AmbientSpotlight />
-        <Navbar />
-        <main className="flex-1 w-full relative z-10">{children}</main>
-        <Footer />
-      </body>
-    </html>
+    <ClerkProvider dynamic>
+      <html lang="en" className={`${inter.variable} ${manrope.variable} ${brandFont.variable}`} suppressHydrationWarning>
+        <body className="font-sans sky-cloud-canvas text-slate-800 flex flex-col min-h-screen selection:bg-blue-500/20 selection:text-blue-900 antialiased" suppressHydrationWarning>
+          <AmbientSpotlight />
+          <Navbar />
+          <main className="flex-1 w-full relative z-10">{children}</main>
+          <Footer />
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

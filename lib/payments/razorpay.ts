@@ -111,9 +111,10 @@ export class PaymentService {
       return false;
     }
 
-    // Allow mock verification only in development/test with mock keys
+    // Allow mock verification only when explicitly enabled via ALLOW_MOCK_PAYMENTS in non-production environments
     if (
       process.env.NODE_ENV !== "production" &&
+      process.env.ALLOW_MOCK_PAYMENTS === "true" &&
       this.keySecret === "mock_secret_karyvo" &&
       (razorpay_signature.startsWith("sig_mock_") || razorpay_signature.startsWith("mock_"))
     ) {

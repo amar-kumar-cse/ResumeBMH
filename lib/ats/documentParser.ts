@@ -270,7 +270,7 @@ export async function parseResumeDocument(
 }
 
 /**
- * Call Gemini 3.8 Flash multimodal to extract resume text with high fidelity OCR
+ * Call Gemini 2.5 Flash multimodal to extract resume text with high fidelity OCR
  */
 async function extractTextWithGemini(fileBuffer: Buffer, mimeType: string): Promise<string> {
   const base64Data = fileBuffer.toString("base64");
@@ -290,7 +290,7 @@ Guidelines:
 
     try {
       const res = await fetch(
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent",
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
         {
           method: "POST",
           headers: {

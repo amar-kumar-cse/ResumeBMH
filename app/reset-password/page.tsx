@@ -2,8 +2,11 @@ import type { Metadata } from "next";
 import { AuthForm } from "@/components/auth/auth-form";
 
 export const metadata: Metadata = {
-  title: "Reset password | Karyvo",
+  title: "Reset password",
   description: "Choose a new Karyvo password.",
+  alternates: {
+    canonical: "/reset-password",
+  },
   robots: { index: false, follow: false },
 };
 

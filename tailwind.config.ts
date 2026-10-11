@@ -12,6 +12,7 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-inter)", "system-ui", "-apple-system", "sans-serif"],
         heading: ["var(--font-manrope)", "var(--font-inter)", "sans-serif"],
+        brand: ["var(--font-brand)", "var(--font-manrope)", "sans-serif"],
       },
       fontSize: {
         xs: ["12px", { lineHeight: "16px" }],

@@ -145,10 +145,10 @@ export function InteractiveBulletDemo() {
               </span>
             </div>
             <h3 className="text-xl sm:text-2xl font-bold text-slate-900 font-heading tracking-tight mt-1">
-              The XYZ Method Bullet Improver
+              AI Action Bullet Optimizer
             </h3>
             <p className="text-sm text-slate-600 mt-0.5">
-              Accomplished [X], as measured by [Y], by doing [Z]. Popularised by Laszlo Bock, former Google VP of People Operations.
+              Transform simple job tasks into quantified, results-driven achievements that impress hiring managers.
             </p>
           </div>
 
@@ -157,6 +157,7 @@ export function InteractiveBulletDemo() {
             {PRESETS.map((p, idx) => (
               <button
                 key={p.role}
+                suppressHydrationWarning
                 onClick={() => handleSelectPreset(idx)}
                 className={`h-9 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all inline-flex items-center justify-center cursor-pointer ${
                   selectedPreset === idx
@@ -191,6 +192,7 @@ export function InteractiveBulletDemo() {
                 <span className="text-xs text-slate-500 font-medium">Example</span>
               </div>
               <textarea
+                suppressHydrationWarning
                 value={inputBullet}
                 onChange={(e) => setInputBullet(e.target.value)}
                 maxLength={300}
@@ -206,9 +208,10 @@ export function InteractiveBulletDemo() {
               </span>
               <button
                 type="button"
+                suppressHydrationWarning
                 onClick={handleTransform}
                 disabled={isLoading || !inputBullet.trim()}
-                className="h-9 px-4 text-xs font-semibold rounded-lg bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 hover:from-blue-700 hover:to-indigo-700 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed transition-all inline-flex items-center gap-2 text-white shadow-md shadow-blue-500/25 cursor-pointer"
+                className="h-9 px-4 text-xs font-semibold rounded-lg bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 hover:from-blue-700 hover:to-indigo-700 active:scale-[0.98] active:duration-75 disabled:opacity-50 disabled:cursor-not-allowed transition-[transform,background-color,box-shadow,opacity] duration-150 ease-out inline-flex items-center gap-2 text-white shadow-md shadow-blue-500/25 cursor-pointer touch-manipulation"
               >
                 {isLoading ? (
                   <span className="animate-spin h-3.5 w-3.5 border-2 border-white border-t-transparent rounded-full" />
@@ -222,13 +225,13 @@ export function InteractiveBulletDemo() {
             </div>
           </div>
 
-          {/* Output: XYZ Optimized Bullet */}
+          {/* Output: AI Impact Optimized Bullet */}
           <div className="p-5 sm:p-6 rounded-xl bg-blue-50/70 border border-blue-200/70 flex flex-col justify-between min-h-[250px] shadow-sm backdrop-blur-md">
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold uppercase tracking-wider text-blue-700 flex items-center gap-1.5">
                   <Sparkles className="h-3.5 w-3.5 text-blue-600" />
-                  XYZ Transformation
+                  High-Impact Transformation
                 </span>
                 <span className="text-xs text-ink-subtle font-medium bg-white px-2 py-0.5 rounded-md border border-slate-200">
                   Example
@@ -264,6 +267,7 @@ export function InteractiveBulletDemo() {
                   <input
                     id="user-real-number"
                     type="text"
+                    suppressHydrationWarning
                     value={userCustomNumber}
                     onChange={(e) => setUserCustomNumber(e.target.value)}
                     placeholder="e.g. 35%, 10k users, 2.5x, ₹15L"
@@ -276,7 +280,7 @@ export function InteractiveBulletDemo() {
 
             <div className="pt-4 mt-auto border-t border-indigo-200/60 flex items-center justify-between gap-3 h-12">
               {/* Honest Legend */}
-              <div className="flex items-center gap-2.5 text-xs text-slate-600" aria-label="XYZ breakdown">
+              <div className="flex items-center gap-2.5 text-xs text-slate-600" aria-label="Bullet impact breakdown">
                 <span className="flex items-center gap-1 font-medium">
                   <span className="h-1.5 w-1.5 rounded-full bg-indigo-600" aria-hidden="true" />
                   Result
@@ -294,8 +298,9 @@ export function InteractiveBulletDemo() {
               <button
                 onClick={handleCopy}
                 type="button"
+                suppressHydrationWarning
                 aria-label={copied ? "Copied to clipboard" : "Copy transformed bullet to clipboard"}
-                className="h-9 inline-flex items-center gap-1.5 px-3.5 rounded-lg text-xs font-semibold bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 border border-indigo-200 shadow-sm transition-all active:scale-95 cursor-pointer"
+                className="h-9 inline-flex items-center gap-1.5 px-3.5 rounded-lg text-xs font-semibold bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 border border-indigo-200 shadow-sm transition-[transform,background-color,border-color,box-shadow,color] duration-150 ease-out active:scale-[0.98] active:duration-75 touch-manipulation cursor-pointer"
               >
                 {copied ? (
                   <>

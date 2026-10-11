@@ -220,7 +220,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      "inline-flex items-center justify-center font-semibold rounded-xl transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none select-none cursor-pointer";
+      "inline-flex items-center justify-center font-semibold rounded-xl transition-[transform,background-color,border-color,box-shadow,opacity] duration-150 ease-out active:scale-[0.98] active:duration-75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none select-none cursor-pointer touch-manipulation";
 
     const sizeStyles = {
       sm: "h-9 px-3.5 text-xs gap-1.5",
@@ -230,20 +230,21 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variantStyles = {
       primary:
-        "bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-md shadow-blue-500/25 active:scale-[0.99]",
+        "bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-md shadow-blue-500/25",
       secondary:
-        "bg-white/85 hover:bg-white text-ink border border-slate-200/80 shadow-sm active:scale-[0.99] backdrop-blur-sm",
+        "bg-white/85 hover:bg-white text-ink border border-slate-200/80 shadow-sm backdrop-blur-sm",
       outline:
-        "bg-white/70 text-ink border border-slate-200/90 hover:bg-white hover:border-slate-300 shadow-sm active:scale-[0.99] backdrop-blur-sm",
+        "bg-white/70 text-ink border border-slate-200/90 hover:bg-white hover:border-slate-300 shadow-sm backdrop-blur-sm",
       ghost:
         "text-ink-muted hover:text-ink hover:bg-white/60",
       danger:
-        "bg-rose-600 text-white hover:bg-rose-700 shadow-sm active:scale-[0.99] focus-visible:ring-rose-500",
+        "bg-rose-600 text-white hover:bg-rose-700 shadow-sm focus-visible:ring-rose-500",
     };
 
     return (
       <button
         ref={ref}
+        suppressHydrationWarning
         disabled={disabled || isLoading}
         className={cn(
           baseStyles,
@@ -353,12 +354,13 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
         <input
           ref={ref}
+          suppressHydrationWarning
           id={inputId}
           required={required}
           aria-invalid={Boolean(error)}
           aria-describedby={cn(errorId, helperId) || undefined}
           className={cn(
-            "w-full h-11 px-3.5 rounded-lg border bg-white text-ink text-sm transition-all",
+            "w-full h-11 px-3.5 rounded-lg border bg-white text-ink text-base sm:text-sm transition-colors duration-150 ease-out",
             "placeholder:text-ink-subtle",
             "focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent",
             "disabled:bg-slate-50 disabled:text-slate-500 disabled:cursor-not-allowed",
@@ -410,13 +412,14 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         )}
         <textarea
           ref={ref}
+          suppressHydrationWarning
           id={textareaId}
           rows={rows}
           required={required}
           aria-invalid={Boolean(error)}
           aria-describedby={cn(errorId, helperId) || undefined}
           className={cn(
-            "w-full p-3.5 rounded-lg border bg-white text-ink text-sm transition-all resize-y",
+            "w-full p-3.5 rounded-lg border bg-white text-ink text-base sm:text-sm transition-colors duration-150 ease-out resize-y",
             "placeholder:text-ink-subtle",
             "focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent",
             "disabled:bg-slate-50 disabled:text-slate-500 disabled:cursor-not-allowed",

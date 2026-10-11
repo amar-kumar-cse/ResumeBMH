@@ -1,6 +1,7 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { Mail, Lock, AlertCircle, CheckCircle2 } from "lucide-react";
@@ -211,9 +212,18 @@ export function AuthForm({
     <div className="mx-auto flex min-h-[70vh] w-full max-w-md items-center px-4 py-12">
       <Card className="w-full space-y-6 p-7 sm:p-9 bg-white border-slate-200 shadow-elevated">
         <div className="space-y-2 text-center">
-          <Link href="/" className="inline-block mb-1">
-            <span className="text-2xl font-extrabold tracking-tight text-ink font-heading">
-              Karyvo
+          <Link href="/" className="inline-flex items-center gap-2 mb-2 group">
+            <div className="relative h-8 w-8 rounded-lg overflow-hidden shadow-sm shadow-blue-500/20 group-hover:scale-105 transition-transform bg-blue-600 flex items-center justify-center">
+              <Image
+                src="/favicon.ico"
+                alt="Karyvo Logo"
+                width={32}
+                height={32}
+                className="h-full w-full object-cover"
+              />
+            </div>
+            <span className="font-brand text-2xl font-extrabold tracking-[-0.03em] text-slate-900 group-hover:text-blue-600 transition-colors">
+              Resume<span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent font-black ml-0.5">BMH</span>
             </span>
           </Link>
           <h1 className="font-heading text-2xl font-bold tracking-tight text-ink">

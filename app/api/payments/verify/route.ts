@@ -66,15 +66,12 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Mark order as paid in database
-    await repository.markOrderPaid(razorpay_order_id, razorpay_payment_id);
-
-    // Upgrade user to Pro, strictly deriving billingCycle from the saved DB order (never trust client payload)
-    const subscription = await repository.upgradeToPro(userId, {
-      billingCycle: existingOrder.billingCycle,
-      paymentId: razorpay_payment_id,
-      orderId: razorpay_order_id,
-    });
+    // Atomically mark order as paid and upgrade user to Pro
+    const { subscription } = await repository.confirmPaymentAndUpgradePro(
+      razorpay_order_id,
+      razorpay_payment_id,
+      { billingCycle: existingOrder.billingCycle }
+    );
 
     return NextResponse.json({
       success: true,

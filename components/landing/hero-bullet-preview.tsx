@@ -13,7 +13,7 @@ export function HeroBulletPreview() {
           <div className="flex items-center gap-2">
             <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
             <span className="text-xs font-bold text-slate-900 font-heading">
-              The XYZ Method in Action
+              Quantified Impact in Action
             </span>
           </div>
           <Badge variant="neutral" className="text-xs">
@@ -47,7 +47,7 @@ export function HeroBulletPreview() {
           <div className="flex items-center justify-between text-xs">
             <span className="font-bold uppercase tracking-wider text-[#1e3a8a] flex items-center gap-1.5">
               <span className="h-1.5 w-1.5 rounded-full bg-[#1e3a8a]" />
-              After: XYZ Optimized
+              After: High-Impact Optimized
             </span>
             <span className="text-emerald-700 font-medium">Clear & verifiable</span>
           </div>

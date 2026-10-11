@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Container, Button, Badge } from "./ui/primitives";
@@ -12,8 +12,8 @@ export function HeroSection() {
           {/* Left Column: Headline, Subhead, CTAs */}
           <div className="lg:col-span-6 space-y-6 text-center lg:text-left flex flex-col items-center lg:items-start z-10">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/85 border border-blue-200/80 text-blue-700 shadow-sm text-xs font-semibold backdrop-blur-md">
-              <Sparkles className="h-3.5 w-3.5 text-amber-500" />
-              <span>The XYZ Method • Popularised by Laszlo Bock</span>
+              <Sparkles className="h-3.5 w-3.5 text-blue-600" />
+              <span>ATS-Optimized • Recruiter-Approved AI</span>
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-extrabold text-slate-900 font-heading tracking-tight leading-[1.12]">
@@ -24,7 +24,7 @@ export function HeroSection() {
             </h1>
 
             <p className="text-base sm:text-lg text-slate-600 max-w-xl mx-auto lg:mx-0 leading-relaxed font-sans">
-              Karyvo structures your career history into verified, measurable bullet points using Laszlo Bock&apos;s XYZ formula. No invented percentages. No robotic fluff.
+              Karyvo structures your real career achievements into high-impact, quantified bullet points. Beat ATS filters, land top interviews, and build resumes that recruiters actually read.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2 w-full sm:w-auto">
@@ -37,7 +37,7 @@ export function HeroSection() {
 
               <Link href="#interactive-demo" className="w-full sm:w-auto">
                 <Button variant="secondary" size="lg" className="w-full sm:w-auto justify-center">
-                  <span>Try the formula demo ↓</span>
+                  <span>Try the live demo ↓</span>
                 </Button>
               </Link>
             </div>
