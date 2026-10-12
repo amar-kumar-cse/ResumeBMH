@@ -513,6 +513,3 @@ Return JSON with:
 }
 
 export const resumeBmhAI = new ResumeBmhAIService();
-export const karyvoAI = resumeBmhAI;
-export const KaryvoAIService = ResumeBmhAIService;
-
