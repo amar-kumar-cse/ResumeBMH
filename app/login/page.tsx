@@ -4,7 +4,7 @@ import { AuthForm } from "@/components/auth/auth-form";
 
 export const metadata: Metadata = {
   title: "Log in",
-  description: "Log in to your Karyvo account.",
+  description: "Log in to your ResumeBMH account.",
   alternates: {
     canonical: "/login",
   },

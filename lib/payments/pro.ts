@@ -66,7 +66,7 @@ export async function checkProStatus(userId: string): Promise<ProStatus> {
 export async function requirePro(userId: string): Promise<ProStatus> {
   const status = await checkProStatus(userId);
   if (!status.isPro) {
-    const error = new Error("This feature requires an active Karyvo Pro subscription.");
+    const error = new Error("This feature requires an active ResumeBMH Pro subscription.");
     (error as Error & { status?: number }).status = 403;
     throw error;
   }
@@ -92,7 +92,7 @@ export async function enforceFeatureQuota(
   }
 
   if (feature === "version-snapshot") {
-    const err = new Error("Resume version snapshots require an active Karyvo Pro subscription.");
+    const err = new Error("Resume version snapshots require an active ResumeBMH Pro subscription.");
     (err as Error & { status?: number }).status = 403;
     throw err;
   }
@@ -100,7 +100,7 @@ export async function enforceFeatureQuota(
   if (feature === "cover-letter") {
     const letters = await repository.getCoverLetters(userId);
     if (letters.length >= 1) {
-      const err = new Error("You have reached the free limit of 1 cover letter. Upgrade to Karyvo Pro for unlimited tailored cover letters.");
+      const err = new Error("You have reached the free limit of 1 cover letter. Upgrade to ResumeBMH Pro for unlimited tailored cover letters.");
       (err as Error & { status?: number }).status = 403;
       throw err;
     }
@@ -109,7 +109,7 @@ export async function enforceFeatureQuota(
   if (feature === "interview") {
     const sessions = await repository.getInterviewSessions(userId);
     if (sessions.length >= 1) {
-      const err = new Error("You have reached the free limit of 1 mock interview session. Upgrade to Karyvo Pro for unlimited interview prep.");
+      const err = new Error("You have reached the free limit of 1 mock interview session. Upgrade to ResumeBMH Pro for unlimited interview prep.");
       (err as Error & { status?: number }).status = 403;
       throw err;
     }
@@ -118,7 +118,7 @@ export async function enforceFeatureQuota(
   if (feature === "ai-bullet") {
     const count = await repository.getDailyAIBulletCount(userId);
     if (count >= 3) {
-      const err = new Error("You have reached the free limit of 3 AI bullet improvements today. Upgrade to Karyvo Pro for unlimited improvements.");
+      const err = new Error("You have reached the free limit of 3 AI bullet improvements today. Upgrade to ResumeBMH Pro for unlimited improvements.");
       (err as Error & { status?: number }).status = 403;
       throw err;
     }

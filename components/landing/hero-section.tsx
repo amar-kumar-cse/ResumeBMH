@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Container, Button, Badge } from "./ui/primitives";
@@ -24,7 +24,7 @@ export function HeroSection() {
             </h1>
 
             <p className="text-base sm:text-lg text-slate-600 max-w-xl mx-auto lg:mx-0 leading-relaxed font-sans">
-              Karyvo structures your real career achievements into high-impact, quantified bullet points. Beat ATS filters, land top interviews, and build resumes that recruiters actually read.
+              ResumeBMH structures your real career achievements into high-impact, quantified bullet points. Beat ATS filters, land top interviews, and build resumes that recruiters actually read.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2 w-full sm:w-auto">

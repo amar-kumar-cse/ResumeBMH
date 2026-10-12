@@ -2,8 +2,8 @@ import { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Karyvo AI Resume Builder & Career Suite",
-    short_name: "Karyvo",
+    name: "ResumeBMH AI Resume Builder & Career Suite",
+    short_name: "ResumeBMH",
     description:
       "Build ATS-friendly resumes, optimize achievements with the XYZ formula, scan for parsing errors, and prepare for interviews.",
     start_url: "/",

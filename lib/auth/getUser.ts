@@ -22,7 +22,7 @@ export class AuthError extends Error {
  */
 export async function getUser(req: Request): Promise<AuthUser> {
   if (isDemoMode()) {
-    return { userId: DEMO_USER_ID, email: "demo@karyvo.local" };
+    return { userId: DEMO_USER_ID, email: "demo@resumebmh.local" };
   }
 
   // 1. Clerk session check
@@ -90,7 +90,7 @@ export async function getUserOptional(req: Request): Promise<AuthUser | null> {
  */
 export async function getServerUser(): Promise<AuthUser | null> {
   if (isDemoMode()) {
-    return { userId: DEMO_USER_ID, email: "demo@karyvo.local" };
+    return { userId: DEMO_USER_ID, email: "demo@resumebmh.local" };
   }
 
   if (process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && process.env.CLERK_SECRET_KEY) {

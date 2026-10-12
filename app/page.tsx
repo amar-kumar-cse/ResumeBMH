@@ -17,14 +17,14 @@ import {
 
 const homeFaqs = [
   {
-    question: "Does Karyvo guarantee that my resume will pass ATS screening?",
+    question: "Does ResumeBMH guarantee that my resume will pass ATS screening?",
     answer:
-      "No, and you should be skeptical of any tool that claims to guarantee an ATS pass. Every company configures its applicant tracking system differently, and human recruiters make the actual shortlist decisions. What Karyvo guarantees is clean, single-column document structure that eliminates technical parsing errors (like dropped text from tables or multi-column layouts) and ensures your real qualifications are clearly visible.",
+      "No, and you should be skeptical of any tool that claims to guarantee an ATS pass. Every company configures its applicant tracking system differently, and human recruiters make the actual shortlist decisions. What ResumeBMH guarantees is clean, single-column document structure that eliminates technical parsing errors (like dropped text from tables or multi-column layouts) and ensures your real qualifications are clearly visible.",
   },
   {
-    question: "Does Karyvo invent metrics or fake achievements?",
+    question: "Does ResumeBMH invent metrics or fake achievements?",
     answer:
-      "Never. We do not invent percentages, fake project scopes, or imaginary team sizes. If your draft bullet point lacks a quantifiable result, Karyvo prompts you to input your actual numbers (e.g. users served, latency reduced, revenue impacted). If you don't know the exact figure, we help you frame the scope honestly without making things up.",
+      "Never. We do not invent percentages, fake project scopes, or imaginary team sizes. If your draft bullet point lacks a quantifiable result, ResumeBMH prompts you to input your actual numbers (e.g. users served, latency reduced, revenue impacted). If you don't know the exact figure, we help you frame the scope honestly without making things up.",
   },
   {
     question: "Where is my career data stored and is it private?",
@@ -37,12 +37,12 @@ const homeFaqs = [
       "You can export your resume as a clean, high-resolution PDF or copy the formatted plain text. Our templates are designed specifically to adhere to standard single-column ATS specifications without graphics, sidebars, or floating text boxes.",
   },
   {
-    question: "How is Karyvo different from pasting my resume into ChatGPT?",
+    question: "How is ResumeBMH different from pasting my resume into ChatGPT?",
     answer:
-      "General AI chatbots tend to generate verbose, robotic text with unverifiable claims and hallucinated statistics. Karyvo is built around your verified Master Career Profile, optimizing bullet points with proven action verbs, quantifiable metrics, and strict ATS formatting standards.",
+      "General AI chatbots tend to generate verbose, robotic text with unverifiable claims and hallucinated statistics. ResumeBMH is built around your verified Master Career Profile, optimizing bullet points with proven action verbs, quantifiable metrics, and strict ATS formatting standards.",
   },
   {
-    question: "Can college freshers or career switchers use Karyvo?",
+    question: "Can college freshers or career switchers use ResumeBMH?",
     answer:
       "Yes. The Master Profile includes options for academic projects, semester coursework, hackathon submissions, and foundational technical skills, allowing candidates without extensive corporate tenure to highlight genuine technical problem-solving.",
   },
@@ -76,7 +76,7 @@ export default function HomePage() {
           <SectionHeading
             badge="Interactive AI Tool"
             title="Turn Weak Bullets Into Recruiter-Ready Achievements"
-            description="Select a role or paste a rough bullet point to see how Karyvo optimizes your real experience with proven action verbs and quantifiable results."
+            description="Select a role or paste a rough bullet point to see how ResumeBMH optimizes your real experience with proven action verbs and quantifiable results."
           />
           <InteractiveBulletDemo />
         </Container>

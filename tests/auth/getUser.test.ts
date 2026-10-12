@@ -94,7 +94,7 @@ describe("getUser (API routes)", () => {
     vi.resetModules();
     (process.env as Record<string, string>).NODE_ENV = "development";
     mod = await load();
-    await expect(mod.getUser(new Request("http://x/api"))).resolves.toMatchObject({ email: "demo@karyvo.local" });
+    await expect(mod.getUser(new Request("http://x/api"))).resolves.toMatchObject({ email: "demo@resumebmh.local" });
   });
 });
 

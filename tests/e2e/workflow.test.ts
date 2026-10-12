@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { repository, createEmptyProfile } from "@/lib/db/repository";
 import { checkProStatus, enforceFeatureQuota } from "@/lib/payments/pro";
 import { atsScanner } from "@/lib/ats/scanner";
-import { karyvoAI } from "@/lib/ai/provider";
+import { resumeBmhAI } from "@/lib/ai/provider";
 import { paymentService } from "@/lib/payments/razorpay";
 
 describe("End-to-End Workflow: Profile -> Resume -> ATS -> Pro -> Quotas", () => {
@@ -94,7 +94,7 @@ describe("End-to-End Workflow: Profile -> Resume -> ATS -> Pro -> Quotas", () =>
 
     // 4. Free user attempts version snapshot -> blocked by Pro paywall
     await expect(enforceFeatureQuota(userId, "version-snapshot")).rejects.toThrow(
-      "Resume version snapshots require an active Karyvo Pro subscription"
+      "Resume version snapshots require an active ResumeBMH Pro subscription"
     );
 
     // 5. Standalone ATS Scan
@@ -135,7 +135,7 @@ TypeScript, Node.js, PostgreSQL, Next.js, Docker, Git`
     );
     expect(savedScan.id).toBe("scan-e2e-1");
 
-    // 6. User purchases Karyvo Pro
+    // 6. User purchases ResumeBMH Pro
     const order = await paymentService.createProOrder(userId, "yearly");
     const confirmResult = await repository.confirmPaymentAndUpgradePro({
       orderId: order.orderId,
@@ -167,7 +167,7 @@ TypeScript, Node.js, PostgreSQL, Next.js, Docker, Git`
     expect(version.versionLabel).toBe("v1 - Target Fintech");
 
     // 9. Cover letter generation
-    const coverLetterText = await karyvoAI.generateCoverLetter(
+    const coverLetterText = await resumeBmhAI.generateCoverLetter(
       profile,
       "Paytm",
       "Lead Full Stack Engineer",

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { karyvoAI } from "@/lib/ai/provider";
+import { resumeBmhAI } from "@/lib/ai/provider";
 import { repository } from "@/lib/db/repository";
 import { getUser } from "@/lib/auth/getUser";
 import { handleApiError } from "@/lib/apiError";
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     }
 
     const profile = await repository.getProfile(userId);
-    const summary = await karyvoAI.generateSummary(profile, targetRole || "Software Engineer");
+    const summary = await resumeBmhAI.generateSummary(profile, targetRole || "Software Engineer");
 
     return NextResponse.json({ success: true, data: { summary } });
   } catch (error) {

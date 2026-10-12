@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Pricing Plans & Pro Upgrade | AI Resume Builder",
   description:
-    "Explore Karyvo pricing plans. Build ATS-compliant resumes for free or upgrade to Karyvo Pro for ₹99 for unlimited AI bullet optimizations, ATS audits, and mock interviews.",
+    "Explore ResumeBMH pricing plans. Build ATS-compliant resumes for free or upgrade to ResumeBMH Pro for ₹99 for unlimited AI bullet optimizations, ATS audits, and mock interviews.",
   alternates: {
     canonical: "/pricing",
   },
@@ -19,23 +19,23 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_IN",
     url: `${SITE_URL}/pricing`,
-    title: "Karyvo Pricing | Affordable AI Career Suite & Pro Upgrade",
+    title: "ResumeBMH Pricing | Affordable AI Career Suite & Pro Upgrade",
     description:
-      "Start building your resume for free. Upgrade to Karyvo Pro for ₹99 for unlimited AI bullet optimizations, ATS audits, and mock interviews.",
+      "Start building your resume for free. Upgrade to ResumeBMH Pro for ₹99 for unlimited AI bullet optimizations, ATS audits, and mock interviews.",
     images: [
       {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: "Karyvo Pricing Plans",
+        alt: "ResumeBMH Pricing Plans",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Karyvo Pricing | Affordable AI Career Suite & Pro Upgrade",
+    title: "ResumeBMH Pricing | Affordable AI Career Suite & Pro Upgrade",
     description:
-      "Start building your resume for free. Upgrade to Karyvo Pro for ₹99 for unlimited AI bullet optimizations, ATS audits, and mock interviews.",
+      "Start building your resume for free. Upgrade to ResumeBMH Pro for ₹99 for unlimited AI bullet optimizations, ATS audits, and mock interviews.",
     images: [`${SITE_URL}/opengraph-image`],
   },
 };

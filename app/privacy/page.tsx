@@ -7,7 +7,7 @@ import { SITE_URL, getBreadcrumbSchema } from "@/lib/seo/config";
 export const metadata: Metadata = {
   title: "Privacy Policy & Career Data Security",
   description:
-    "Learn how Karyvo protects your resume data, career profiles, and AI processing integrity with dedicated Supabase Row-Level Security.",
+    "Learn how ResumeBMH protects your resume data, career profiles, and AI processing integrity with dedicated Supabase Row-Level Security.",
   alternates: {
     canonical: "/privacy",
   },
@@ -15,23 +15,23 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_IN",
     url: `${SITE_URL}/privacy`,
-    title: "Privacy Policy | Karyvo AI Career Platform",
+    title: "Privacy Policy | ResumeBMH AI Career Platform",
     description:
-      "Learn how Karyvo protects your resume data, career profiles, and AI processing integrity.",
+      "Learn how ResumeBMH protects your resume data, career profiles, and AI processing integrity.",
     images: [
       {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: "Karyvo Privacy Policy",
+        alt: "ResumeBMH Privacy Policy",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Privacy Policy | Karyvo AI Career Platform",
+    title: "Privacy Policy | ResumeBMH AI Career Platform",
     description:
-      "Learn how Karyvo protects your resume data, career profiles, and AI processing integrity.",
+      "Learn how ResumeBMH protects your resume data, career profiles, and AI processing integrity.",
     images: [`${SITE_URL}/opengraph-image`],
   },
 };
@@ -72,7 +72,7 @@ export default function PrivacyPolicyPage() {
             Privacy Policy & AI Transparency Notice
           </h1>
           <p className="text-sm text-slate-600">
-            Last updated: October 2026. This policy explains how Karyvo handles your career data and AI workloads.
+            Last updated: October 2026. This policy explains how ResumeBMH handles your career data and AI workloads.
           </p>
         </div>
 
@@ -83,7 +83,7 @@ export default function PrivacyPolicyPage() {
               <span>1. Your Career Data Belongs Exclusively to You</span>
             </h2>
             <p>
-              Karyvo stores your Master Career Profile, saved resumes, version snapshots, cover letters, and interview
+              ResumeBMH stores your Master Career Profile, saved resumes, version snapshots, cover letters, and interview
               evaluations in isolated database tables strictly protected by Supabase Row-Level Security (RLS). Only your
               authenticated account session can query, modify, or delete your career assets. We never sell, rent, or monetize
               your resume data or personal identifiers.
@@ -121,7 +121,7 @@ export default function PrivacyPolicyPage() {
               <span>3. Anti-Hallucination & Metric Integrity Guarantee</span>
             </h2>
             <p>
-              Karyvo adheres to a strict factual boundary policy. Our AI prompts are instructed to never fabricate metrics,
+              ResumeBMH adheres to a strict factual boundary policy. Our AI prompts are instructed to never fabricate metrics,
               invent employment history, or inject unverified performance numbers (such as speculative latency or revenue figures).
               Any bullet optimization preserves your authentic achievements while polishing phrasing and ATS alignment.
             </p>
@@ -146,8 +146,8 @@ export default function PrivacyPolicyPage() {
             <h2 className="text-base font-bold text-slate-900 font-heading">Contact & Security Inquiries</h2>
             <p className="text-xs text-slate-500">
               For questions regarding privacy, security compliance, or data subject requests, please reach out to{" "}
-              <a href="mailto:support@karyvo.com" className="text-brand-primary hover:underline">
-                support@karyvo.com
+              <a href="mailto:support@resumebmh.com" className="text-brand-primary hover:underline">
+                support@resumebmh.com
               </a>.
             </p>
           </section>

@@ -17,7 +17,7 @@ describe("Free-tier Limits vs Pro Quotas", () => {
 
   it("version-snapshot: forbidden on free tier, allowed on Pro", async () => {
     await expect(enforceFeatureQuota(freeUser, "version-snapshot")).rejects.toThrow(
-      "Resume version snapshots require an active Karyvo Pro subscription"
+      "Resume version snapshots require an active ResumeBMH Pro subscription"
     );
 
     await expect(enforceFeatureQuota(proUser, "version-snapshot")).resolves.toBeUndefined();

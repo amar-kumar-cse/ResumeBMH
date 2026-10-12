@@ -3,7 +3,7 @@ import { AuthForm } from "@/components/auth/auth-form";
 
 export const metadata: Metadata = {
   title: "Reset password",
-  description: "Choose a new Karyvo password.",
+  description: "Choose a new ResumeBMH password.",
   alternates: {
     canonical: "/reset-password",
   },

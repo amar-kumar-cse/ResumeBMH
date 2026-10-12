@@ -1,5 +1,5 @@
 -- ==============================================================================
--- KARYVO AI BUILDER — COMPLETE SUPABASE POSTGRESQL SCHEMA (HARDENED & FAIL-CLOSED)
+-- RESUMEBMH AI BUILDER — COMPLETE SUPABASE POSTGRESQL SCHEMA (HARDENED & FAIL-CLOSED)
 -- Execute this script in your Supabase SQL Editor to initialize all tables,
 -- foreign keys, indexes, and secure owner-only Row Level Security (RLS) policies.
 -- Compatible with Clerk user IDs (text), Supabase Auth (UUID), and local sessions.

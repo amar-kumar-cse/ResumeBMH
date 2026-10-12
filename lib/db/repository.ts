@@ -214,7 +214,7 @@ export interface PaymentOrderRecord {
 
 export class RepositoryStore {
   private supabase: SupabaseClient | null = null;
-  private dbFilePath = path.join(process.cwd(), "data", "karyvo-local-db.json");
+  private dbFilePath = path.join(process.cwd(), "data", "resumebmh-local-db.json");
 
   // In-Memory Multi-Tenant Store (Used for offline dev / demo mode / unit tests)
   private profiles = new Map<string, MasterCareerProfile>();
@@ -345,7 +345,7 @@ export class RepositoryStore {
     if (message?.includes("fetch failed") || message?.includes("ENOTFOUND")) {
       return;
     }
-    console.error(`[Karyvo DB Error] ${operation}:`, message);
+    console.error(`[ResumeBMH DB Error] ${operation}:`, message);
   }
 
   // ==========================================
@@ -1456,6 +1456,6 @@ export class RepositoryStore {
 }
 
 // Global singleton to survive hot-reload in Next.js development
-const globalForRepo = globalThis as unknown as { karyvoRepo: RepositoryStore };
-export const repository = globalForRepo.karyvoRepo || new RepositoryStore();
-if (process.env.NODE_ENV !== "production") globalForRepo.karyvoRepo = repository;
+const globalForRepo = globalThis as unknown as { resumeBmhRepo: RepositoryStore };
+export const repository = globalForRepo.resumeBmhRepo || new RepositoryStore();
+if (process.env.NODE_ENV !== "production") globalForRepo.resumeBmhRepo = repository;

@@ -1,4 +1,4 @@
-# Karyvo — AI Resume Builder
+# ResumeBMH — AI Resume Builder
 
 > **Build Your Better Resume** — India-first AI career platform to build ATS-proof resumes, optimize bullets using the XYZ method (popularised by Laszlo Bock, former Google HR head), craft tailored role cover letters, and master technical and behavioral interview preparation with an interactive mock AI coach.
 
@@ -6,7 +6,7 @@
 
 ## 🚀 Overview
 
-**Karyvo** connects all career preparation workflows through a single, central **Master Career Profile**:
+**ResumeBMH** connects all career preparation workflows through a single, central **Master Career Profile**:
 - **7-Step Resume Builder**: Structured guided builder with real-time physically-lit preview and instant PDF export.
 - **Standalone ATS Scanner**: Deterministic audit scoring formatting, completeness, keyword density, and quantified impact metrics without requiring a job description.
 - **XYZ AI Bullet Improver**: Transforms passive accomplishments into quantified, high-impact statements (*"Accomplished [X], as measured by [Y], by doing [Z]"*).
@@ -49,8 +49,8 @@ Deploy your instance of **ResumeBMH** to Vercel with one click:
 
 ```bash
 # Clone the repository
-git clone https://github.com/amar-kumar-cse/Karyvo.git
-cd Karyvo
+git clone https://github.com/nowicstdo-labs/ResumeBMH.git
+cd ResumeBMH
 
 # Install dependencies
 npm install
@@ -78,7 +78,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## 🔐 Authentication Setup (Supabase Auth)
 
-Karyvo uses Supabase Auth (email + password, Google sign-in, email verification, password reset). Private pages redirect to `/login`, and every API route returns `401` without a verified session.
+ResumeBMH uses Supabase Auth (email + password, Google sign-in, email verification, password reset). Private pages redirect to `/login`, and every API route returns `401` without a verified session.
 
 1. Create a Supabase project and copy the URL, anon key and service-role key into `.env.local`.
 2. In **Authentication → URL Configuration** set *Site URL* to your app URL (`http://localhost:3000` locally) and add `http://localhost:3000/auth/callback` and `https://YOUR-DOMAIN/auth/callback` to *Redirect URLs*.
@@ -91,7 +91,7 @@ For quick UI-only work without Supabase you can set `DEMO_MODE=true` in `.env.lo
 
 ## 🔒 Security & Anti-Hallucination
 
-All AI generation pipelines in Karyvo run through strict anti-hallucination guardrails:
+All AI generation pipelines in ResumeBMH run through strict anti-hallucination guardrails:
 - No speculative metrics or unearned skills are fabricated.
 - Only verifiable facts supplied in the Master Career Profile are utilized during generation.
 

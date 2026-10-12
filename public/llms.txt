@@ -1,4 +1,4 @@
-# Karyvo AI Builder
+# ResumeBMH AI Builder
 
 > India-first AI career platform and ATS resume optimizer grounded in Laszlo Bock's XYZ formula.
 
@@ -12,7 +12,7 @@
 
 ## Pricing & Availability
 - **Starter Plan**: ₹0 (Free forever, includes ATS scoring and resume building).
-- **Karyvo Pro**: ₹99 one-time (Unlimited ATS audits, AI bullet rewriting, mock interview simulator).
+- **ResumeBMH Pro**: ₹99 one-time (Unlimited ATS audits, AI bullet rewriting, mock interview simulator).
 
 ## Engineering & Privacy Philosophy
 - **Factual Grounding**: Never invents metrics, fake percentages, or imaginary achievements.
@@ -20,8 +20,8 @@
 - **Privacy First**: Supabase Row-Level Security (RLS) ensures only authenticated owners can access career data. Never sold to third-party recruiters or used to train public models.
 
 ## Key URLs
-- Homepage: https://karyvo.com/
-- Resume Builder: https://karyvo.com/resume
-- ATS Health Check: https://karyvo.com/ats
-- Interview Simulator: https://karyvo.com/interview
-- Pricing: https://karyvo.com/pricing
+- Homepage: https://resumebmh.vercel.app/
+- Resume Builder: https://resumebmh.vercel.app/resume
+- ATS Health Check: https://resumebmh.vercel.app/ats
+- Interview Simulator: https://resumebmh.vercel.app/interview
+- Pricing: https://resumebmh.vercel.app/pricing

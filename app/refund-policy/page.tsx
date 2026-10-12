@@ -7,7 +7,7 @@ import { SITE_URL, getBreadcrumbSchema } from "@/lib/seo/config";
 export const metadata: Metadata = {
   title: "Refund Policy & 7-Day Money-Back Guarantee",
   description:
-    "Learn about Karyvo's transparent refund policy, billing terms, and 7-day money-back guarantee for first-time Pro subscribers.",
+    "Learn about ResumeBMH's transparent refund policy, billing terms, and 7-day money-back guarantee for first-time Pro subscribers.",
   alternates: {
     canonical: "/refund-policy",
   },
@@ -15,23 +15,23 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_IN",
     url: `${SITE_URL}/refund-policy`,
-    title: "Refund Policy | Karyvo AI Career Platform",
+    title: "Refund Policy | ResumeBMH AI Career Platform",
     description:
-      "Learn about Karyvo's transparent refund policy, billing terms, and cancellation guarantees.",
+      "Learn about ResumeBMH's transparent refund policy, billing terms, and cancellation guarantees.",
     images: [
       {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: "Karyvo Refund Policy",
+        alt: "ResumeBMH Refund Policy",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Refund Policy | Karyvo AI Career Platform",
+    title: "Refund Policy | ResumeBMH AI Career Platform",
     description:
-      "Learn about Karyvo's transparent refund policy, billing terms, and cancellation guarantees.",
+      "Learn about ResumeBMH's transparent refund policy, billing terms, and cancellation guarantees.",
     images: [`${SITE_URL}/opengraph-image`],
   },
 };
@@ -83,7 +83,7 @@ export default function RefundPolicyPage() {
               <span>1. 7-Day Money-Back Guarantee</span>
             </h2>
             <p>
-              We want you to be completely satisfied with Karyvo Pro. If you upgrade to Karyvo Pro (Monthly or Annual) and
+              We want you to be completely satisfied with ResumeBMH Pro. If you upgrade to ResumeBMH Pro (Monthly or Annual) and
               find that our AI bullet optimization, ATS scanning, or mock interview prep does not meet your expectations, you
               can request a full refund within <strong>7 calendar days</strong> of your initial payment date.
             </p>
@@ -120,7 +120,7 @@ export default function RefundPolicyPage() {
               To request a refund within the 7-day guarantee window, please contact our support desk:
             </p>
             <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1 font-mono text-xs text-slate-800">
-              <p>Email: <strong>support@karyvo.com</strong></p>
+              <p>Email: <strong>support@resumebmh.com</strong></p>
               <p>Subject: <em>Refund Request - [Your Registered Email]</em></p>
               <p>Please include your Razorpay Order ID or payment receipt.</p>
             </div>

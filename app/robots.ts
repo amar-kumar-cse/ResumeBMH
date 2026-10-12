@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/seo/config";
 
 /**
- * Dynamic robots.txt generator for Karyvo.
+ * Dynamic robots.txt generator for ResumeBMH.
  * Served by Next.js App Router at /robots.txt
  *
  * Configured for modern search engines (Googlebot, Bingbot),

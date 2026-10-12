@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import {
@@ -70,15 +70,15 @@ export function PricingWorkspace() {
 
       // 2. Load Razorpay Checkout SDK if real keys are configured
       const scriptLoaded = await loadRazorpayScript();
-      const isRealKey = keyId && keyId !== "rzp_test_karyvo_mock";
+      const isRealKey = keyId && !keyId.includes("mock");
 
       if (scriptLoaded && isRealKey && (window as any).Razorpay) {
         const options = {
           key: keyId,
           amount: amount,
           currency: currency || "INR",
-          name: "Karyvo",
-          description: `Karyvo Pro (${billingCycle === "yearly" ? "Annual" : "Monthly"})`,
+          name: "ResumeBMH",
+          description: `ResumeBMH Pro (${billingCycle === "yearly" ? "Annual" : "Monthly"})`,
           order_id: orderId,
           handler: async function (response: {
             razorpay_order_id: string;
@@ -277,7 +277,7 @@ export function PricingWorkspace() {
                 <Crown className="h-3.5 w-3.5 mr-1" />
                 Premium Career Engine
               </Badge>
-              <h2 className="font-heading text-3xl font-extrabold text-slate-900 mt-2">Karyvo Pro</h2>
+              <h2 className="font-heading text-3xl font-extrabold text-slate-900 mt-2">ResumeBMH Pro</h2>
               <p className="text-xs text-slate-600">Full autonomy over ATS, Cover Letters, and Mock Interviews.</p>
             </div>
 

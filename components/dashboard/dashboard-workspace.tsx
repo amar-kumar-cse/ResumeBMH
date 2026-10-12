@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { MasterCareerProfile } from "@/types/profile";
@@ -372,7 +372,7 @@ export function DashboardWorkspace({
             <div className="flex items-center gap-2">
               <Crown className="w-5 h-5 text-amber-600" aria-hidden="true" />
               <h3 className="text-sm font-bold text-ink font-heading">
-                Upgrade to Karyvo Pro
+                Upgrade to ResumeBMH Pro
               </h3>
             </div>
             <p className="text-xs text-ink-muted leading-relaxed">

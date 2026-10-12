@@ -28,7 +28,7 @@ const InterviewEvaluationSchema = z.object({
   betterAnswer: z.string(),
 });
 
-export class KaryvoAIService {
+export class ResumeBmhAIService {
   /**
    * Helper to make robust, timeout-bounded calls to Google Gemini API
    */
@@ -512,5 +512,7 @@ Return JSON with:
   }
 }
 
-export const karyvoAI = new KaryvoAIService();
+export const resumeBmhAI = new ResumeBmhAIService();
+export const karyvoAI = resumeBmhAI;
+export const KaryvoAIService = ResumeBmhAIService;
 

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { karyvoAI } from "@/lib/ai/provider";
+import { resumeBmhAI } from "@/lib/ai/provider";
 import { getUser } from "@/lib/auth/getUser";
 import { handleApiError } from "@/lib/apiError";
 import { rateLimit, RATE_LIMITS } from "@/lib/rateLimit";
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: "Bullet text exceeds maximum limit of 2,000 characters." }, { status: 400 });
     }
 
-    const result = await karyvoAI.improveBullet(bullet, context);
+    const result = await resumeBmhAI.improveBullet(bullet, context);
     return NextResponse.json({ success: true, data: result });
   } catch (error) {
     return handleApiError(error, "POST /api/ai/improve-bullet");

@@ -4,7 +4,7 @@ import { AuthForm } from "@/components/auth/auth-form";
 
 export const metadata: Metadata = {
   title: "Create account",
-  description: "Create your Karyvo account.",
+  description: "Create your ResumeBMH account.",
   alternates: {
     canonical: "/signup",
   },

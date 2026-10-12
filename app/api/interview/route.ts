@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { karyvoAI } from "@/lib/ai/provider";
+import { resumeBmhAI } from "@/lib/ai/provider";
 import { repository } from "@/lib/db/repository";
 import { InterviewSession } from "@/types/interview";
 import { getUser } from "@/lib/auth/getUser";
@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
     }
 
     const profile = await repository.getProfile(userId);
-    const questions = await karyvoAI.generateInterviewQuestions(targetRole.trim(), profile);
+    const questions = await resumeBmhAI.generateInterviewQuestions(targetRole.trim(), profile);
 
     const session: InterviewSession = {
       id: `int-${crypto.randomUUID()}`,

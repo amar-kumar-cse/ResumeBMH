@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -216,7 +216,7 @@ export function AuthForm({
             <div className="relative h-8 w-8 rounded-lg overflow-hidden shadow-sm shadow-blue-500/20 group-hover:scale-105 transition-transform bg-blue-600 flex items-center justify-center">
               <Image
                 src="/favicon.ico"
-                alt="Karyvo Logo"
+                alt="ResumeBMH Logo"
                 width={32}
                 height={32}
                 className="h-full w-full object-cover"
@@ -391,7 +391,7 @@ export function AuthForm({
         <p className="text-center text-sm text-ink-muted">
           {mode === "login" && (
             <>
-              New to Karyvo?{" "}
+              New to ResumeBMH?{" "}
               <Link
                 href={`/signup?next=${encodeURIComponent(next)}`}
                 className="font-semibold text-accent hover:text-accent-hover transition-colors underline"

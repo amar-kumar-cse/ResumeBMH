@@ -115,12 +115,12 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full px-4 sm:px-6 lg:px-8 pt-3 pb-2">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 rounded-2xl border border-white/80 bg-white/85 backdrop-blur-xl shadow-[0_10px_30px_-5px_rgba(30,58,138,0.08),0_4px_12px_-2px_rgba(0,0,0,0.03)]">
-        {/* Brand Logo: Karyvo with modern app icon */}
+        {/* Brand Logo: ResumeBMH with modern app icon */}
         <Link href="/" className="flex items-center gap-2.5 group select-none">
           <div className="relative h-9 w-9 rounded-xl overflow-hidden shadow-sm shadow-blue-500/20 group-hover:scale-105 transition-transform flex items-center justify-center bg-blue-600">
             <Image
               src="/favicon.ico"
-              alt="Karyvo Logo"
+              alt="ResumeBMH Logo"
               width={36}
               height={36}
               className="h-full w-full object-cover"

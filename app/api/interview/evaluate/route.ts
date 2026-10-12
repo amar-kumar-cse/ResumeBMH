@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { karyvoAI } from "@/lib/ai/provider";
+import { resumeBmhAI } from "@/lib/ai/provider";
 import { repository } from "@/lib/db/repository";
 import { getUser } from "@/lib/auth/getUser";
 import { handleApiError } from "@/lib/apiError";
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: "Input payload exceeds allowed character limits." }, { status: 400 });
     }
 
-    const evaluation = await karyvoAI.evaluateInterviewAnswer(
+    const evaluation = await resumeBmhAI.evaluateInterviewAnswer(
       questionText,
       userAnswer,
       category || "Technical"

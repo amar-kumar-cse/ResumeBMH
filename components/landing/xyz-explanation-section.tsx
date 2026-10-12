@@ -8,7 +8,7 @@ export function XyzExplanationSection() {
       <SectionHeading
         tag="The Winning Formula"
         title="Why Recruiter-Ready Bullets Win Interviews"
-        description="Recruiters spend an average of 6 seconds scanning a resume. Karyvo transforms vague duty lists into quantified, high-impact achievements that pass ATS filters."
+        description="Recruiters spend an average of 6 seconds scanning a resume. ResumeBMH transforms vague duty lists into quantified, high-impact achievements that pass ATS filters."
       />
 
       {/* 3-Box Visual */}
@@ -73,7 +73,7 @@ export function XyzExplanationSection() {
         <div className="p-6 rounded-xl border border-emerald-200 bg-emerald-50/40 space-y-3">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-800">
             <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-            <span>Optimized by Karyvo</span>
+            <span>Optimized by ResumeBMH</span>
           </div>
           <p className="text-base text-slate-900 font-medium font-sans">
             &ldquo;Reduced deployment failure rate by 45% by automating CI/CD unit testing pipelines in GitHub Actions.&rdquo;

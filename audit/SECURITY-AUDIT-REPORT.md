@@ -1,7 +1,7 @@
-# Karyvo Application Security Audit Report (Cloudflare Security Guidelines)
+# ResumeBMH Application Security Audit Report (Cloudflare Security Guidelines)
 
 **Date:** 2026-10-12  
-**Target:** Karyvo Production Codebase (Next.js 15, Supabase PostgreSQL, Clerk Auth, Razorpay, Gemini AI)  
+**Target:** ResumeBMH Production Codebase (Next.js 15, Supabase PostgreSQL, Clerk Auth, Razorpay, Gemini AI)  
 **Methodology:** Cloudflare Application Security Framework & OWASP Top 10 (2025/2026)  
 **Status:** Audit Completed ✅  
 

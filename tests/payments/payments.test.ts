@@ -15,7 +15,7 @@ describe("Payments & Pro Gating (Step 2)", () => {
 
   it("requirePro: throws 403 error for non-pro user", async () => {
     await expect(requirePro(userId)).rejects.toThrow(
-      "This feature requires an active Karyvo Pro subscription."
+      "This feature requires an active ResumeBMH Pro subscription."
     );
   });
 
@@ -39,7 +39,7 @@ describe("Payments & Pro Gating (Step 2)", () => {
   });
 
   it("verifySignature: validates legitimate signature and rejects tampered data", () => {
-    const keySecret = process.env.RAZORPAY_KEY_SECRET || "mock_secret_karyvo";
+    const keySecret = process.env.RAZORPAY_KEY_SECRET || "mock_secret_resumebmh";
     const orderId = "order_valid_123";
     const paymentId = "pay_valid_456";
 
@@ -128,7 +128,7 @@ describe("Payments & Pro Gating (Step 2)", () => {
     expect(expiredStatus.isPro).toBe(false);
     expect(expiredStatus.status).toBe("expired");
 
-    await expect(requirePro(expiredUser)).rejects.toThrow("requires an active Karyvo Pro subscription");
+    await expect(requirePro(expiredUser)).rejects.toThrow("requires an active ResumeBMH Pro subscription");
   });
 
   it("order lifecycle: creates order, marks paid, and stores payment ID", async () => {

@@ -1,6 +1,6 @@
-# Karyvo SEO Audit Report (Post-Optimization)
+# ResumeBMH SEO Audit Report (Post-Optimization)
 
-**Target:** `http://localhost:3000` / Karyvo Career Platform  
+**Target:** `http://localhost:3000` / ResumeBMH Career Platform  
 **Auditor Engine:** Claude SEO v2.4.2  
 **Frameworks Followed:** `/ponytail` (Zero over-engineering, standard Next.js 15 native features) + `/autoplan` (Automated review pipeline) + `/seo`  
 **Date:** 2026-10-12  
@@ -15,7 +15,7 @@
 | **Technical SEO** | 85% | **98%** | 🟢 Optimal | Added native `alternates: { canonical: "./" }` & `robots` directive to Next.js metadata. |
 | **Content Quality** | 93% | **98%** | 🟢 Optimal | Title cleaned up from `???` artifacts to standard clean divider `|`. |
 | **Structured Data (Schema)** | 60% | **100%** | 🟢 Optimal | Embedded complete Schema.org JSON-LD graph (`SoftwareApplication`, `FAQPage`, `Organization`, `WebSite`). |
-| **Social / OpenGraph** | 70% | **98%** | 🟢 Optimal | Deployed 1200x630 high-res OG preview banner matching the sky clouds & glassmorphism theme (`/images/og-karyvo.jpg`). |
+| **Social / OpenGraph** | 70% | **98%** | 🟢 Optimal | Deployed 1200x630 high-res OG preview banner matching the sky clouds & glassmorphism theme (`/images/og-resumebmh.jpg`). |
 | **AI Search & GEO** | 75% | **96%** | 🟢 Optimal | Created standard `/public/llms.txt` for ChatGPT Search, Perplexity, and Claude AI bots. |
 
 ---
@@ -33,11 +33,11 @@
 - **Organization & WebSite:** Links authority back to the brand.
 
 ### 1.3 OpenGraph Social Sharing Card
-- Deployed `/public/images/og-karyvo.jpg` (1200x630px).
+- Deployed `/public/images/og-resumebmh.jpg` (1200x630px).
 - Tested with Twitter Cards (`summary_large_image`) and Facebook/LinkedIn OpenGraph format.
 
 ### 1.4 Generative Engine Optimization (`/public/llms.txt`)
-- Created `/public/llms.txt` documenting Karyvo's Laszlo Bock XYZ method, ATS guidelines, pricing, and key routes for LLM indexing bots.
+- Created `/public/llms.txt` documenting ResumeBMH's Laszlo Bock XYZ method, ATS guidelines, pricing, and key routes for LLM indexing bots.
 
 ---
 

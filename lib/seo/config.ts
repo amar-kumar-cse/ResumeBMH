@@ -1,15 +1,15 @@
 /**
- * Centralized SEO & Structured Data Configuration for Karyvo.
+ * Centralized SEO & Structured Data Configuration for ResumeBMH.
  * Single source of truth for base URLs, canonical routes, metadata, and JSON-LD schemas.
  */
 
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || "https://karyvo.com";
+  process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || "https://resumebmh.vercel.app";
 
-export const SITE_NAME = "Karyvo";
+export const SITE_NAME = "ResumeBMH";
 export const SITE_TAGLINE = "Build Your Resume. Beat ATS. Get Interview-Ready.";
 export const SITE_TITLE_DEFAULT =
-  "Karyvo | AI Resume Builder, Free ATS Checker & Career Platform";
+  "ResumeBMH | AI Resume Builder, Free ATS Checker & Career Platform";
 
 export const SITE_DESCRIPTION =
   "India-first AI career platform. Master Career Profile powers single-column ATS Resume Builder, Standalone ATS Scanner, XYZ AI Bullet Improver, Cover Letter, and Role Interview simulator.";
@@ -26,7 +26,7 @@ export const SEO_KEYWORDS = [
   "Cover Letter Builder",
   "India Tech Jobs Resume",
   "SDE Placement Resume",
-  "Karyvo AI Builder",
+  "ResumeBMH AI Builder",
 ];
 
 export interface SitemapRoute {
@@ -69,25 +69,25 @@ export function getOrganizationSchema() {
   return {
     "@type": "Organization",
     "@id": `${SITE_URL}/#organization`,
-    name: "Karyvo",
-    legalName: "Karyvo Technologies",
+    name: "ResumeBMH",
+    legalName: "ResumeBMH Technologies",
     url: SITE_URL,
     logo: {
       "@type": "ImageObject",
       url: `${SITE_URL}/logo-clean.png`,
-      caption: "Karyvo AI Career Platform Logo",
+      caption: "ResumeBMH AI Career Platform Logo",
     },
     contactPoint: [
       {
         "@type": "ContactPoint",
         contactType: "customer support",
-        email: "support@karyvo.com",
+        email: "support@resumebmh.com",
         availableLanguage: ["English", "Hindi"],
         areaServed: "IN",
       },
     ],
     sameAs: [
-      "https://github.com/amar-kumar-cse/Karyvo",
+      "https://github.com/nowicstdo-labs/ResumeBMH",
     ],
   };
 }
@@ -97,7 +97,7 @@ export function getWebSiteSchema() {
     "@type": "WebSite",
     "@id": `${SITE_URL}/#website`,
     url: SITE_URL,
-    name: "Karyvo AI Career Platform",
+    name: "ResumeBMH AI Career Platform",
     publisher: {
       "@id": `${SITE_URL}/#organization`,
     },
@@ -118,7 +118,7 @@ export function getSoftwareApplicationSchema() {
   return {
     "@type": "SoftwareApplication",
     "@id": `${SITE_URL}/#software`,
-    name: "Karyvo AI Builder",
+    name: "ResumeBMH AI Builder",
     applicationCategory: "BusinessApplication",
     applicationSubCategory: "Career & Resume Optimization",
     operatingSystem: "Web Browser",
@@ -135,7 +135,7 @@ export function getSoftwareApplicationSchema() {
       },
       {
         "@type": "Offer",
-        name: "Karyvo Pro Plan",
+        name: "ResumeBMH Pro Plan",
         price: "99",
         priceCurrency: "INR",
         availability: "https://schema.org/InStock",
@@ -204,11 +204,11 @@ export function getProductPricingSchema() {
   return {
     "@type": "Product",
     "@id": `${SITE_URL}/pricing#product`,
-    name: "Karyvo Pro Career Suite",
+    name: "ResumeBMH Pro Career Suite",
     description: "Full-stack AI resume optimization, ATS scanner, and mock interview suite.",
     brand: {
       "@type": "Brand",
-      name: "Karyvo",
+      name: "ResumeBMH",
     },
     offers: {
       "@type": "AggregateOffer",
@@ -227,7 +227,7 @@ export function getProductPricingSchema() {
         },
         {
           "@type": "Offer",
-          name: "Karyvo Pro Monthly",
+          name: "ResumeBMH Pro Monthly",
           price: "99",
           priceCurrency: "INR",
           availability: "https://schema.org/InStock",

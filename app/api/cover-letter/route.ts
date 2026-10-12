@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { karyvoAI } from "@/lib/ai/provider";
+import { resumeBmhAI } from "@/lib/ai/provider";
 import { repository } from "@/lib/db/repository";
 import { CoverLetter, CoverLetterTone } from "@/types/cover-letter";
 import { getUser } from "@/lib/auth/getUser";
@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
 
     const profile = await repository.getProfile(userId);
 
-    const generatedContent = await karyvoAI.generateCoverLetter(
+    const generatedContent = await resumeBmhAI.generateCoverLetter(
       profile,
       companyName.trim(),
       targetRole.trim(),

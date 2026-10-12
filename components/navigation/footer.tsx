@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ShieldCheck, Check } from "lucide-react";
@@ -14,7 +14,7 @@ export function Footer() {
               <div className="relative h-8 w-8 rounded-xl overflow-hidden shadow-sm shadow-blue-500/25 group-hover:scale-105 transition-transform bg-blue-600 flex items-center justify-center">
                 <Image
                   src="/favicon.ico"
-                  alt="Karyvo Logo"
+                  alt="ResumeBMH Logo"
                   width={32}
                   height={32}
                   className="h-full w-full object-cover"
@@ -50,7 +50,7 @@ export function Footer() {
           <div>
             <h2 className="text-sm font-bold text-slate-900 mb-3.5 tracking-tight font-heading">Platform & Resources</h2>
             <ul className="space-y-2.5 text-sm">
-              <li><Link href="/#how-it-works" className="text-slate-600 hover:text-blue-600 transition-colors">How Karyvo Works</Link></li>
+              <li><Link href="/#how-it-works" className="text-slate-600 hover:text-blue-600 transition-colors">How ResumeBMH Works</Link></li>
               <li><Link href="/#features" className="text-slate-600 hover:text-blue-600 transition-colors">Product Capabilities</Link></li>
               <li><Link href="/pricing" className="text-slate-600 hover:text-blue-600 transition-colors">Pricing Plans</Link></li>
               <li><Link href="/#faq" className="text-slate-600 hover:text-blue-600 transition-colors">Frequently Asked Questions</Link></li>
@@ -83,7 +83,7 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="pt-8 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-          <p>© {new Date().getFullYear()} Karyvo. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} ResumeBMH. All rights reserved.</p>
           <div className="flex flex-wrap items-center gap-4 sm:gap-6">
             <Link href="/privacy" className="hover:text-blue-600 transition-colors">
               Privacy Policy

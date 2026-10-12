@@ -7,7 +7,7 @@ import { SITE_URL, getBreadcrumbSchema, getFaqSchema } from "@/lib/seo/config";
 export const metadata: Metadata = {
   title: "Help Center, FAQs & Product Guides",
   description:
-    "Find guides, frequently asked questions, and troubleshooting for Karyvo. Learn about ATS single-column formatting, factual AI bullet optimization, and billing.",
+    "Find guides, frequently asked questions, and troubleshooting for ResumeBMH. Learn about ATS single-column formatting, factual AI bullet optimization, and billing.",
   alternates: {
     canonical: "/support",
   },
@@ -15,23 +15,23 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_IN",
     url: `${SITE_URL}/support`,
-    title: "Help & Support Center | Karyvo AI Career Platform",
+    title: "Help & Support Center | ResumeBMH AI Career Platform",
     description:
-      "Find guides, frequently asked questions, and troubleshooting for Karyvo ATS resume building and mock interviews.",
+      "Find guides, frequently asked questions, and troubleshooting for ResumeBMH ATS resume building and mock interviews.",
     images: [
       {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: "Karyvo Help & Support Center",
+        alt: "ResumeBMH Help & Support Center",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Help & Support Center | Karyvo AI Career Platform",
+    title: "Help & Support Center | ResumeBMH AI Career Platform",
     description:
-      "Find guides, frequently asked questions, and troubleshooting for Karyvo ATS resume building and mock interviews.",
+      "Find guides, frequently asked questions, and troubleshooting for ResumeBMH ATS resume building and mock interviews.",
     images: [`${SITE_URL}/opengraph-image`],
   },
 };
@@ -44,25 +44,25 @@ const supportBreadcrumbs = [
 const faqsData = [
   {
     q: "How does the AI Impact Bullet improver avoid hallucinating fake metrics?",
-    a: "Unlike generic chatbots that inject fake numbers like 'increased sales by 45%', Karyvo enforces strict factual grounding. If you provided metrics in your draft, we sharpen the wording. If no metric is present, we articulate the engineering deliverable or place a clear '[add your metric]' placeholder.",
+    a: "Unlike generic chatbots that inject fake numbers like 'increased sales by 45%', ResumeBMH enforces strict factual grounding. If you provided metrics in your draft, we sharpen the wording. If no metric is present, we articulate the engineering deliverable or place a clear '[add your metric]' placeholder.",
     category: "AI Features",
     icon: Cpu,
   },
   {
     q: "Will my uploaded PDF resume work with ATS scanners?",
-    a: "Yes. Karyvo exports clean, single-column and multi-section layouts formatted in clean typography without background images, nested tables, or hidden glyphs that break Applicant Tracking Systems (Workday, Greenhouse, Lever).",
+    a: "Yes. ResumeBMH exports clean, single-column and multi-section layouts formatted in clean typography without background images, nested tables, or hidden glyphs that break Applicant Tracking Systems (Workday, Greenhouse, Lever).",
     category: "ATS Scanner",
     icon: FileCheck2,
   },
   {
-    q: "What is included in the Free tier vs Karyvo Pro?",
-    a: "Free tier users can build resumes, test the interactive AI bullet demo, create 1 tailored cover letter, conduct 1 full mock interview session, and optimize up to 3 AI bullets daily. Karyvo Pro unlocks unlimited cover letters, unlimited mock interviews, unlimited AI bullet improvements, and resume checkpoint version snapshots.",
+    q: "What is included in the Free tier vs ResumeBMH Pro?",
+    a: "Free tier users can build resumes, test the interactive AI bullet demo, create 1 tailored cover letter, conduct 1 full mock interview session, and optimize up to 3 AI bullets daily. ResumeBMH Pro unlocks unlimited cover letters, unlimited mock interviews, unlimited AI bullet improvements, and resume checkpoint version snapshots.",
     category: "Plans & Billing",
     icon: CreditCard,
   },
   {
     q: "How do I cancel my subscription or request a refund?",
-    a: "You can cancel auto-renewal at any time from the Pricing or Settings page. You retain full Pro access until your current paid billing period ends. We also provide a full 7-day money-back guarantee for first-time Karyvo Pro subscribers.",
+    a: "You can cancel auto-renewal at any time from the Pricing or Settings page. You retain full Pro access until your current paid billing period ends. We also provide a full 7-day money-back guarantee for first-time ResumeBMH Pro subscribers.",
     category: "Billing",
     icon: CreditCard,
   },

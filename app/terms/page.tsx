@@ -8,7 +8,7 @@ import { SITE_URL, getBreadcrumbSchema } from "@/lib/seo/config";
 export const metadata: Metadata = {
   title: "Terms of Service & Usage Agreement",
   description:
-    "Terms and conditions governing use of the Karyvo resume builder, ATS health checker, and career preparation tools.",
+    "Terms and conditions governing use of the ResumeBMH resume builder, ATS health checker, and career preparation tools.",
   alternates: {
     canonical: "/terms",
   },
@@ -16,23 +16,23 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_IN",
     url: `${SITE_URL}/terms`,
-    title: "Terms of Service | Karyvo AI Career Platform",
+    title: "Terms of Service | ResumeBMH AI Career Platform",
     description:
-      "Terms and conditions governing use of the Karyvo resume builder and career tools.",
+      "Terms and conditions governing use of the ResumeBMH resume builder and career tools.",
     images: [
       {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: "Karyvo Terms of Service",
+        alt: "ResumeBMH Terms of Service",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Terms of Service | Karyvo AI Career Platform",
+    title: "Terms of Service | ResumeBMH AI Career Platform",
     description:
-      "Terms and conditions governing use of the Karyvo resume builder and career tools.",
+      "Terms and conditions governing use of the ResumeBMH resume builder and career tools.",
     images: [`${SITE_URL}/opengraph-image`],
   },
 };
@@ -73,7 +73,7 @@ export default function TermsPage() {
               Terms of Service
             </h1>
             <p className="text-sm text-ink-muted">
-              Last updated: October 2026. Please read these terms carefully before using Karyvo.
+              Last updated: October 2026. Please read these terms carefully before using ResumeBMH.
             </p>
           </div>
 
@@ -83,7 +83,7 @@ export default function TermsPage() {
                 1. Acceptance of Terms
               </h2>
               <p>
-                By creating an account or accessing Karyvo, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.
+                By creating an account or accessing ResumeBMH, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.
               </p>
             </section>
 
@@ -92,7 +92,7 @@ export default function TermsPage() {
                 2. User Account and Accuracy of Information
               </h2>
               <p>
-                You are responsible for maintaining the confidentiality of your account credentials. You represent that the career experience, education, and credentials you provide in your Master Career Profile are accurate and truthfully reflect your background. Karyvo provides optimization tools but does not verify the truthfulness of user-submitted qualifications.
+                You are responsible for maintaining the confidentiality of your account credentials. You represent that the career experience, education, and credentials you provide in your Master Career Profile are accurate and truthfully reflect your background. ResumeBMH provides optimization tools but does not verify the truthfulness of user-submitted qualifications.
               </p>
             </section>
 
@@ -110,7 +110,7 @@ export default function TermsPage() {
                 4. No Employment Guarantee
               </h2>
               <p>
-                Karyvo is a document preparation and interview preparation tool. We do not guarantee employment, interview callbacks, job offers, or specific ATS scores. Hiring decisions are made solely by individual employers.
+                ResumeBMH is a document preparation and interview preparation tool. We do not guarantee employment, interview callbacks, job offers, or specific ATS scores. Hiring decisions are made solely by individual employers.
               </p>
             </section>
 
@@ -120,8 +120,8 @@ export default function TermsPage() {
               </h2>
               <p>
                 For questions regarding these Terms of Service, please contact us at{" "}
-                <a href="mailto:support@karyvo.com" className="text-accent underline font-medium">
-                  support@karyvo.com
+                <a href="mailto:support@resumebmh.com" className="text-accent underline font-medium">
+                  support@resumebmh.com
                 </a>.
               </p>
             </section>

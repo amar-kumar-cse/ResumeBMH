@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { MasterCareerProfile } from "@/types/profile";
@@ -41,7 +41,7 @@ export function MasterProfileWorkspace({ initialProfile }: Props) {
     const downloadAnchor = document.createElement("a");
     downloadAnchor.setAttribute("href", dataStr);
     const safeName = profile.fullName ? profile.fullName.replace(/\s+/g, "_") : "user";
-    downloadAnchor.setAttribute("download", `karyvo_profile_${safeName}.json`);
+    downloadAnchor.setAttribute("download", `resumebmh_profile_${safeName}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
@@ -104,7 +104,7 @@ export function MasterProfileWorkspace({ initialProfile }: Props) {
       <PageHeader
         badge="Single Source of Truth"
         title="Master Career Profile"
-        description="Enter your career details once. Karyvo routes verified information into your Resume Builder, ATS Scanner, and Interview Coach."
+        description="Enter your career details once. ResumeBMH routes verified information into your Resume Builder, ATS Scanner, and Interview Coach."
         actions={
           <div className="flex flex-wrap items-center gap-2.5">
             <input

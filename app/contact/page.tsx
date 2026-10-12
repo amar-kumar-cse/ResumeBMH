@@ -7,7 +7,7 @@ import { SITE_URL, getBreadcrumbSchema } from "@/lib/seo/config";
 export const metadata: Metadata = {
   title: "Contact Customer Support & Product Team",
   description:
-    "Get in touch with Karyvo product and technical support. Quick assistance for subscriptions, ATS resume exports, and career tool inquiries.",
+    "Get in touch with ResumeBMH product and technical support. Quick assistance for subscriptions, ATS resume exports, and career tool inquiries.",
   alternates: {
     canonical: "/contact",
   },
@@ -15,23 +15,23 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_IN",
     url: `${SITE_URL}/contact`,
-    title: "Contact Karyvo | Customer Support & Assistance",
+    title: "Contact ResumeBMH | Customer Support & Assistance",
     description:
-      "Get in touch with Karyvo product and technical support. Inquiries for billing, account assistance, and feature guidance.",
+      "Get in touch with ResumeBMH product and technical support. Inquiries for billing, account assistance, and feature guidance.",
     images: [
       {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: "Contact Karyvo Support",
+        alt: "Contact ResumeBMH Support",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Contact Karyvo | Customer Support & Assistance",
+    title: "Contact ResumeBMH | Customer Support & Assistance",
     description:
-      "Get in touch with Karyvo product and technical support. Inquiries for billing, account assistance, and feature guidance.",
+      "Get in touch with ResumeBMH product and technical support. Inquiries for billing, account assistance, and feature guidance.",
     images: [`${SITE_URL}/opengraph-image`],
   },
 };
@@ -49,16 +49,16 @@ const jsonLd = {
       "@type": "ContactPage",
       "@id": `${SITE_URL}/contact#webpage`,
       url: `${SITE_URL}/contact`,
-      name: "Contact Karyvo Support",
-      description: "Get in touch with the Karyvo engineering and product support team.",
+      name: "Contact ResumeBMH Support",
+      description: "Get in touch with the ResumeBMH engineering and product support team.",
       mainEntity: {
         "@type": "Organization",
-        name: "Karyvo",
+        name: "ResumeBMH",
         url: SITE_URL,
         contactPoint: {
           "@type": "ContactPoint",
           contactType: "customer support",
-          email: "support@karyvo.com",
+          email: "support@resumebmh.com",
           availableLanguage: ["English", "Hindi"],
           areaServed: "IN",
         },
@@ -91,7 +91,7 @@ export default function ContactPage() {
             Support & Inquiries
           </Badge>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight font-heading">
-            Contact Karyvo Support
+            Contact ResumeBMH Support
           </h1>
           <p className="text-sm text-slate-600">
             Have questions about your subscription, career exports, or technical features? We are here to help.
@@ -105,8 +105,8 @@ export default function ContactPage() {
             </div>
             <h2 className="font-bold text-slate-900 font-heading text-sm">Email Inquiries</h2>
             <p className="text-xs text-slate-600">General assistance and billing:</p>
-            <a href="mailto:support@karyvo.com" className="text-xs font-semibold text-brand-primary hover:underline block">
-              support@karyvo.com
+            <a href="mailto:support@resumebmh.com" className="text-xs font-semibold text-brand-primary hover:underline block">
+              support@resumebmh.com
             </a>
           </Card>
 
@@ -124,7 +124,7 @@ export default function ContactPage() {
               <MapPin className="h-5 w-5" />
             </div>
             <h2 className="font-bold text-slate-900 font-heading text-sm">Headquarters</h2>
-            <p className="text-xs text-slate-600">Karyvo Career Suite</p>
+            <p className="text-xs text-slate-600">ResumeBMH Career Suite</p>
             <span className="text-xs font-semibold text-slate-800 block">Bengaluru, Karnataka, India</span>
           </Card>
         </div>
@@ -136,7 +136,7 @@ export default function ContactPage() {
           </h2>
 
           <form
-            action="mailto:support@karyvo.com"
+            action="mailto:support@resumebmh.com"
             method="GET"
             className="space-y-4"
           >

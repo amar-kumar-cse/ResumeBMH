@@ -109,8 +109,8 @@ describe("Technical SEO Implementation", () => {
   describe("Web App Manifest (manifest.ts)", () => {
     it("returns valid PWA & mobile search manifest attributes", () => {
       const m = manifest();
-      expect(m.name).toContain("Karyvo");
-      expect(m.short_name).toBe("Karyvo");
+      expect(m.name).toContain("ResumeBMH");
+      expect(m.short_name).toBe("ResumeBMH");
       expect(m.start_url).toBe("/");
       expect(m.display).toBe("standalone");
       expect(m.theme_color).toBe("#2563eb");
@@ -131,7 +131,7 @@ describe("Technical SEO Implementation", () => {
     it("generates valid Organization schema", () => {
       const org = getOrganizationSchema();
       expect(org["@type"]).toBe("Organization");
-      expect(org.name).toBe("Karyvo");
+      expect(org.name).toBe("ResumeBMH");
       expect(org.url).toBe(SITE_URL);
       expect(org.contactPoint.length).toBeGreaterThan(0);
     });
@@ -146,7 +146,7 @@ describe("Technical SEO Implementation", () => {
     it("generates valid SoftwareApplication schema with pricing offers", () => {
       const app = getSoftwareApplicationSchema();
       expect(app["@type"]).toBe("SoftwareApplication");
-      expect(app.name).toContain("Karyvo");
+      expect(app.name).toContain("ResumeBMH");
       expect(app.applicationCategory).toBe("BusinessApplication");
       expect(app.offers.length).toBe(2);
       expect(app.offers[0].price).toBe("0");
@@ -156,8 +156,8 @@ describe("Technical SEO Implementation", () => {
 
     it("generates valid FAQPage schema", () => {
       const faqs = [
-        { question: "Is Karyvo free?", answer: "Yes, you can build single-column ATS resumes for free." },
-        { question: "Does it pass ATS?", answer: "Karyvo generates single-column formats that parse cleanly." },
+        { question: "Is ResumeBMH free?", answer: "Yes, you can build single-column ATS resumes for free." },
+        { question: "Does it pass ATS?", answer: "ResumeBMH generates single-column formats that parse cleanly." },
       ];
       const faqSchema = getFaqSchema(faqs, "test-faq");
       expect(faqSchema["@type"]).toBe("FAQPage");

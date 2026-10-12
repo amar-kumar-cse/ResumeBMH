@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   },
   title: {
     default: SITE_TITLE_DEFAULT,
-    template: "%s | Karyvo",
+    template: "%s | ResumeBMH",
   },
   description: SITE_DESCRIPTION,
   keywords: SEO_KEYWORDS,
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_IN",
     url: SITE_URL,
-    siteName: "Karyvo",
+    siteName: "ResumeBMH",
     title: SITE_TITLE_DEFAULT,
     description: SITE_DESCRIPTION,
     images: [
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: "Karyvo AI Resume Builder and Career Platform",
+        alt: "ResumeBMH AI Resume Builder and Career Platform",
       },
     ],
   },

@@ -9,15 +9,15 @@ export class PaymentService {
   private razorpayClient: Razorpay | null = null;
 
   constructor() {
-    this.keyId = process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_karyvo_mock";
-    this.keySecret = process.env.RAZORPAY_KEY_SECRET || "mock_secret_karyvo";
+    this.keyId = process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_resumebmh_mock";
+    this.keySecret = process.env.RAZORPAY_KEY_SECRET || "mock_secret_resumebmh";
 
     // Initialize official Razorpay instance if valid keys exist
     if (
       this.keyId &&
       this.keySecret &&
-      this.keyId !== "rzp_test_karyvo_mock" &&
-      this.keySecret !== "mock_secret_karyvo"
+      !this.keyId.includes("mock") &&
+      !this.keySecret.includes("mock")
     ) {
       try {
         this.razorpayClient = new Razorpay({
@@ -106,7 +106,7 @@ export class PaymentService {
     }
 
     // Reject mock signatures in production
-    if (process.env.NODE_ENV === "production" && this.keySecret === "mock_secret_karyvo") {
+    if (process.env.NODE_ENV === "production" && (this.keySecret.includes("mock"))) {
       console.error("CRITICAL: Mock payment secret detected in production. Rejecting.");
       return false;
     }
@@ -115,7 +115,7 @@ export class PaymentService {
     if (
       process.env.NODE_ENV !== "production" &&
       process.env.ALLOW_MOCK_PAYMENTS === "true" &&
-      this.keySecret === "mock_secret_karyvo" &&
+      this.keySecret.includes("mock") &&
       (razorpay_signature.startsWith("sig_mock_") || razorpay_signature.startsWith("mock_"))
     ) {
       return true;

@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "Karyvo | AI Resume Builder, Free ATS Checker & Career Platform";
+export const alt = "ResumeBMH | AI Resume Builder, Free ATS Checker & Career Platform";
 export const size = {
   width: 1200,
   height: 630,
@@ -39,13 +39,13 @@ export default async function OpenGraphImage() {
               fontWeight: 800,
             }}
           >
-            K
+            R
           </div>
           <span style={{ fontSize: "36px", fontWeight: 800, color: "#ffffff", letterSpacing: "-0.02em" }}>
             Resume<span style={{ color: "#38bdf8" }}>BMH</span>
           </span>
           <span style={{ fontSize: "16px", color: "#94a3b8", marginLeft: "12px", borderLeft: "2px solid #334155", paddingLeft: "16px" }}>
-            by Karyvo
+            AI Career Suite
           </span>
         </div>
 
@@ -88,7 +88,7 @@ export default async function OpenGraphImage() {
 
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", borderTop: "1px solid #1e293b", paddingTop: "24px" }}>
           <span style={{ color: "#64748b", fontSize: "18px", fontWeight: 500 }}>
-            https://karyvo.com
+            https://resumebmh.vercel.app
           </span>
           <span style={{ color: "#10b981", fontSize: "18px", fontWeight: 600 }}>
             Factual Grounding • Single-Column Standard
