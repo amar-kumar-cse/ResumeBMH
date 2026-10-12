@@ -212,18 +212,18 @@ export function PricingWorkspace() {
       {/* Pricing Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
         {/* FREE PLAN */}
-        <Card className="p-8 rounded-2xl flex flex-col justify-between space-y-8 bg-white border-slate-200">
+        <Card className="p-6 sm:p-8 rounded-2xl flex flex-col justify-between space-y-8 bg-white border-slate-200">
           <div className="space-y-6">
             <div className="space-y-1">
               <Badge variant="default" size="sm">
                 Starter
               </Badge>
-              <h2 className="font-heading text-2xl font-bold text-slate-900 mt-2">Free Tier</h2>
+              <h2 className="font-heading text-xl sm:text-2xl font-bold text-slate-900 mt-2">Free Tier</h2>
               <p className="text-xs text-slate-600">Essential tools for job seekers and campus freshers.</p>
             </div>
 
             <div className="flex items-baseline gap-1.5">
-              <span className="font-heading text-4xl font-extrabold text-slate-900">₹0</span>
+              <span className="font-heading text-3xl sm:text-4xl font-extrabold text-slate-900">₹0</span>
               <span className="text-xs text-slate-500 font-medium">/ forever</span>
             </div>
 
@@ -270,19 +270,21 @@ export function PricingWorkspace() {
         </Card>
 
         {/* PRO PLAN */}
-        <Card className="p-8 rounded-2xl relative flex flex-col justify-between space-y-8 border-brand-primary bg-indigo-50/20 shadow-md">
+        <Card className="p-6 sm:p-8 rounded-2xl relative flex flex-col justify-between space-y-8 border-brand-primary bg-indigo-50/20 shadow-md">
           <div className="space-y-6">
             <div className="space-y-1">
               <Badge variant="brand" size="sm">
                 <Crown className="h-3.5 w-3.5 mr-1" />
                 Premium Career Engine
               </Badge>
-              <h2 className="font-heading text-3xl font-extrabold text-slate-900 mt-2">ResumeBMH Pro</h2>
+              <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-slate-900 mt-2 tracking-tight">
+                ResumeBMH Pro
+              </h2>
               <p className="text-xs text-slate-600">Full autonomy over ATS, Cover Letters, and Mock Interviews.</p>
             </div>
 
             <div className="flex items-baseline gap-1.5">
-              <span className="font-heading text-4xl sm:text-5xl font-extrabold text-brand-primary">
+              <span className="font-heading text-3xl sm:text-4xl font-extrabold text-brand-primary">
                 {billingCycle === "monthly" ? "₹499" : "₹2,999"}
               </span>
               <span className="text-xs text-slate-600 font-medium">

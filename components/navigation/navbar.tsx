@@ -128,10 +128,10 @@ export function Navbar() {
             />
           </div>
           <div className="flex flex-col">
-            <span className="font-brand text-[21px] font-extrabold tracking-[-0.03em] text-slate-900 leading-none flex items-center">
+            <span className="font-brand text-xl font-extrabold tracking-[-0.03em] text-slate-900 leading-none flex items-center">
               Resume<span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 bg-clip-text text-transparent font-black ml-0.5">BMH</span>
             </span>
-            <span className="hidden sm:block text-[8px] font-bold text-slate-400 tracking-[0.22em] uppercase mt-1 leading-none">
+            <span className="hidden sm:block text-xs font-semibold text-slate-500 tracking-wider uppercase mt-0.5 leading-none">
               Build Your Better Resume
             </span>
           </div>

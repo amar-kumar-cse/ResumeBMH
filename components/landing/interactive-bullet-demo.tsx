@@ -140,7 +140,7 @@ export function InteractiveBulletDemo() {
           <div>
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs font-semibold text-blue-600 uppercase tracking-wider">
+              <span className="text-xs font-semibold text-blue-600">
                 Interactive Live Demo
               </span>
             </div>

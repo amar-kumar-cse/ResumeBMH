@@ -1,15 +1,16 @@
 import React from "react";
-import { Container, SectionHeading, Card, Badge } from "@/components/landing/ui/primitives";
+import { Container, Section, SectionHeading, Card, Badge } from "@/components/landing/ui/primitives";
 import { CheckCircle2, XCircle } from "lucide-react";
 
 export function XyzExplanationSection() {
   return (
-    <div id="xyz-method" className="w-full">
-      <SectionHeading
-        tag="The Winning Formula"
-        title="Why Recruiter-Ready Bullets Win Interviews"
-        description="Recruiters spend an average of 6 seconds scanning a resume. ResumeBMH transforms vague duty lists into quantified, high-impact achievements that pass ATS filters."
-      />
+    <Section id="xyz-method">
+      <Container>
+        <SectionHeading
+          tag="The Winning Formula"
+          title="Why Recruiter-Ready Bullets Win Interviews"
+          description="Recruiters spend an average of 6 seconds scanning a resume. ResumeBMH transforms vague duty lists into quantified, high-impact achievements that pass ATS filters."
+        />
 
       {/* 3-Box Visual */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-12">
@@ -87,6 +88,7 @@ export function XyzExplanationSection() {
       <p className="text-center text-xs text-slate-400 mt-6 font-medium">
         ✨ Standard framework favored by hiring managers at Google, Amazon, and leading Fortune 500 tech companies.
       </p>
-    </div>
+      </Container>
+    </Section>
   );
 }

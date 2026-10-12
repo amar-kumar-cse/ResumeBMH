@@ -201,8 +201,8 @@ export function PricingSection() {
               </div>
 
               <div className="mb-8">
-                <p className="text-xs font-bold uppercase tracking-wider text-blue-600 mb-3.5 flex items-center gap-1.5">
-                  <Zap className="w-3.5 h-3.5 fill-blue-600" />
+                <p className="text-xs font-bold text-blue-700 mb-3.5 flex items-center gap-1.5">
+                  <Zap className="w-3.5 h-3.5 fill-blue-700" />
                   Everything in Starter, plus:
                 </p>
                 <ul className="space-y-3.5 text-sm text-slate-700">
